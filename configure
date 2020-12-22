@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+  if($#ARGV == 0) {
+     $response = shift(@ARGV) ;
+     print("Configure soil test environment: $response \n");
+  }else {
+     print "Please select from following predefined environments: \n\n";
+
+     print "   1. gfortran compiler serial \n";
+     print "   2. empty \n";
+     print "   0. exit only \n";
+
+     printf "\nEnter selection : " ;
+
+     $response = <STDIN> ;
+     chop($response);
+  }
+
+  if ($response == 1) {
+              # generic gfortran settings
+              system "cp config/user_build_config.gfortran.serial user_build_config"; 
+            }
+
+  elsif ($response == 2) {
+              # TBD
+              print "$response not valid at this time\n"; 
+            }
+
+  else   {print "no selection $response\n"; last} 

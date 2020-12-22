@@ -1,0 +1,12 @@
+
+#===============================================================================
+#  Placeholder options for gfortran
+#===============================================================================
+
+ COMPILERF90    =       /opt/local/bin/gfortran-mp-10
+ FREESOURCE     =       #-ffree-form  -ffree-line-length-none
+ F90FLAGS       =       -fdefault-real-8 -fdefault-double-8
+ NETCDFMOD      =       -I/opt/local/include
+ NETCDFLIB      =       -L/opt/local/lib -lnetcdf -lnetcdff
+ PHYSDIR        =       ../../ccpp-physics/physics
+
