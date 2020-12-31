@@ -209,7 +209,7 @@ contains
   noahmp%model%vegtype  = this%vegetation_category
   noahmp%model%slopetyp = this%slope_category
   noahmp%model%tg3      = this%deep_soil_temperature
-  noahmp%model%sfcemis  = this%emissivity
+  noahmp%model%emiss    = this%emissivity
   noahmp%model%snoalb   = this%max_snow_albedo
   noahmp%model%shdmin   = minval(this%gvf_monthly,dim=2)
   noahmp%model%shdmax   = maxval(this%gvf_monthly,dim=2)

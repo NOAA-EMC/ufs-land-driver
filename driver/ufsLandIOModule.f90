@@ -527,8 +527,24 @@ contains
       status = nf90_put_att(ncid, varid, "long_name", "green vegetation fraction")
       status = nf90_put_att(ncid, varid, "units", "-")
 
-    status = nf90_def_var(ncid, "sfcemis", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
+    status = nf90_def_var(ncid, "emiss", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "surface emissivity")
+      status = nf90_put_att(ncid, varid, "units", "-")
+
+    status = nf90_def_var(ncid, "albdvis", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
+      status = nf90_put_att(ncid, varid, "long_name", "surface albedo - direct visible")
+      status = nf90_put_att(ncid, varid, "units", "-")
+
+    status = nf90_def_var(ncid, "albdnir", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
+      status = nf90_put_att(ncid, varid, "long_name", "surface albedo - direct NIR")
+      status = nf90_put_att(ncid, varid, "units", "-")
+
+    status = nf90_def_var(ncid, "albivis", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
+      status = nf90_put_att(ncid, varid, "long_name", "surface albedo - diffuse visible")
+      status = nf90_put_att(ncid, varid, "units", "-")
+
+    status = nf90_def_var(ncid, "albinir", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
+      status = nf90_put_att(ncid, varid, "long_name", "surface albedo - diffuse NIR")
       status = nf90_put_att(ncid, varid, "units", "-")
 
     status = nf90_def_var(ncid, "dlwflx", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
@@ -900,8 +916,20 @@ contains
   status = nf90_inq_varid(ncid, "sigmaf", varid)
   status = nf90_put_var(ncid, varid , noahmp%model%sigmaf  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
 
-  status = nf90_inq_varid(ncid, "sfcemis", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%sfcemis , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_inq_varid(ncid, "emiss", varid)
+  status = nf90_put_var(ncid, varid , noahmp%model%emiss   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+
+  status = nf90_inq_varid(ncid, "albdvis", varid)
+  status = nf90_put_var(ncid, varid , noahmp%model%albdvis , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+
+  status = nf90_inq_varid(ncid, "albdnir", varid)
+  status = nf90_put_var(ncid, varid , noahmp%model%albdnir , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+
+  status = nf90_inq_varid(ncid, "albivis", varid)
+  status = nf90_put_var(ncid, varid , noahmp%model%albivis , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+
+  status = nf90_inq_varid(ncid, "albinir", varid)
+  status = nf90_put_var(ncid, varid , noahmp%model%albinir , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snet", varid)
   status = nf90_put_var(ncid, varid , noahmp%model%snet    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))

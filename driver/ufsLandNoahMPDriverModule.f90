@@ -106,7 +106,11 @@ associate (                               &
    u1         => noahmp%model%u1         ,&
    v1         => noahmp%model%v1         ,&
    sigmaf     => noahmp%model%sigmaf     ,&
-   sfcemis    => noahmp%model%sfcemis    ,&
+   emiss      => noahmp%model%emiss      ,&
+   albdvis    => noahmp%model%albdvis    ,&
+   albdnir    => noahmp%model%albdnir    ,&
+   albivis    => noahmp%model%albivis    ,&
+   albinir    => noahmp%model%albinir    ,&
    snet       => noahmp%model%snet       ,&
    tg3        => noahmp%model%tg3        ,&
    cm         => noahmp%model%cm         ,&
@@ -242,7 +246,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
   
       call noahmpdrv_run                                               &
           ( im, km, itime, ps, u1, v1, t1, q1, soiltyp, vegtype,       &  !  ---  inputs
-            sigmaf, sfcemis, dlwflx, dswsfc, snet, delt, tg3, cm, ch,  &
+            sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,           &
             prsl1, prslki, zf, dry, wind, slopetyp,                    &
             shdmin, shdmax, snoalb, sfalb, flag_iter, flag_guess,      &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
@@ -258,6 +262,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             waxy, wtxy, tsnoxy, zsnsoxy, snicexy, snliqxy, lfmassxy,   &
             rtmassxy, stmassxy, woodxy, stblcpxy, fastcpxy, xlaixy,    &
             xsaixy, taussxy, smoiseq, smcwtdxy, deeprechxy, rechxy,    &
+            albdvis, albdnir,  albivis,  albinir,emiss,                &
             sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &  !  ---  outputs:
             cmm, chh, evbs, evcw, sbsno, snowc, stm, snohf,            &
             smcwlt2, smcref2, wet1, t2mmp, q2mp, errmsg, errflg)     
