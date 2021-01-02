@@ -53,3 +53,13 @@
  surface_evap_resistance_option    = 1
  glacier_option                    = 1
 /
+
+&forcing
+ forcing_name_precipitation     = "precipitation"
+ forcing_name_temperature       = "temperature"
+ forcing_name_specific_humidity = "specific_humidity"
+ forcing_name_wind_speed        = "wind_speed"
+ forcing_name_pressure          = "surface_pressure"
+ forcing_name_sw_radiation      = "downward_shortwave"
+ forcing_name_lw_radiation      = "downward_longwave"
+/

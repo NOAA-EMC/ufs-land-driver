@@ -46,7 +46,15 @@ type, public :: namelist_type
   integer        ::  soil_temp_time_scheme_option
   integer        ::  surface_evap_resistance_option
   integer        ::  glacier_option
-
+  
+  character*128  ::  forcing_name_precipitation
+  character*128  ::  forcing_name_sw_radiation
+  character*128  ::  forcing_name_lw_radiation
+  character*128  ::  forcing_name_pressure
+  character*128  ::  forcing_name_specific_humidity
+  character*128  ::  forcing_name_wind_speed
+  character*128  ::  forcing_name_temperature
+  
   contains
 
     procedure, public  :: ReadNamelist         
@@ -102,6 +110,14 @@ contains
     integer        ::  surface_evap_resistance_option    = -999
     integer        ::  glacier_option                    = -999
 
+    character*128  ::  forcing_name_precipitation = ""
+    character*128  ::  forcing_name_temperature = ""
+    character*128  ::  forcing_name_specific_humidity = ""
+    character*128  ::  forcing_name_wind_speed = ""
+    character*128  ::  forcing_name_pressure = ""
+    character*128  ::  forcing_name_sw_radiation = ""
+    character*128  ::  forcing_name_lw_radiation = ""
+
     integer, parameter :: NOAHMP_LAND_SURFACE_MODEL = 2
   
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
@@ -118,7 +134,11 @@ contains
                snow_albedo_option                , precip_partition_option           , &
                soil_temp_lower_bdy_option        , soil_temp_time_scheme_option      , &
                surface_evap_resistance_option    , glacier_option                    
- 
+    namelist / forcing / forcing_name_precipitation     , forcing_name_temperature  , &
+                         forcing_name_specific_humidity , forcing_name_wind_speed   , &
+			 forcing_name_pressure          , forcing_name_sw_radiation , &
+                         forcing_name_lw_radiation
+			 
 !---------------------------------------------------------------------
 !  read input file, part 1
 !---------------------------------------------------------------------
@@ -127,6 +147,7 @@ contains
      read(30, run_setup)
      read(30, land_model_option)
      read(30, structure)
+     read(30, forcing)
     close(30)
 
     allocate (soil_level_thickness (1:num_soil_levels))   ! soil level thicknesses [m]
@@ -170,6 +191,13 @@ contains
     this%forcing_height       = forcing_height
     this%soil_level_thickness = soil_level_thickness
     this%soil_level_nodes     = soil_level_nodes
+    this%forcing_name_precipitation     = forcing_name_precipitation
+    this%forcing_name_temperature       = forcing_name_temperature
+    this%forcing_name_specific_humidity = forcing_name_specific_humidity
+    this%forcing_name_wind_speed        = forcing_name_wind_speed
+    this%forcing_name_pressure          = forcing_name_pressure
+    this%forcing_name_sw_radiation      = forcing_name_sw_radiation
+    this%forcing_name_lw_radiation      = forcing_name_lw_radiation
     
     if(simulation_end /= "") then
       call calc_sec_since(simulation_start,simulation_end,0,run_time)

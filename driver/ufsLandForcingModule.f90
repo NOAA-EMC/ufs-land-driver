@@ -117,37 +117,37 @@ contains
    stop
   end if
 
-  status = nf90_inq_varid(ncid, "temperature", varid)
+  status = nf90_inq_varid(ncid, trim(namelist%forcing_name_temperature), varid)
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%temperature, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
    
-  status = nf90_inq_varid(ncid, "specific_humidity", varid)
+  status = nf90_inq_varid(ncid, trim(namelist%forcing_name_specific_humidity), varid)
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%specific_humidity, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
   
-  status = nf90_inq_varid(ncid, "surface_pressure", varid)
+  status = nf90_inq_varid(ncid, trim(namelist%forcing_name_pressure), varid)
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%surface_pressure, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
   
-  status = nf90_inq_varid(ncid, "wind_speed", varid)
+  status = nf90_inq_varid(ncid, trim(namelist%forcing_name_wind_speed), varid)
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%wind_speed, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
   
-  status = nf90_inq_varid(ncid, "downward_longwave", varid)
+  status = nf90_inq_varid(ncid, trim(namelist%forcing_name_lw_radiation), varid)
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%downward_longwave, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
 
-  status = nf90_inq_varid(ncid, "downward_shortwave", varid)
+  status = nf90_inq_varid(ncid, trim(namelist%forcing_name_sw_radiation), varid)
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%downward_shortwave, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
   
-  status = nf90_inq_varid(ncid, "precipitation", varid)
+  status = nf90_inq_varid(ncid, trim(namelist%forcing_name_precipitation), varid)
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%precipitation, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
