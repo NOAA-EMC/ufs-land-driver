@@ -47,6 +47,9 @@ type, public :: namelist_type
   integer        ::  surface_evap_resistance_option
   integer        ::  glacier_option
   
+  integer        ::  forcing_timestep_seconds
+  character*128  ::  forcing_type
+  character*128  ::  forcing_filename
   character*128  ::  forcing_name_precipitation
   character*128  ::  forcing_name_sw_radiation
   character*128  ::  forcing_name_lw_radiation
@@ -110,6 +113,9 @@ contains
     integer        ::  surface_evap_resistance_option    = -999
     integer        ::  glacier_option                    = -999
 
+    integer        ::  forcing_timestep_seconds = -999
+    character*128  ::  forcing_type = ""
+    character*128  ::  forcing_filename = ""
     character*128  ::  forcing_name_precipitation = ""
     character*128  ::  forcing_name_temperature = ""
     character*128  ::  forcing_name_specific_humidity = ""
@@ -134,7 +140,9 @@ contains
                snow_albedo_option                , precip_partition_option           , &
                soil_temp_lower_bdy_option        , soil_temp_time_scheme_option      , &
                surface_evap_resistance_option    , glacier_option                    
-    namelist / forcing / forcing_name_precipitation     , forcing_name_temperature  , &
+    namelist / forcing / forcing_timestep_seconds       ,                             &
+                         forcing_type                   , forcing_filename          , &
+                         forcing_name_precipitation     , forcing_name_temperature  , &
                          forcing_name_specific_humidity , forcing_name_wind_speed   , &
 			 forcing_name_pressure          , forcing_name_sw_radiation , &
                          forcing_name_lw_radiation
@@ -191,6 +199,9 @@ contains
     this%forcing_height       = forcing_height
     this%soil_level_thickness = soil_level_thickness
     this%soil_level_nodes     = soil_level_nodes
+    this%forcing_timestep_seconds       = forcing_timestep_seconds
+    this%forcing_type                   = forcing_type
+    this%forcing_filename               = forcing_filename
     this%forcing_name_precipitation     = forcing_name_precipitation
     this%forcing_name_temperature       = forcing_name_temperature
     this%forcing_name_specific_humidity = forcing_name_specific_humidity

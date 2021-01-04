@@ -45,7 +45,17 @@ contains
   
   this%forcing_counter = 0
   
-  forcing_filename = trim(namelist%forcing_dir)//"/"//"ufs_land_forcing.19980101060000.nc"
+  forcing_type : select case (trim(namelist%forcing_type))
+    case ("single_point")
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+    case ("gswp3")
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+      forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
+    case default
+      stop "namelist forcing_type not recognized"
+  end select forcing_type
+  
+  write(*,*) "Starting first read: "//trim(forcing_filename)
   
   status = nf90_open(forcing_filename, NF90_NOWRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)
@@ -78,13 +88,16 @@ contains
     status = nf90_get_var(ncid, varid, read_time, start = (/itime/))
      if(status /= nf90_noerr) call handle_err(status)
      
-    if (read_time == namelist%initial_time + namelist%timestep_seconds) then
+    if (read_time == namelist%initial_time + namelist%forcing_timestep_seconds) then
        this%forcing_counter = itime
        exit timeloop
     end if
     
   end do timeloop
   
+  status = nf90_close(ncid)
+   if (status /= nf90_noerr) call handle_err(status)
+
   if(this%forcing_counter == 0) stop "did not find initial forcing time in file"
    
   end subroutine ReadForcingInit
@@ -93,16 +106,30 @@ contains
   
   use netcdf
   use error_handling, only : handle_err
+  use time_utilities
   
   class(forcing_type)  :: this
   type(namelist_type)  :: namelist
   double precision     :: now_time
   
   character*128        :: forcing_filename
+  character*19         :: now_date  ! format: yyyy-mm-dd hh:nn:ss
   
   integer :: ncid, dimid, varid, status
   
-  forcing_filename = trim(namelist%forcing_dir)//"/"//"ufs_land_forcing.19980101060000.nc"
+  call date_from_since("1970-01-01 00:00:00", now_time, now_date)
+  
+  write(*,*) "Reading forcing at time: ",now_date
+  
+  forcing_type : select case (trim(namelist%forcing_type))
+    case ("single_point")
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+    case ("gswp3")
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+      forcing_filename = trim(forcing_filename)//now_date(1:7)//".nc"
+    case default
+      stop "namelist forcing_type not recognized"
+  end select forcing_type
   
   status = nf90_open(forcing_filename, NF90_NOWRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)
