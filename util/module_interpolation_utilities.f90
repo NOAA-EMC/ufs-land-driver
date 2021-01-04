@@ -71,5 +71,26 @@ end do
 
 end subroutine interpolate_monthly
 
+subroutine interpolate_linear(now_time, last_time, next_time, vector_length, &
+                              last_var, next_var, interp_var)
+
+implicit none
+
+double precision                  :: now_time, last_time, next_time
+integer                           :: vector_length
+real, dimension(vector_length)    :: last_var, next_var, interp_var
+
+real                :: last_weight, next_weight
+
+if(last_time > now_time .or. next_time < now_time) &
+   stop "problem with time in interpolate_monthly"
+
+ next_weight = (now_time - last_time) / (next_time - last_time)
+ last_weight = 1.0 - next_weight
+
+  interp_var = last_weight * last_var + next_weight * next_var
+
+end subroutine interpolate_linear
+
 end module interpolation_utilities
 

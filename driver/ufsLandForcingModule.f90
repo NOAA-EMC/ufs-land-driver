@@ -26,6 +26,14 @@ type, public :: forcing_type
     procedure, public  :: ReadForcing
 
 end type forcing_type
+
+  real, allocatable, dimension(:)  :: last_temperature
+  real, allocatable, dimension(:)  :: last_specific_humidity
+  real, allocatable, dimension(:)  :: last_surface_pressure
+  real, allocatable, dimension(:)  :: last_wind_speed
+  real, allocatable, dimension(:)  :: last_downward_longwave
+  real, allocatable, dimension(:)  :: last_downward_shortwave
+  real, allocatable, dimension(:)  :: last_precipitation
      
 contains   
 
@@ -73,6 +81,14 @@ contains
   allocate(this%downward_longwave (this%nlocations))
   allocate(this%downward_shortwave(this%nlocations))
   allocate(this%precipitation     (this%nlocations))
+
+  allocate(last_temperature       (this%nlocations))
+  allocate(last_specific_humidity (this%nlocations))
+  allocate(last_surface_pressure  (this%nlocations))
+  allocate(last_wind_speed        (this%nlocations))
+  allocate(last_downward_longwave (this%nlocations))
+  allocate(last_downward_shortwave(this%nlocations))
+  allocate(last_precipitation     (this%nlocations))
 
   status = nf90_inq_dimid(ncid, "time", dimid)
    if (status /= nf90_noerr) call handle_err(status)
@@ -151,40 +167,48 @@ contains
 
   status = nf90_inq_varid(ncid, trim(namelist%forcing_name_temperature), varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%temperature, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
+  status = nf90_get_var(ncid, varid, last_temperature, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
    
   status = nf90_inq_varid(ncid, trim(namelist%forcing_name_specific_humidity), varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%specific_humidity, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
+  status = nf90_get_var(ncid, varid, last_specific_humidity, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, trim(namelist%forcing_name_pressure), varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%surface_pressure, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
+  status = nf90_get_var(ncid, varid, last_surface_pressure, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, trim(namelist%forcing_name_wind_speed), varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%wind_speed, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
+  status = nf90_get_var(ncid, varid, last_wind_speed, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, trim(namelist%forcing_name_lw_radiation), varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%downward_longwave, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
+  status = nf90_get_var(ncid, varid, last_downward_longwave, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inq_varid(ncid, trim(namelist%forcing_name_sw_radiation), varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%downward_shortwave, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
+  status = nf90_get_var(ncid, varid, last_downward_shortwave, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, trim(namelist%forcing_name_precipitation), varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%precipitation, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
+  status = nf90_get_var(ncid, varid, last_precipitation, start = (/1,this%forcing_counter/), count = (/this%nlocations, 1/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_close(ncid)
+  
+  this%temperature        = last_temperature
+  this%specific_humidity  = last_specific_humidity
+  this%surface_pressure   = last_surface_pressure
+  this%wind_speed         = last_wind_speed
+  this%downward_longwave  = last_downward_longwave
+  this%downward_shortwave = last_downward_shortwave
+  this%precipitation      = last_precipitation
 
   this%forcing_counter = this%forcing_counter + 1   ! increment forcing counter by 1
 
