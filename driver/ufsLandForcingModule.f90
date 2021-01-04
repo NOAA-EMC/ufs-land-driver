@@ -131,6 +131,11 @@ contains
       stop "namelist forcing_type not recognized"
   end select forcing_type
   
+  if(now_date(9:19) == "01 00:00:00") then
+    this%forcing_counter = 1
+    write(*,*) "Resetting forcing counter to beginning of file"
+  end if
+  
   status = nf90_open(forcing_filename, NF90_NOWRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)
   
