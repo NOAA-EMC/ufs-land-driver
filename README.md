@@ -18,17 +18,19 @@ The model forcing and driver are seperated in two repositories: **ufs_land_forci
 
     `git checkout feature/noahmp`
 
-3) Copy the **user_build_config** from **ufs_land_forcing** repository, and edit this file to setup compiler, and   library paths (to be consistent with your environment).
+3) Make sure your computer has FORTRAN compiler and NetCDF software installed.
 
-4) The **makefile** collect all the codes from **ccpp-physics** directory and compile it. 
+4) Edit the **user_build_config** file to setup compiler, and library paths (to be consistent with your environment).
+
+5) The **makefile** collect all the codes from **ccpp-physics** directory and compile it. 
 
     Invoke `make` to compile.
  
     All the modules from **ccpp-physics** should be compiled in **mod** directory, and all the drivers in **driver**      directory, and the executable is in **run** directory.
 
 ## Example of single point test:
-5) There are 2 namelist files, one for noah and another for noah-mp model in **run/examples/single_point**        directory. To modify and test them, copy one of them to the **run** directory (where the ufsLand.exe is) and update   the “static_file”, init_file” and “forcing_dir” file directories.
+6) There are 2 namelist files, one for noah and another for noah-mp model in **run/examples/single_point**        directory. To modify and test them, copy one of them to the **run** directory (where the ufsLand.exe is) and update   the “static_file”, init_file” and “forcing_dir” file directories.
 
-6) Run the executable by typing: `./ufsLand.exe`
+7) Run the executable by typing: `./ufsLand.exe`
 
 7) The output NetCDF file will be create. 
