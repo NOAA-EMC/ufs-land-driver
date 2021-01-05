@@ -22,7 +22,7 @@ The model forcing and driver are seperated in two repositories: **ufs_land_forci
 
 4) Edit the **user_build_config** file to setup compiler, and library paths (to be consistent with your environment).
 
-5) The **makefile** collect all the codes from **ccpp-physics** directory and compile it. 
+5) Inside **ccpp-physics/physics** directory we can see the noahMp model under **module_sf_noahmplsm.f90The** name. The **makefile** collect all the codes from **ccpp-physics** directory and compile it. 
 
     Invoke `make` to compile.
  
