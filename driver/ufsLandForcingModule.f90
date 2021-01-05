@@ -67,7 +67,7 @@ contains
   
   this%forcing_counter = 0
   
-  forcing_type : select case (trim(namelist%forcing_type))
+  forcing_type_option : select case (trim(namelist%forcing_type))
     case ("single_point")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
     case ("gswp3")
@@ -75,7 +75,7 @@ contains
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
     case default
       stop "namelist forcing_type not recognized"
-  end select forcing_type
+  end select forcing_type_option
   
   write(*,*) "Starting first read: "//trim(forcing_filename)
   
@@ -171,7 +171,7 @@ contains
   
   if(.not. next_forcing_read) then
   
-    forcing_type1 : select case (trim(namelist%forcing_type))
+    forcing_type_option : select case (trim(namelist%forcing_type))
       case ("single_point")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       case ("gswp3")
@@ -183,7 +183,7 @@ contains
         end if
       case default
         stop "namelist forcing_type not recognized"
-    end select forcing_type1
+    end select forcing_type_option
   
     status = nf90_open(forcing_filename, NF90_NOWRITE, ncid)
      if (status /= nf90_noerr) call handle_err(status)
