@@ -223,7 +223,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
   
   if(timestep == 1) call noahmp%InitStates(namelist, now_time)
 
-  call forcing%ReadForcing(namelist, now_time)
+  call forcing%ReadForcing(namelist, static, now_time)
   
   call interpolate_monthly(now_time, im, static%gvf_monthly, sigmaf)
   call interpolate_monthly(now_time, im, static%albedo_monthly, sfalb)

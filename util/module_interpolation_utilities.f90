@@ -80,10 +80,10 @@ double precision                  :: now_time, last_time, next_time
 integer                           :: vector_length
 real, dimension(vector_length)    :: last_var, next_var, interp_var
 
-real                :: last_weight, next_weight
+real                              :: last_weight, next_weight
 
 if(last_time > now_time .or. next_time < now_time) &
-   stop "problem with time in interpolate_monthly"
+   stop "problem with time in interpolate_linear"
 
  next_weight = (now_time - last_time) / (next_time - last_time)
  last_weight = 1.0 - next_weight
@@ -91,6 +91,84 @@ if(last_time > now_time .or. next_time < now_time) &
   interp_var = last_weight * last_var + next_weight * next_var
 
 end subroutine interpolate_linear
+
+subroutine interpolate_zenith_angle(now_time, last_time, next_time, vector_length, &
+                                    latitude, longitude,                           &
+                                   last_var0, next_var0, interp_var)
+
+use cosine_zenith
+
+implicit none
+
+double precision                  :: now_time, last_time, next_time
+integer                           :: vector_length
+real, dimension(vector_length)    :: latitude, longitude, last_var0, next_var0, interp_var
+
+real, dimension(vector_length)    :: last_cosz, next_cosz, now_cosz
+real, dimension(vector_length)    :: last_var, next_var
+
+real                              :: last_weight, next_weight, julian
+real, parameter                   :: critical_energy = 50.0
+real, parameter                   :: critical_cosz   = 0.05
+
+  if(last_time > now_time .or. next_time < now_time) &
+     stop "problem with time in interpolate_zenith_angle"
+
+  call calc_cosine_zenith( now_time, vector_length, latitude, longitude,  now_cosz, julian)
+  call calc_cosine_zenith(last_time, vector_length, latitude, longitude, last_cosz, julian)
+  call calc_cosine_zenith(next_time, vector_length, latitude, longitude, next_cosz, julian)
+
+  last_var = last_var0
+  next_var = next_var0
+
+  where(last_var <= 0 .or. last_cosz <= 0.0) 
+    last_var = 0.0
+    last_cosz = 0.0
+  end where
+
+  where(next_var <= 0 .or. next_cosz <= 0.0)
+    next_var = 0.0
+    next_cosz = 0.0
+  end where
+
+! default to linear time interpolation
+
+  next_weight = (now_time - last_time) / (next_time - last_time)
+  last_weight = 1.0 - next_weight
+
+  interp_var = last_weight * last_var + next_weight * next_var
+
+! if sun sufficently high around sunset, use last value
+
+where(last_var > critical_energy .and. next_var <= critical_energy .and. last_cosz > critical_cosz) 
+  interp_var = now_cosz/last_cosz * last_var   
+end where
+
+! if sun sufficently high around sunrise, use next value
+
+where(last_var <= critical_energy .and. next_var > critical_energy .and. next_cosz > critical_cosz) 
+  interp_var = now_cosz/next_cosz * next_var   
+end where
+
+! mid-day with sufficient sun, so use zenith angle
+
+where( last_var  > critical_energy .and. next_var  > critical_energy .and. &
+       last_cosz > critical_cosz   .and. next_cosz > critical_cosz .and. last_weight >= 0.5)
+  interp_var = now_cosz/last_cosz * last_var 
+end where
+
+where( last_var  > critical_energy .and. next_var  > critical_energy .and. &
+       last_cosz > critical_cosz   .and. next_cosz > critical_cosz .and. last_weight < 0.5)
+  interp_var = now_cosz/next_cosz * next_var 
+end where
+
+! final data check
+
+where(interp_var <= 0 .or. now_cosz <= 0.0) interp_var = 0.0
+
+
+end subroutine interpolate_zenith_angle
+
 
 end module interpolation_utilities
 

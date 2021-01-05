@@ -50,6 +50,7 @@ type, public :: namelist_type
   integer        ::  forcing_timestep_seconds
   character*128  ::  forcing_type
   character*128  ::  forcing_filename
+  character*128  ::  forcing_interp_solar
   character*128  ::  forcing_name_precipitation
   character*128  ::  forcing_name_sw_radiation
   character*128  ::  forcing_name_lw_radiation
@@ -116,6 +117,7 @@ contains
     integer        ::  forcing_timestep_seconds = -999
     character*128  ::  forcing_type = ""
     character*128  ::  forcing_filename = ""
+    character*128  ::  forcing_interp_solar = ""
     character*128  ::  forcing_name_precipitation = ""
     character*128  ::  forcing_name_temperature = ""
     character*128  ::  forcing_name_specific_humidity = ""
@@ -142,6 +144,7 @@ contains
                surface_evap_resistance_option    , glacier_option                    
     namelist / forcing / forcing_timestep_seconds       ,                             &
                          forcing_type                   , forcing_filename          , &
+			 forcing_interp_solar           ,                             &
                          forcing_name_precipitation     , forcing_name_temperature  , &
                          forcing_name_specific_humidity , forcing_name_wind_speed   , &
 			 forcing_name_pressure          , forcing_name_sw_radiation , &
@@ -202,6 +205,7 @@ contains
     this%forcing_timestep_seconds       = forcing_timestep_seconds
     this%forcing_type                   = forcing_type
     this%forcing_filename               = forcing_filename
+    this%forcing_interp_solar           = forcing_interp_solar
     this%forcing_name_precipitation     = forcing_name_precipitation
     this%forcing_name_temperature       = forcing_name_temperature
     this%forcing_name_specific_humidity = forcing_name_specific_humidity

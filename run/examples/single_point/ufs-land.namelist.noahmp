@@ -58,6 +58,7 @@
  forcing_timestep_seconds       = 1800
  forcing_type                   = "single_point"
  forcing_filename               = "ufs_land_forcing.19980101060000.nc"
+ forcing_interp_solar           = "linear"
  forcing_name_precipitation     = "precipitation"
  forcing_name_temperature       = "temperature"
  forcing_name_specific_humidity = "specific_humidity"

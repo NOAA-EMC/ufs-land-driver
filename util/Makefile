@@ -25,5 +25,5 @@ clean:
 
 module_time_utilities.o:
 module_error_handling.o:
-module_interpolation_utilities.o: module_time_utilities.o
+module_interpolation_utilities.o: module_time_utilities.o module_cosine_zenith.o
 module_cosine_zenith.o: module_time_utilities.o

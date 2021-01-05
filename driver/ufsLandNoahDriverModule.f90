@@ -187,7 +187,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   now_time = namelist%initial_time + timestep * namelist%timestep_seconds
 
-  call forcing%ReadForcing(namelist, now_time)
+  call forcing%ReadForcing(namelist, static, now_time)
 
   call interpolate_monthly(now_time, im, static%gvf_monthly, sigmaf)
   call interpolate_monthly(now_time, im, static%albedo_monthly, sfalb)

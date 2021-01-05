@@ -144,15 +144,17 @@ contains
    
   end subroutine ReadForcingInit
 
-  subroutine ReadForcing(this, namelist, now_time)
+  subroutine ReadForcing(this, namelist, static, now_time)
   
   use netcdf
   use error_handling, only : handle_err
   use time_utilities
-  use interpolation_utilities, only : interpolate_linear
+  use interpolation_utilities, only : interpolate_linear, interpolate_zenith_angle
+  use ufsLandStaticModule, only : static_type
   
   class(forcing_type)  :: this
   type(namelist_type)  :: namelist
+  type (static_type)   :: static
   double precision     :: now_time
   
   character*128        :: forcing_filename
@@ -279,8 +281,18 @@ contains
     call interpolate_linear(now_time, last_time, next_time, this%nlocations, &
                             last_downward_longwave, next_downward_longwave, this%downward_longwave)
 
-    call interpolate_linear(now_time, last_time, next_time, this%nlocations, &
-                            last_downward_shortwave, next_downward_shortwave, this%downward_shortwave)
+    if(trim(namelist%forcing_interp_solar) == "linear") then
+
+      call interpolate_linear(now_time, last_time, next_time, this%nlocations, &
+                              last_downward_shortwave, next_downward_shortwave, this%downward_shortwave)
+
+    elseif(trim(namelist%forcing_interp_solar) == "cosine_zenith") then
+
+      call interpolate_zenith_angle(now_time, last_time, next_time, this%nlocations,  &
+                              static%latitude, static%longitude,                      &
+                              last_downward_shortwave, next_downward_shortwave,       &
+                              this%downward_shortwave)
+    end if
 
     this%precipitation = next_precipitation
   

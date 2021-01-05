@@ -48,5 +48,6 @@ ufsLandNoahMPType.o:	ufsLandNamelistRead.o ../mod/noahmp_tables.o
 ufsLandInitialModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ../util/module_error_handling.o
 ufsLandStaticModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ../util/module_error_handling.o
 ufsLandForcingModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o \
-                        ../util/module_error_handling.o	../util/module_time_utilities.o
+                        ../util/module_error_handling.o	../util/module_time_utilities.o \
+			ufsLandStaticModule.o
 ufsLandNamelistRead.o:	../util/module_time_utilities.o
