@@ -11,6 +11,8 @@ type, public :: namelist_type
   character*128  :: forcing_dir
   character*128  :: output_dir
   
+  logical        :: separate_output
+  
   integer        :: timestep_seconds
   
   character*19   :: simulation_start
@@ -77,6 +79,8 @@ contains
     character*128  :: init_file = ""
     character*128  :: forcing_dir = ""
     character*128  :: output_dir = ""
+    
+    logical        :: separate_output = .false.
   
     integer        :: timestep_seconds = -999
   
@@ -130,7 +134,7 @@ contains
   
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
-			    run_seconds, run_timesteps
+			    run_seconds, run_timesteps, separate_output
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
     namelist / soil_setup / soil_level_thickness, soil_level_nodes
@@ -191,6 +195,7 @@ contains
     this%init_file            = init_file
     this%forcing_dir          = forcing_dir
     this%output_dir           = output_dir
+    this%separate_output      = separate_output
     this%timestep_seconds     = timestep_seconds
     this%simulation_start     = simulation_start
     this%simulation_end       = simulation_end

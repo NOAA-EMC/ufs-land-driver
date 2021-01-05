@@ -6,7 +6,7 @@ module ufsLandIOModule
 
   type, public :: output_type
 
-    character*33     :: filename
+    character*100    :: filename
     integer          :: output_counter
 
   contains
@@ -38,7 +38,8 @@ contains
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_date
   
-  if(now_time == namelist%initial_time + namelist%timestep_seconds) then
+  if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
+     namelist%separate_output) then
   
     call date_from_since(reference_date, now_time, nowdate)
     read(nowdate( 1: 4),'(i4.4)') yyyy
@@ -48,7 +49,8 @@ contains
     read(nowdate(15:16),'(i2.2)') nn
     read(nowdate(18:19),'(i2.2)') ss
 
-    write(this%filename,'(a16,i4,5i2.2,a3)') "ufs_land_output.", yyyy, mm, dd, hh, nn, ss, ".nc"
+    write(this%filename,'(a16,i4,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a3)') &
+      "ufs_land_output.", yyyy, "-", mm, "-", dd, "_", hh, "-", nn, "-", ss, ".nc"
 
     write(*,*) "Creating: "//this%filename
 
@@ -471,7 +473,8 @@ contains
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date
   
-  if(now_time == namelist%initial_time + namelist%timestep_seconds) then
+  if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
+     namelist%separate_output ) then
   
     call date_from_since(reference_date, now_time, nowdate)
     read(nowdate( 1: 4),'(i4.4)') yyyy
@@ -481,7 +484,8 @@ contains
     read(nowdate(15:16),'(i2.2)') nn
     read(nowdate(18:19),'(i2.2)') ss
 
-    write(this%filename,'(a16,i4,5i2.2,a3)') "ufs_land_output.", yyyy, mm, dd, hh, nn, ss, ".nc"
+    write(this%filename,'(a16,i4,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a3)') &
+      "ufs_land_output.", yyyy, "-", mm, "-", dd, "_", hh, "-", nn, "-", ss, ".nc"
 
     write(*,*) "Creating: "//this%filename
 

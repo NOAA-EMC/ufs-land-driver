@@ -5,6 +5,8 @@
   forcing_dir      = "/ufs_land_forcing/examples/single_point"
   output_dir       = "./"
 
+  separate_output = .false.
+
   timestep_seconds = 1800
 
 ! simulation_start is required
