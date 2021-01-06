@@ -149,7 +149,7 @@ contains
   use netcdf
   use error_handling, only : handle_err
   use time_utilities
-  use interpolation_utilities, only : interpolate_linear, interpolate_zenith_angle
+  use interpolation_utilities, only : interpolate_linear, interpolate_gswp3_zenith
   use ufsLandStaticModule, only : static_type
   
   class(forcing_type)  :: this
@@ -246,8 +246,17 @@ contains
     this%surface_pressure   = next_surface_pressure
     this%wind_speed         = next_wind_speed
     this%downward_longwave  = next_downward_longwave
-    this%downward_shortwave = next_downward_shortwave
     this%precipitation      = next_precipitation
+    
+    if(namelist%forcing_time_solar == "instantaneous") then
+      this%downward_shortwave = next_downward_shortwave
+    elseif(namelist%forcing_time_solar == "gswp3_average") then
+      call interpolate_gswp3_zenith(now_time, next_time, this%nlocations,             &
+                              static%latitude, static%longitude,                      &
+			      namelist%timestep_seconds,                              &
+                              next_downward_shortwave,                                &
+                              this%downward_shortwave)
+    end if
     
     last_time               = next_time
     last_temperature        = next_temperature
@@ -286,11 +295,12 @@ contains
       call interpolate_linear(now_time, last_time, next_time, this%nlocations, &
                               last_downward_shortwave, next_downward_shortwave, this%downward_shortwave)
 
-    elseif(trim(namelist%forcing_interp_solar) == "cosine_zenith") then
+    elseif(trim(namelist%forcing_interp_solar) == "gswp3_zenith") then
 
-      call interpolate_zenith_angle(now_time, last_time, next_time, this%nlocations,  &
+      call interpolate_gswp3_zenith(now_time, last_time, this%nlocations,             &
                               static%latitude, static%longitude,                      &
-                              last_downward_shortwave, next_downward_shortwave,       &
+			      namelist%timestep_seconds,                              &
+                              last_downward_shortwave,                                &
                               this%downward_shortwave)
     end if
 

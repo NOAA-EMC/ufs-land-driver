@@ -92,83 +92,67 @@ if(last_time > now_time .or. next_time < now_time) &
 
 end subroutine interpolate_linear
 
-subroutine interpolate_zenith_angle(now_time, last_time, next_time, vector_length, &
-                                    latitude, longitude,                           &
-                                   last_var0, next_var0, interp_var)
+subroutine interpolate_gswp3_zenith(now_time, last_time, vector_length, &
+                                    latitude, longitude, timestep,      &
+                                    last_var, interp_var)
 
 use cosine_zenith
 
 implicit none
 
-double precision                  :: now_time, last_time, next_time
-integer                           :: vector_length
-real, dimension(vector_length)    :: latitude, longitude, last_var0, next_var0, interp_var
+double precision                  :: now_time, last_time
+integer                           :: vector_length, timestep
+real, dimension(vector_length)    :: latitude, longitude, last_var, interp_var
 
-real, dimension(vector_length)    :: last_cosz, next_cosz, now_cosz
-real, dimension(vector_length)    :: last_var, next_var
+double precision                  :: calc_time
+real, dimension(vector_length)    :: cosz1, cosz2, cosz3, coszavg, cosz
 
-real                              :: last_weight, next_weight, julian
+real                              :: julian
 real, parameter                   :: critical_energy = 50.0
-real, parameter                   :: critical_cosz   = 0.05
+real, parameter                   :: critical_cosz   = 0.0001
 
-  if(last_time > now_time .or. next_time < now_time) &
+  if(now_time < last_time) &
      stop "problem with time in interpolate_zenith_angle"
 
-  call calc_cosine_zenith( now_time, vector_length, latitude, longitude,  now_cosz, julian)
-  call calc_cosine_zenith(last_time, vector_length, latitude, longitude, last_cosz, julian)
-  call calc_cosine_zenith(next_time, vector_length, latitude, longitude, next_cosz, julian)
+! calculate zenith angle between the model timesteps for this forcing average
 
-  last_var = last_var0
-  next_var = next_var0
+  calc_time = last_time + 0.5*timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz1, julian)
 
-  where(last_var <= 0 .or. last_cosz <= 0.0) 
-    last_var = 0.0
-    last_cosz = 0.0
-  end where
+  calc_time = last_time + 0.5*timestep + timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz2, julian)
 
-  where(next_var <= 0 .or. next_cosz <= 0.0)
-    next_var = 0.0
-    next_cosz = 0.0
-  end where
+  calc_time = last_time + 0.5*timestep + 2*timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz3, julian)
 
-! default to linear time interpolation
+  where(cosz1 <= critical_cosz) cosz1 = 0.0
+  where(cosz2 <= critical_cosz) cosz2 = 0.0
+  where(cosz3 <= critical_cosz) cosz3 = 0.0
+  
+  coszavg = (cosz1 + cosz2 + cosz3) / 3.0
+  
+  interp_var = 0.0
 
-  next_weight = (now_time - last_time) / (next_time - last_time)
-  last_weight = 1.0 - next_weight
+! find which time to interpolate
 
-  interp_var = last_weight * last_var + next_weight * next_var
+  if(now_time == last_time) then
+    cosz = cosz1
+  elseif(now_time == last_time + real(timestep)) then
+    cosz = cosz2
+  elseif(now_time == last_time + real(2*timestep)) then
+    cosz = cosz3
+  else
+    stop "problem interpolating in gswp3_zenith"
+  end if
 
-! if sun sufficently high around sunset, use last value
-
-where(last_var > critical_energy .and. next_var <= critical_energy .and. last_cosz > critical_cosz) 
-  interp_var = now_cosz/last_cosz * last_var   
-end where
-
-! if sun sufficently high around sunrise, use next value
-
-where(last_var <= critical_energy .and. next_var > critical_energy .and. next_cosz > critical_cosz) 
-  interp_var = now_cosz/next_cosz * next_var   
-end where
-
-! mid-day with sufficient sun, so use zenith angle
-
-where( last_var  > critical_energy .and. next_var  > critical_energy .and. &
-       last_cosz > critical_cosz   .and. next_cosz > critical_cosz .and. last_weight >= 0.5)
-  interp_var = now_cosz/last_cosz * last_var 
-end where
-
-where( last_var  > critical_energy .and. next_var  > critical_energy .and. &
-       last_cosz > critical_cosz   .and. next_cosz > critical_cosz .and. last_weight < 0.5)
-  interp_var = now_cosz/next_cosz * next_var 
-end where
+  where(coszavg > 0.0) interp_var = cosz/coszavg*last_var
 
 ! final data check
 
-where(interp_var <= 0 .or. now_cosz <= 0.0) interp_var = 0.0
+where(interp_var < 0.0 .or. cosz <= 0.0) interp_var = 0.0
 
 
-end subroutine interpolate_zenith_angle
-
+end subroutine interpolate_gswp3_zenith
 
 end module interpolation_utilities
 
