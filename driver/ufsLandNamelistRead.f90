@@ -18,6 +18,13 @@ type, public :: namelist_type
   character*19   :: simulation_start
   character*19   :: simulation_end
   integer        :: run_timesteps
+  
+  integer        :: begloc
+  integer        :: endloc
+
+  integer        :: begsub
+  integer        :: endsub
+  integer        :: lensub
 
   integer        :: land_model
 
@@ -94,6 +101,9 @@ contains
     integer        :: run_seconds = -999
     integer        :: run_timesteps = -999
     
+    integer        :: begloc = 1
+    integer        :: endloc = 1
+    
     integer        :: land_model = -999
 
     integer        :: num_soil_levels = -999
@@ -136,7 +146,7 @@ contains
   
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
-			    run_seconds, run_timesteps, separate_output
+			    run_seconds, run_timesteps, separate_output, begloc, endloc
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
     namelist / soil_setup / soil_level_thickness, soil_level_nodes
@@ -199,6 +209,8 @@ contains
     this%output_dir           = output_dir
     this%separate_output      = separate_output
     this%timestep_seconds     = timestep_seconds
+    this%begloc               = begloc
+    this%endloc               = endloc
     this%simulation_start     = simulation_start
     this%simulation_end       = simulation_end
     this%run_days             = run_days

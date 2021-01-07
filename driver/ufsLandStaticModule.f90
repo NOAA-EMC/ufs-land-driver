@@ -60,68 +60,79 @@ contains
 
   status = nf90_inquire_dimension(ncid, dimid, len = this%nlocations)
    if (status /= nf90_noerr) call handle_err(status)
+  
+  if(namelist%begloc > this%nlocations .or. namelist%endloc > this%nlocations) &
+    stop "begloc or endloc not consistent with nlocations in static read"
    
   status = nf90_inq_dimid(ncid, "soil_levels", dimid)
    if (status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inquire_dimension(ncid, dimid, len = this%nlevels)
    if (status /= nf90_noerr) call handle_err(status)
-   
-  allocate(this%latitude              (this%nlocations))
-  allocate(this%longitude             (this%nlocations))
-  allocate(this%vegetation_category   (this%nlocations))
-  allocate(this%soil_category         (this%nlocations))
-  allocate(this%slope_category        (this%nlocations))
-  allocate(this%deep_soil_temperature (this%nlocations))
-  allocate(this%elevation             (this%nlocations))
-  allocate(this%land_mask             (this%nlocations))
+  
+  allocate(this%latitude              (namelist%lensub))
+  allocate(this%longitude             (namelist%lensub))
+  allocate(this%vegetation_category   (namelist%lensub))
+  allocate(this%soil_category         (namelist%lensub))
+  allocate(this%slope_category        (namelist%lensub))
+  allocate(this%deep_soil_temperature (namelist%lensub))
+  allocate(this%elevation             (namelist%lensub))
+  allocate(this%land_mask             (namelist%lensub))
   allocate(this%soil_level_thickness  (this%nlevels))
   allocate(this%soil_level_nodes      (this%nlevels))
-  allocate(this%max_snow_albedo       (this%nlocations))
-  allocate(this%emissivity            (this%nlocations))
-  allocate(this%gvf_monthly           (this%nlocations,12))
-  allocate(this%albedo_monthly        (this%nlocations,12))
-  allocate(this%lai_monthly           (this%nlocations,12))
-  allocate(this%z0_monthly            (this%nlocations,12))
+  allocate(this%max_snow_albedo       (namelist%lensub))
+  allocate(this%emissivity            (namelist%lensub))
+  allocate(this%gvf_monthly           (namelist%lensub,12))
+  allocate(this%albedo_monthly        (namelist%lensub,12))
+  allocate(this%lai_monthly           (namelist%lensub,12))
+  allocate(this%z0_monthly            (namelist%lensub,12))
   
   status = nf90_inq_varid(ncid, "latitude", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%latitude)
+  status = nf90_get_var(ncid, varid, this%latitude, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "longitude", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%longitude)
+  status = nf90_get_var(ncid, varid, this%longitude, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "vegetation_category", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%vegetation_category)
+  status = nf90_get_var(ncid, varid, this%vegetation_category, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "soil_category", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%soil_category)
+  status = nf90_get_var(ncid, varid, this%soil_category, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "slope_category", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%slope_category)
+  status = nf90_get_var(ncid, varid, this%slope_category, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inq_varid(ncid, "deep_soil_temperature", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%deep_soil_temperature)
+  status = nf90_get_var(ncid, varid, this%deep_soil_temperature, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "elevation", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%elevation)
+  status = nf90_get_var(ncid, varid, this%elevation, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "land_mask", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%land_mask)
+  status = nf90_get_var(ncid, varid, this%land_mask, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "soil_level_thickness", varid)
@@ -136,32 +147,38 @@ contains
   
   status = nf90_inq_varid(ncid, "max_snow_albedo", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%max_snow_albedo)
+  status = nf90_get_var(ncid, varid, this%max_snow_albedo, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "emissivity", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%emissivity)
+  status = nf90_get_var(ncid, varid, this%emissivity, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "gvf_monthly", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%gvf_monthly, count = (/this%nlocations, 12/))
+  status = nf90_get_var(ncid, varid, this%gvf_monthly, &
+       start = (/namelist%begsub,1/), count = (/namelist%lensub,12/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inq_varid(ncid, "albedo_monthly", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%albedo_monthly, count = (/this%nlocations, 12/))
+  status = nf90_get_var(ncid, varid, this%albedo_monthly, &
+       start = (/namelist%begsub,1/), count = (/namelist%lensub,12/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inq_varid(ncid, "lai_monthly", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%lai_monthly, count = (/this%nlocations, 12/))
+  status = nf90_get_var(ncid, varid, this%lai_monthly, &
+       start = (/namelist%begsub,1/), count = (/namelist%lensub,12/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inq_varid(ncid, "z0_monthly", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%z0_monthly, count = (/this%nlocations, 12/))
+  status = nf90_get_var(ncid, varid, this%z0_monthly, &
+       start = (/namelist%begsub,1/), count = (/namelist%lensub,12/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_get_att(ncid, NF90_GLOBAL, "iswater", this%iswater)

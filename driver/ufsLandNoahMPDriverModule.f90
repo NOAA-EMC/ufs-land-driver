@@ -22,11 +22,11 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
 
   call static%ReadStatic(namelist)
   
-  call noahmp%Init(namelist,static%nlocations)
+  call noahmp%Init(namelist,namelist%lensub)
 
   call initial%ReadInitial(namelist)
   
-  call initial%TransferInitialNoahMP(noahmp)
+  call initial%TransferInitialNoahMP(namelist, noahmp)
   
   call static%TransferStaticNoahMP(noahmp)
   

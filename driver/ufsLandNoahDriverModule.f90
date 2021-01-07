@@ -22,11 +22,11 @@ subroutine ufsLandNoahDriverInit(namelist, static, forcing, noah)
 
   call static%ReadStatic(namelist)
   
-  call noah%Init(namelist,static%nlocations)
+  call noah%Init(namelist,namelist%lensub)
 
   call initial%ReadInitial(namelist)
   
-  call initial%TransferInitialNoah(noah)
+  call initial%TransferInitialNoah(namelist, noah)
   
   call static%TransferStaticNoah(noah)
   

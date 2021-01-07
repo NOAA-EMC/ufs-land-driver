@@ -37,6 +37,7 @@ contains
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_date
+  integer :: outsub
   
   if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
      namelist%separate_output) then
@@ -284,6 +285,8 @@ contains
 
   end if
   
+  outsub = namelist%begsub - namelist%begloc + 1
+  
   status = nf90_open(this%filename, NF90_WRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)
   
@@ -294,157 +297,207 @@ contains
   status = nf90_put_var(ncid, varid , noah%static%delt   , start = (/this%output_counter/))
 
   status = nf90_inq_varid(ncid, "ps", varid)
-  status = nf90_put_var(ncid, varid , forcing%surface_pressure   , start = (/1,this%output_counter/), &
-                                                                   count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%surface_pressure   , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
+
   status = nf90_inq_varid(ncid, "t1", varid)
-  status = nf90_put_var(ncid, varid , forcing%temperature        , start = (/1,this%output_counter/), &
-                                                                   count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%temperature        , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
+
   status = nf90_inq_varid(ncid, "q1", varid)
-  status = nf90_put_var(ncid, varid , forcing%specific_humidity  , start = (/1,this%output_counter/), &
-                                                                   count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%specific_humidity  , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
+
   status = nf90_inq_varid(ncid, "wind", varid)
-  status = nf90_put_var(ncid, varid , forcing%wind_speed         , start = (/1,this%output_counter/), &
-                                                                   count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%wind_speed         , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
+
   status = nf90_inq_varid(ncid, "tprcp", varid)
-  status = nf90_put_var(ncid, varid , forcing%precipitation      , start = (/1,this%output_counter/), &
-                                                                   count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%precipitation      , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
+
   status = nf90_inq_varid(ncid, "dlwflx", varid)
-  status = nf90_put_var(ncid, varid , forcing%downward_longwave  , start = (/1,this%output_counter/), &
-                                                                   count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%downward_longwave  , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
+
   status = nf90_inq_varid(ncid, "dswsfc", varid)
-  status = nf90_put_var(ncid, varid , forcing%downward_shortwave , start = (/1,this%output_counter/), &
-                                                                   count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%downward_shortwave , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
+
   status = nf90_inq_varid(ncid, "sigmaf", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sigmaf  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%sigmaf          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "sfcemis", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sfcemis , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%sfcemis         , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snet", varid)
-  status = nf90_put_var(ncid, varid , noah%model%snet    , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%snet            , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tg3", varid)
-  status = nf90_put_var(ncid, varid , noah%model%tg3     , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%tg3             , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "cm", varid)
-  status = nf90_put_var(ncid, varid , noah%model%cm      , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%cm              , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "ch", varid)
-  status = nf90_put_var(ncid, varid , noah%model%ch      , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%ch              , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "prsl1", varid)
-  status = nf90_put_var(ncid, varid , noah%model%prsl1   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%prsl1           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "prslki", varid)
-  status = nf90_put_var(ncid, varid , noah%model%prslki  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%prslki          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "zf", varid)
-  status = nf90_put_var(ncid, varid , noah%model%zf      , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%zf              , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "shdmin", varid)
-  status = nf90_put_var(ncid, varid , noah%model%shdmin  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%shdmin          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "shdmax", varid)
-  status = nf90_put_var(ncid, varid , noah%model%shdmax  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%shdmax          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snoalb", varid)
-  status = nf90_put_var(ncid, varid , noah%model%snoalb  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%snoalb          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "sfalb", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sfalb   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%sfalb           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "weasd", varid)
-  status = nf90_put_var(ncid, varid , noah%model%weasd   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%weasd           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snwdph", varid)
-  status = nf90_put_var(ncid, varid , noah%model%snwdph  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%snwdph          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tskin", varid)
-  status = nf90_put_var(ncid, varid , noah%model%tskin   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%tskin           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "srflag", varid)
-  status = nf90_put_var(ncid, varid , noah%model%srflag  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%srflag          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "smc", varid)
-  status = nf90_put_var(ncid, varid , noah%model%smc     , start = (/             1,              1,this%output_counter/), &
-                                                           count = (/noah%static%im, noah%static%km, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%smc                , &
+      start = (/        outsub,              1,this%output_counter/), &
+      count = (/noah%static%im, noah%static%km,                  1/))
 
   status = nf90_inq_varid(ncid, "stc", varid)
-  status = nf90_put_var(ncid, varid , noah%model%stc     , start = (/             1,              1,this%output_counter/),  &
-                                                           count = (/noah%static%im, noah%static%km, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%stc                , &
+      start = (/        outsub,              1,this%output_counter/), &
+      count = (/noah%static%im, noah%static%km,                  1/))
 
   status = nf90_inq_varid(ncid, "slc", varid)
-  status = nf90_put_var(ncid, varid , noah%model%slc     , start = (/             1,              1,this%output_counter/),  &
-                                                           count = (/noah%static%im, noah%static%km, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%slc                , &
+      start = (/        outsub,              1,this%output_counter/), &
+      count = (/noah%static%im, noah%static%km,                  1/))
 
   status = nf90_inq_varid(ncid, "canopy", varid)
-  status = nf90_put_var(ncid, varid , noah%model%canopy  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%canopy          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "trans", varid)
-  status = nf90_put_var(ncid, varid , noah%model%trans   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%trans           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tsurf", varid)
-  status = nf90_put_var(ncid, varid , noah%model%tsurf   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%tsurf           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "zorl", varid)
-  status = nf90_put_var(ncid, varid , noah%model%zorl    , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%zorl            , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "sncovr1", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sncovr1 , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%sncovr1         , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "qsurf", varid)
-  status = nf90_put_var(ncid, varid , noah%model%qsurf   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%qsurf           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "gflux", varid)
-  status = nf90_put_var(ncid, varid , noah%model%gflux   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%gflux           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "drain", varid)
-  status = nf90_put_var(ncid, varid , noah%model%drain   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%drain           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "evap", varid)
-  status = nf90_put_var(ncid, varid , noah%model%evap    , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%evap            , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "hflx", varid)
-  status = nf90_put_var(ncid, varid , noah%model%hflx    , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%hflx            , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "ep", varid)
-  status = nf90_put_var(ncid, varid , noah%model%ep      , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%ep              , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "runoff", varid)
-  status = nf90_put_var(ncid, varid , noah%model%runoff  , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%runoff          , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "cmm", varid)
-  status = nf90_put_var(ncid, varid , noah%model%cmm     , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%cmm             , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "chh", varid)
-  status = nf90_put_var(ncid, varid , noah%model%chh     , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%chh             , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "evbs", varid)
-  status = nf90_put_var(ncid, varid , noah%model%evbs    , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%evbs            , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "evcw", varid)
-  status = nf90_put_var(ncid, varid , noah%model%evcw    , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%evcw            , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "sbsno", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sbsno   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%sbsno           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snowc", varid)
-  status = nf90_put_var(ncid, varid , noah%model%snowc   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%snowc           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "stm", varid)
-  status = nf90_put_var(ncid, varid , noah%model%stm     , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%stm             , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snohf", varid)
-  status = nf90_put_var(ncid, varid , noah%model%snohf   , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%snohf           , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "smcwlt2", varid)
-  status = nf90_put_var(ncid, varid , noah%model%smcwlt2 , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%smcwlt2         , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "smcref2", varid)
-  status = nf90_put_var(ncid, varid , noah%model%smcref2 , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%smcref2         , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "wet1", varid)
-  status = nf90_put_var(ncid, varid , noah%model%wet1    , start = (/1,this%output_counter/), count = (/noah%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noah%model%wet1            , &
+      start = (/outsub,this%output_counter/), count = (/noah%static%im, 1/))
 
   
   status = nf90_close(ncid)
@@ -472,6 +525,7 @@ contains
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date
+  integer :: outsub
   
   if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
      namelist%separate_output ) then
@@ -887,295 +941,388 @@ contains
 
   end if
   
+  outsub = namelist%begsub - namelist%begloc + 1
+  
   status = nf90_open(this%filename, NF90_WRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "time", varid)
-  status = nf90_put_var(ncid, varid , now_time           , start = (/this%output_counter/))
+  status = nf90_put_var(ncid, varid , now_time             , start = (/this%output_counter/))
   
   status = nf90_inq_varid(ncid, "delt", varid)
   status = nf90_put_var(ncid, varid , noahmp%static%delt   , start = (/this%output_counter/))
 
   status = nf90_inq_varid(ncid, "ps", varid)
-  status = nf90_put_var(ncid, varid , forcing%surface_pressure   , start = (/1,this%output_counter/), &
-                                                                   count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%surface_pressure   , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
+
   status = nf90_inq_varid(ncid, "t1", varid)
-  status = nf90_put_var(ncid, varid , forcing%temperature        , start = (/1,this%output_counter/), &
-                                                                   count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%temperature        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
+      
   status = nf90_inq_varid(ncid, "q1", varid)
-  status = nf90_put_var(ncid, varid , forcing%specific_humidity  , start = (/1,this%output_counter/), &
-                                                                   count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%specific_humidity  , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
+      
   status = nf90_inq_varid(ncid, "wind", varid)
-  status = nf90_put_var(ncid, varid , forcing%wind_speed         , start = (/1,this%output_counter/), &
-                                                                   count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%wind_speed         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
+      
   status = nf90_inq_varid(ncid, "tprcp", varid)
-  status = nf90_put_var(ncid, varid , forcing%precipitation      , start = (/1,this%output_counter/), &
-                                                                   count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%precipitation      , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
+      
   status = nf90_inq_varid(ncid, "dlwflx", varid)
-  status = nf90_put_var(ncid, varid , forcing%downward_longwave  , start = (/1,this%output_counter/), &
-                                                                   count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%downward_longwave  , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
+      
   status = nf90_inq_varid(ncid, "dswsfc", varid)
-  status = nf90_put_var(ncid, varid , forcing%downward_shortwave , start = (/1,this%output_counter/), &
-                                                                   count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , forcing%downward_shortwave , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
+      
   status = nf90_inq_varid(ncid, "sigmaf", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%sigmaf  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%sigmaf        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "emiss", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%emiss   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%emiss         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "albdvis", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%albdvis , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%albdvis       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "albdnir", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%albdnir , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%albdnir       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "albivis", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%albivis , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%albivis       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "albinir", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%albinir , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%albinir       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snet", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snet    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%snet          , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tg3", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%tg3     , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%tg3           , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "cm", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%cm      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%cm            , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "ch", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%ch      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%ch            , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "prsl1", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%prsl1   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%prsl1         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "prslki", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%prslki  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%prslki        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "zf", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%zf      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%zf            , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "shdmin", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%shdmin  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%shdmin        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "shdmax", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%shdmax  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%shdmax        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snoalb", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snoalb  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%snoalb        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "sfalb", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%sfalb   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%sfalb         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "weasd", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%weasd   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%weasd         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snwdph", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snwdph  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%snwdph        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tskin", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%tskin   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%tskin         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "srflag", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%srflag  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%srflag        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "smc", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%smc     , start = (/             1,              1,this%output_counter/), &
-                                                           count = (/noahmp%static%im, noahmp%static%km, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%smc                  , &
+      start = (/          outsub,                1,this%output_counter/), &
+      count = (/noahmp%static%im, noahmp%static%km,                  1/))
 
   status = nf90_inq_varid(ncid, "stc", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%stc     , start = (/             1,              1,this%output_counter/),  &
-                                                           count = (/noahmp%static%im, noahmp%static%km, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%stc                  , &
+      start = (/          outsub,                1,this%output_counter/), &
+      count = (/noahmp%static%im, noahmp%static%km,                  1/))
 
   status = nf90_inq_varid(ncid, "slc", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%slc     , start = (/             1,              1,this%output_counter/),  &
-                                                           count = (/noahmp%static%im, noahmp%static%km, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%slc                  , &
+      start = (/          outsub,                1,this%output_counter/), &
+      count = (/noahmp%static%im, noahmp%static%km,                  1/))
 
   status = nf90_inq_varid(ncid, "canopy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%canopy  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%canopy        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "trans", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%trans   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%trans         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tsurf", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%tsurf   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%tsurf         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "zorl", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%zorl    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%zorl          , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "sncovr1", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%sncovr1 , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%sncovr1       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "qsurf", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%qsurf   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%qsurf         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "gflux", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%gflux   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%gflux         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "drain", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%drain   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%drain         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "evap", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%evap    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%evap          , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "hflx", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%hflx    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%hflx          , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "ep", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%ep      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%ep            , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "runoff", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%runoff  , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%runoff        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "cmm", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%cmm     , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%cmm           , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "chh", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%chh     , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%chh           , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "evbs", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%evbs    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%evbs          , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "evcw", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%evcw    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%evcw          , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "sbsno", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%sbsno   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%sbsno         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snowc", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snowc   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%snowc         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "stm", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%stm     , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%stm           , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snohf", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snohf   , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%snohf         , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "smcwlt2", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%smcwlt2 , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%smcwlt2       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "smcref2", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%smcref2 , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%smcref2       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "wet1", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%wet1    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%wet1          , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "xcoszin", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%xcoszin     , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%xcoszin     , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "snowxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snowxy      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%snowxy      , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tvxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%tvxy        , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%tvxy        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tgxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%tgxy        , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%tgxy        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "canicexy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%canicexy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%canicexy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "canliqxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%canliqxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%canliqxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "eahxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%eahxy       , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%eahxy       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "tahxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%tahxy       , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%tahxy       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "cmxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%cmxy        , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%cmxy        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "chxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%chxy        , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%chxy        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "fwetxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%fwetxy      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%fwetxy      , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "sneqvoxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%sneqvoxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%sneqvoxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "alboldxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%alboldxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%alboldxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "qsnowxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%qsnowxy     , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%qsnowxy     , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "wslakexy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%wslakexy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%wslakexy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "zwtxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%zwtxy       , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%zwtxy       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "waxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%waxy        , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%waxy        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "wtxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%wtxy        , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%wtxy        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "lfmassxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%lfmassxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%lfmassxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "rtmassxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%rtmassxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%rtmassxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "stmassxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%stmassxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%stmassxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "woodxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%woodxy      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%woodxy      , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "stblcpxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%stblcpxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%stblcpxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "fastcpxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%fastcpxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%fastcpxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "xlaixy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%xlaixy      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%xlaixy      , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "xsaixy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%xsaixy      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%xsaixy      , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "taussxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%taussxy     , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%taussxy     , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "smcwtdxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%smcwtdxy    , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%smcwtdxy    , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "deeprechxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model% deeprechxy , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model% deeprechxy , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "rechxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%rechxy      , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%rechxy      , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "t2mmp", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%t2mmp       , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%t2mmp       , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "q2mp", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%q2mp        , start = (/1,this%output_counter/), count = (/noahmp%static%im, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%q2mp        , &
+      start = (/outsub,this%output_counter/), count = (/noahmp%static%im, 1/))
 
   status = nf90_inq_varid(ncid, "smoiseq", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%smoiseq     , start = (/             1,              1,this%output_counter/), &
-                                                           count = (/noahmp%static%im, noahmp%static%km, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%smoiseq              , &
+      start = (/outsub          ,                1,this%output_counter/), &
+      count = (/noahmp%static%im, noahmp%static%km,                  1/))
 
   status = nf90_inq_varid(ncid, "zsnsoxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%zsnsoxy     , start = (/             1,              1,this%output_counter/),  &
-                                                           count = (/noahmp%static%im, noahmp%static%km+3, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%zsnsoxy                , &
+      start = (/outsub          ,                  1,this%output_counter/), &
+      count = (/noahmp%static%im, noahmp%static%km+3,                  1/))
 
   status = nf90_inq_varid(ncid, "tsnoxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%tsnoxy     , start = (/             1,              1,this%output_counter/),  &
-                                                           count = (/noahmp%static%im, 3, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%tsnoxy             , &
+      start = (/outsub          ,              1,this%output_counter/), &
+      count = (/noahmp%static%im,              3,                  1/))
 
   status = nf90_inq_varid(ncid, "snicexy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snicexy     , start = (/             1,              1,this%output_counter/),  &
-                                                           count = (/noahmp%static%im, 3, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%snicexy            , &
+      start = (/outsub          ,              1,this%output_counter/), &
+      count = (/noahmp%static%im,              3,                  1/))
 
   status = nf90_inq_varid(ncid, "snliqxy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snliqxy     , start = (/             1,              1,this%output_counter/),  &
-                                                           count = (/noahmp%static%im, 3, 1/))
+  status = nf90_put_var(ncid, varid , noahmp%model%snliqxy            , &
+      start = (/outsub          ,              1,this%output_counter/), &
+      count = (/noahmp%static%im,              3,                  1/))
 
   
   status = nf90_close(ncid)
