@@ -12,7 +12,7 @@ The model forcing and driver are seperated in two repositories: **ufs_land_forci
 
     https://github.com/HelinWei-NOAA/ccpp-physics.git
 
-2) In the "ufs-land-driver" repository, Use the **feature/noahmp** branch, so: 
+2) In the "ufs-land-driver" repository, use the **feature/noahmp** branch, so: 
 
     `git fetch`
 
