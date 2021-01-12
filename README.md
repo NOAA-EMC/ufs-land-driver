@@ -23,14 +23,14 @@ The model forcing and driver are seperated in two repositories: **ufs_land_forci
 4) Edit the **user_build_config** file to setup compiler, and library paths (to be consistent with your environment). Set the PHYSDIR to point to the top of the ccpp-physics directory.
 
 5) Inside **ccpp-physics/physics** directory we can see the noah-mp model under **module_sf_noahmplsm.f90** name. 
-6) When typing make at the top of the ufs_land_driver directory, the **Makefile** will automatically find the ccpp physics code in that location and collect all the codes from **ccpp-physics** directory and compile it (make sure the ccpp_physics repo is checked out at the feature/noahmp branch). 
+6) When typing make at the top of the **ufs_land_driver** directory, the **Makefile** will automatically find the **ccpp-physics** code in that location and collect all the codes from **ccpp-physics** directory and compile it (make sure the **ccpp_physics** repository is checked out at the **feature/noahmp** branch). 
 
     Invoke `make` to compile.
  
     All the modules from **ccpp-physics** should be compiled in **mod** directory, and all the drivers in **driver** directory, and the executable is in **run** directory.
 
 ## Example of single point test:
-6) There are 2 namelist files, one for noah and another for noah-mp model in **run/examples/single_point**        directory. To modify and test them, copy one of them to the **run** directory (where the ufsLand.exe is) and update   the “static_file”, init_file” and “forcing_dir” file directories.
+6) There are 2 namelist files, one for noah and another for noah-mp model in **run/examples/single_point** directory. To modify and test them, copy one of them to the **run** directory (where the ufsLand.exe is) and update   the “static_file”, init_file” and “forcing_dir” file directories.
 
 7) Run the executable by typing: `./ufsLand.exe`
 
