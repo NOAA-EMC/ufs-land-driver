@@ -275,6 +275,12 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
 
+  if(errflg /= 0) then
+    write(*,*) "noahmpdrv_run reporting an error"
+    write(*,*) errmsg
+    stop
+  end if
+
 end do time_loop
 
 end associate
