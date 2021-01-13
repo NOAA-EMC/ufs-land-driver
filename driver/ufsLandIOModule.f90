@@ -6,7 +6,7 @@ module ufsLandIOModule
 
   type, public :: output_type
 
-    character*100    :: filename
+    character*256    :: filename
     integer          :: output_counter
 
   contains
@@ -53,7 +53,9 @@ contains
     write(this%filename,'(a16,i4,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a3)') &
       "ufs_land_output.", yyyy, "-", mm, "-", dd, "_", hh, "-", nn, "-", ss, ".nc"
 
-    write(*,*) "Creating: "//this%filename
+    this%filename = trim(namelist%output_dir)//"/"//trim(this%filename)
+
+    write(*,*) "Creating: "//trim(this%filename)
 
     status = nf90_create(this%filename, NF90_CLOBBER, ncid)
       if (status /= nf90_noerr) call handle_err(status)
@@ -541,7 +543,9 @@ contains
     write(this%filename,'(a16,i4,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a3)') &
       "ufs_land_output.", yyyy, "-", mm, "-", dd, "_", hh, "-", nn, "-", ss, ".nc"
 
-    write(*,*) "Creating: "//this%filename
+    this%filename = trim(namelist%output_dir)//"/"//trim(this%filename)
+
+    write(*,*) "Creating: "//trim(this%filename)
 
     status = nf90_create(this%filename, NF90_CLOBBER, ncid)
       if (status /= nf90_noerr) call handle_err(status)
