@@ -8,6 +8,8 @@ include ../user_build_config
 OBJS =	../driver/ufsLandDriver.o \
 	../driver/ufsLandNoahDriverModule.o \
 	../driver/ufsLandNoahMPDriverModule.o \
+	../driver/ufsLandNoahRestartModule.o \
+	../driver/ufsLandNoahMPRestartModule.o \
 	../driver/ufsLandNamelistRead.o \
 	../driver/ufsLandNoahType.o \
 	../driver/ufsLandNoahMPType.o \

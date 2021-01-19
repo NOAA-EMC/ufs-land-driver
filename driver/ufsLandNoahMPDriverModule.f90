@@ -55,12 +55,14 @@ use ufsLandNoahMPType, only    : noahmp_type
 use ufsLandStaticModule, only  : static_type
 use ufsLandForcingModule
 use ufsLandIOModule
+use ufsLandNoahMPRestartModule
 
 type (namelist_type)  :: namelist
 type (noahmp_type)    :: noahmp
 type (forcing_type)   :: forcing
 type (static_type)    :: static
 type (output_type)    :: output
+type (noahmp_restart_type)    :: restart
 
 integer          :: timestep
 double precision :: now_time
@@ -274,6 +276,8 @@ time_loop : do timestep = 1, namelist%run_timesteps
   where(dswsfc>0.0 .and. sfalb<0.0) dswsfc = 0.0
 
   call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+
+  call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
 
   if(errflg /= 0) then
     write(*,*) "noahmpdrv_run reporting an error"

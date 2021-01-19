@@ -56,12 +56,14 @@ use ufsLandNoahType, only      : noah_type
 use ufsLandStaticModule, only  : static_type
 use ufsLandForcingModule
 use ufsLandIOModule
+use ufsLandNoahRestartModule
 
 type (namelist_type)  :: namelist
 type (noah_type)      :: noah
 type (forcing_type)   :: forcing
 type (static_type)    :: static
 type (output_type)    :: output
+type (noah_restart_type)    :: restart
 
 integer          :: timestep
 double precision :: now_time
@@ -245,6 +247,8 @@ time_loop : do timestep = 1, namelist%run_timesteps
   evap = evap * rho * hvap
 
   call output%WriteOutputNoah(namelist, noah, forcing, now_time)
+  
+  call restart%WriteRestartNoah(namelist, noah, now_time)
 
   if(errflg /= 0) then
     write(*,*) "noahmpdrv_run reporting an error"

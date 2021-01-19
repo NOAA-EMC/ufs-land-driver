@@ -4,6 +4,7 @@
   init_file        = "ufs_land_driver_init.nc"
   forcing_dir      = "/ufs_land_forcing/examples/single_point"
   output_dir       = "./"
+  restart_dir      = "./"
 
   separate_output = .false.
 

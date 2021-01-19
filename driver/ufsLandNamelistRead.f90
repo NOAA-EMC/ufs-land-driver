@@ -10,6 +10,7 @@ type, public :: namelist_type
   character*128  :: init_file
   character*128  :: forcing_dir
   character*128  :: output_dir
+  character*128  :: restart_dir
   
   logical        :: separate_output
   
@@ -87,6 +88,7 @@ contains
     character*128  :: init_file = ""
     character*128  :: forcing_dir = ""
     character*128  :: output_dir = ""
+    character*128  :: restart_dir = ""
     
     logical        :: separate_output = .false.
   
@@ -146,7 +148,8 @@ contains
   
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
-			    run_seconds, run_timesteps, separate_output, begloc, endloc
+			    run_seconds, run_timesteps, separate_output, begloc, endloc, &
+			    restart_dir
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
     namelist / soil_setup / soil_level_thickness, soil_level_nodes
@@ -207,6 +210,7 @@ contains
     this%init_file            = init_file
     this%forcing_dir          = forcing_dir
     this%output_dir           = output_dir
+    this%restart_dir          = restart_dir
     this%separate_output      = separate_output
     this%timestep_seconds     = timestep_seconds
     this%begloc               = begloc
