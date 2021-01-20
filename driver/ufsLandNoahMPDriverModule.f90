@@ -11,22 +11,27 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   use ufsLandStaticModule
   use ufsLandInitialModule
   use ufsLandForcingModule
+  use ufsLandNoahMPRestartModule
 
   implicit none
 
-  type (namelist_type)     :: namelist
-  type (noahmp_type)       :: noahmp
-  type (static_type)       :: static
-  type (initial_type)      :: initial
-  type (forcing_type)      :: forcing
+  type (namelist_type)       :: namelist
+  type (noahmp_type)         :: noahmp
+  type (static_type)         :: static
+  type (initial_type)        :: initial
+  type (forcing_type)        :: forcing
+  type (noahmp_restart_type) :: restart
 
   call static%ReadStatic(namelist)
   
   call noahmp%Init(namelist,namelist%lensub)
 
-  call initial%ReadInitial(namelist)
-  
-  call initial%TransferInitialNoahMP(namelist, noahmp)
+  if(namelist%restart_simulation) then
+    call restart%ReadRestartNoahMP(namelist, noahmp)
+  else
+    call initial%ReadInitial(namelist)
+    call initial%TransferInitialNoahMP(namelist, noahmp)
+  end if
   
   call static%TransferStaticNoahMP(noahmp)
   
@@ -223,7 +228,8 @@ time_loop : do timestep = 1, namelist%run_timesteps
   iyrlen = 365
   if(mod(now_yyyy,4) == 0) iyrlen = 366
   
-  if(timestep == 1) call noahmp%InitStates(namelist, now_time)
+  if(.not.namelist%restart_simulation .and. timestep == 1) &
+     call noahmp%InitStates(namelist, now_time)
 
   call forcing%ReadForcing(namelist, static, now_time)
   
@@ -245,7 +251,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
   snow_mp = 0.0
   graupel_mp = 0.0
   ice_mp = 0.0
-  
+
       call noahmpdrv_run                                               &
           ( im, km, itime, ps, u1, v1, t1, q1, soiltyp, vegtype,       &  !  ---  inputs
             sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,           &
@@ -277,7 +283,11 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
 
-  call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+  if(namelist%restart_timesteps > 0) then
+    if(mod(timestep,namelist%restart_timesteps) == 0) then
+      call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+    end if
+  end if
 
   if(errflg /= 0) then
     write(*,*) "noahmpdrv_run reporting an error"

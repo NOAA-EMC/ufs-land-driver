@@ -3,10 +3,14 @@
   static_file      = "ufs_land_driver_static.nc"
   init_file        = "ufs_land_driver_init.nc"
   forcing_dir      = "/ufs_land_forcing/examples/single_point"
-  output_dir       = "./"
-  restart_dir      = "./"
 
   separate_output = .false.
+  output_dir       = "./"
+
+  restart_frequency_s = 0
+  restart_simulation  = .false.
+  restart_date        = "2000-01-01 00:00:00"
+  restart_dir         = "./"
 
   timestep_seconds = 1800
 

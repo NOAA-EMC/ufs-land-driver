@@ -11,6 +11,7 @@ subroutine ufsLandNoahDriverInit(namelist, static, forcing, noah)
   use ufsLandStaticModule
   use ufsLandInitialModule
   use ufsLandForcingModule
+  use ufsLandNoahRestartModule
 
   implicit none
 
@@ -19,14 +20,18 @@ subroutine ufsLandNoahDriverInit(namelist, static, forcing, noah)
   type (static_type)       :: static
   type (initial_type)      :: initial
   type (forcing_type)      :: forcing
+  type (noah_restart_type) :: restart
 
   call static%ReadStatic(namelist)
   
   call noah%Init(namelist,namelist%lensub)
 
-  call initial%ReadInitial(namelist)
-  
-  call initial%TransferInitialNoah(namelist, noah)
+  if(namelist%restart_simulation) then
+    call restart%ReadRestartNoah(namelist, noah)
+  else
+    call initial%ReadInitial(namelist)
+    call initial%TransferInitialNoah(namelist, noah)
+  end if
   
   call static%TransferStaticNoah(noah)
   
@@ -248,7 +253,11 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   call output%WriteOutputNoah(namelist, noah, forcing, now_time)
   
-  call restart%WriteRestartNoah(namelist, noah, now_time)
+  if(namelist%restart_timesteps > 0) then
+    if(mod(timestep,namelist%restart_timesteps) == 0) then
+      call restart%WriteRestartNoah(namelist, noah, now_time)
+    end if
+  end if
 
   if(errflg /= 0) then
     write(*,*) "noahmpdrv_run reporting an error"

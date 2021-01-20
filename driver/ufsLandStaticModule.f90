@@ -230,6 +230,7 @@ contains
   noahmp%model%snoalb   = this%max_snow_albedo
   noahmp%model%shdmin   = minval(this%gvf_monthly,dim=2)
   noahmp%model%shdmax   = maxval(this%gvf_monthly,dim=2)
+  noahmp%model%xlatin   = this%latitude
 
   noahmp%model%dry     = .false.
   where(this%vegetation_category /= this%iswater) noahmp%model%dry = .true.
