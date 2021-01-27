@@ -33,7 +33,7 @@ OBJS =	../driver/ufsLandDriver.o \
 	../mod/module_sf_noahmp_glacier.o \
 	../mod/module_sf_noahmplsm.o \
 	../mod/noahmp_tables.o \
-	../mod/sfc_noahmp_drv.o \
+	../mod/noahmp_sfc_drv.o \
 	../mod/sfc_diff.o
 
 all:	ufsLand.exe
