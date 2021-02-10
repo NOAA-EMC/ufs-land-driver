@@ -58,8 +58,8 @@ module_sf_noahmplsm.o: $(PHYSDIR)/module_sf_noahmplsm.f90
 noahmp_tables.o: $(PHYSDIR)/noahmp_tables.f90
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/noahmp_tables.f90
 
-noahmp_sfc_drv.o: $(PHYSDIR)/noahmp_sfc_drv.f90
-	$(COMPILERF90) -cpp -DCCPP -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/noahmp_sfc_drv.f90
+noahmp_sfc_drv.o: $(PHYSDIR)/noahmp_sfc_drv.F90
+	$(COMPILERF90) -cpp -DCCPP -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/noahmp_sfc_drv.F90
 
 sfc_diff.o: $(PHYSDIR)/sfc_diff.f
 	$(COMPILERF90) -cpp -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/sfc_diff.f
