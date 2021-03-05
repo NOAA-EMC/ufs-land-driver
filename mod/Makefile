@@ -17,7 +17,7 @@ OBJS =	machine.o \
 	module_sf_noahmp_glacier.o \
 	module_sf_noahmplsm.o \
 	noahmp_tables.o \
-	noahmp_sfc_drv.o \
+	sfc_noahmp_drv.o \
 	sfc_diff.o
 	
 all:	$(OBJS)
@@ -58,8 +58,8 @@ module_sf_noahmplsm.o: $(PHYSDIR)/module_sf_noahmplsm.f90
 noahmp_tables.o: $(PHYSDIR)/noahmp_tables.f90
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/noahmp_tables.f90
 
-noahmp_sfc_drv.o: $(PHYSDIR)/noahmp_sfc_drv.F90
-	$(COMPILERF90) -cpp -DCCPP -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/noahmp_sfc_drv.F90
+sfc_noahmp_drv.o: $(PHYSDIR)/sfc_noahmp_drv.F90
+	$(COMPILERF90) -cpp -DCCPP -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/sfc_noahmp_drv.F90
 
 sfc_diff.o: $(PHYSDIR)/sfc_diff.f
 	$(COMPILERF90) -cpp -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/sfc_diff.f
