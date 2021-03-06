@@ -52,7 +52,11 @@ type :: noahmp_model_type
   integer             , allocatable :: soiltyp   (:) ! soil type (integer index)                   im
   integer             , allocatable :: vegtype   (:) ! vegetation type (integer index)             im
   real(kind=kind_phys), allocatable :: sigmaf    (:) ! areal fractional cover of green vegetation  im
-  real(kind=kind_phys), allocatable :: sfcemis   (:) ! sfc lw emissivity ( fraction )              im
+  real(kind=kind_phys), allocatable :: emiss     (:) ! sfc lw emissivity ( fraction )              im
+  real(kind=kind_phys), allocatable :: albdvis   (:) ! albedo - direct  visible ( fraction )       im
+  real(kind=kind_phys), allocatable :: albdnir   (:) ! albedo - direct  NIR     ( fraction )       im
+  real(kind=kind_phys), allocatable :: albivis   (:) ! albedo - diffuse visible ( fraction )       im
+  real(kind=kind_phys), allocatable :: albinir   (:) ! albedo - diffuse NIR     ( fraction )       im
   real(kind=kind_phys), allocatable :: snet      (:) ! total sky sfc netsw flx into ground[W/m**2] im NOT USED
   real(kind=kind_phys), allocatable :: tg3       (:) ! deep soil temperature [K]                   im
   real(kind=kind_phys), allocatable :: cm        (:) ! surface exchange coeff for momentum [m/s]   im
@@ -187,7 +191,11 @@ contains
     allocate(this%model%soiltyp   (vector_length))
     allocate(this%model%vegtype   (vector_length))
     allocate(this%model%sigmaf    (vector_length))
-    allocate(this%model%sfcemis   (vector_length))
+    allocate(this%model%emiss     (vector_length))
+    allocate(this%model%albdvis   (vector_length))
+    allocate(this%model%albdnir   (vector_length))
+    allocate(this%model%albivis   (vector_length))
+    allocate(this%model%albinir   (vector_length))
     allocate(this%model%snet      (vector_length))
     allocate(this%model%tg3       (vector_length))
     allocate(this%model%cm        (vector_length))
@@ -319,7 +327,11 @@ contains
     this%model%soiltyp    = huge(1)
     this%model%vegtype    = huge(1)
     this%model%sigmaf     = huge(1.0)
-    this%model%sfcemis    = huge(1.0)
+    this%model%emiss      = huge(1.0)
+    this%model%albdvis    = huge(1.0)
+    this%model%albdnir    = huge(1.0)
+    this%model%albivis    = huge(1.0)
+    this%model%albinir    = huge(1.0)
     this%model%snet       = huge(1.0)
     this%model%tg3        = huge(1.0)
     this%model%cm         = huge(1.0)

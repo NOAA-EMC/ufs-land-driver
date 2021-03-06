@@ -11,22 +11,27 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   use ufsLandStaticModule
   use ufsLandInitialModule
   use ufsLandForcingModule
+  use ufsLandNoahMPRestartModule
 
   implicit none
 
-  type (namelist_type)     :: namelist
-  type (noahmp_type)       :: noahmp
-  type (static_type)       :: static
-  type (initial_type)      :: initial
-  type (forcing_type)      :: forcing
+  type (namelist_type)       :: namelist
+  type (noahmp_type)         :: noahmp
+  type (static_type)         :: static
+  type (initial_type)        :: initial
+  type (forcing_type)        :: forcing
+  type (noahmp_restart_type) :: restart
 
   call static%ReadStatic(namelist)
   
-  call noahmp%Init(namelist,static%nlocations)
+  call noahmp%Init(namelist,namelist%lensub)
 
-  call initial%ReadInitial(namelist)
-  
-  call initial%TransferInitialNoahMP(noahmp)
+  if(namelist%restart_simulation) then
+    call restart%ReadRestartNoahMP(namelist, noahmp)
+  else
+    call initial%ReadInitial(namelist)
+    call initial%TransferInitialNoahMP(namelist, noahmp)
+  end if
   
   call static%TransferStaticNoahMP(noahmp)
   
@@ -55,12 +60,14 @@ use ufsLandNoahMPType, only    : noahmp_type
 use ufsLandStaticModule, only  : static_type
 use ufsLandForcingModule
 use ufsLandIOModule
+use ufsLandNoahMPRestartModule
 
 type (namelist_type)  :: namelist
 type (noahmp_type)    :: noahmp
 type (forcing_type)   :: forcing
 type (static_type)    :: static
 type (output_type)    :: output
+type (noahmp_restart_type)    :: restart
 
 integer          :: timestep
 double precision :: now_time
@@ -106,7 +113,11 @@ associate (                               &
    u1         => noahmp%model%u1         ,&
    v1         => noahmp%model%v1         ,&
    sigmaf     => noahmp%model%sigmaf     ,&
-   sfcemis    => noahmp%model%sfcemis    ,&
+   emiss      => noahmp%model%emiss      ,&
+   albdvis    => noahmp%model%albdvis    ,&
+   albdnir    => noahmp%model%albdnir    ,&
+   albivis    => noahmp%model%albivis    ,&
+   albinir    => noahmp%model%albinir    ,&
    snet       => noahmp%model%snet       ,&
    tg3        => noahmp%model%tg3        ,&
    cm         => noahmp%model%cm         ,&
@@ -217,9 +228,10 @@ time_loop : do timestep = 1, namelist%run_timesteps
   iyrlen = 365
   if(mod(now_yyyy,4) == 0) iyrlen = 366
   
-  if(timestep == 1) call noahmp%InitStates(namelist, now_time)
+  if(.not.namelist%restart_simulation .and. timestep == 1) &
+     call noahmp%InitStates(namelist, now_time)
 
-  call forcing%ReadForcing(namelist, now_time)
+  call forcing%ReadForcing(namelist, static, now_time)
   
   call interpolate_monthly(now_time, im, static%gvf_monthly, sigmaf)
   call interpolate_monthly(now_time, im, static%albedo_monthly, sfalb)
@@ -239,10 +251,10 @@ time_loop : do timestep = 1, namelist%run_timesteps
   snow_mp = 0.0
   graupel_mp = 0.0
   ice_mp = 0.0
-  
+
       call noahmpdrv_run                                               &
           ( im, km, itime, ps, u1, v1, t1, q1, soiltyp, vegtype,       &  !  ---  inputs
-            sigmaf, sfcemis, dlwflx, dswsfc, snet, delt, tg3, cm, ch,  &
+            sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,           &
             prsl1, prslki, zf, dry, wind, slopetyp,                    &
             shdmin, shdmax, snoalb, sfalb, flag_iter, flag_guess,      &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
@@ -258,6 +270,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             waxy, wtxy, tsnoxy, zsnsoxy, snicexy, snliqxy, lfmassxy,   &
             rtmassxy, stmassxy, woodxy, stblcpxy, fastcpxy, xlaixy,    &
             xsaixy, taussxy, smoiseq, smcwtdxy, deeprechxy, rechxy,    &
+            albdvis, albdnir,  albivis,  albinir,emiss,                &
             sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &  !  ---  outputs:
             cmm, chh, evbs, evcw, sbsno, snowc, stm, snohf,            &
             smcwlt2, smcref2, wet1, t2mmp, q2mp, errmsg, errflg)     
@@ -269,6 +282,18 @@ time_loop : do timestep = 1, namelist%run_timesteps
   where(dswsfc>0.0 .and. sfalb<0.0) dswsfc = 0.0
 
   call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+
+  if(namelist%restart_timesteps > 0) then
+    if(mod(timestep,namelist%restart_timesteps) == 0) then
+      call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+    end if
+  end if
+
+  if(errflg /= 0) then
+    write(*,*) "noahmpdrv_run reporting an error"
+    write(*,*) errmsg
+    stop
+  end if
 
 end do time_loop
 

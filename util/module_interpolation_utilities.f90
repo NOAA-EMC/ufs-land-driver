@@ -71,5 +71,88 @@ end do
 
 end subroutine interpolate_monthly
 
+subroutine interpolate_linear(now_time, last_time, next_time, vector_length, &
+                              last_var, next_var, interp_var)
+
+implicit none
+
+double precision                  :: now_time, last_time, next_time
+integer                           :: vector_length
+real, dimension(vector_length)    :: last_var, next_var, interp_var
+
+real                              :: last_weight, next_weight
+
+if(last_time > now_time .or. next_time < now_time) &
+   stop "problem with time in interpolate_linear"
+
+ next_weight = (now_time - last_time) / (next_time - last_time)
+ last_weight = 1.0 - next_weight
+
+  interp_var = last_weight * last_var + next_weight * next_var
+
+end subroutine interpolate_linear
+
+subroutine interpolate_gswp3_zenith(now_time, last_time, vector_length, &
+                                    latitude, longitude, timestep,      &
+                                    last_var, interp_var)
+
+use cosine_zenith
+
+implicit none
+
+double precision                  :: now_time, last_time
+integer                           :: vector_length, timestep
+real, dimension(vector_length)    :: latitude, longitude, last_var, interp_var
+
+double precision                  :: calc_time
+real, dimension(vector_length)    :: cosz1, cosz2, cosz3, coszavg, cosz
+
+real                              :: julian
+real, parameter                   :: critical_energy = 50.0
+real, parameter                   :: critical_cosz   = 0.0001
+
+  if(now_time < last_time) &
+     stop "problem with time in interpolate_zenith_angle"
+
+! calculate zenith angle between the model timesteps for this forcing average
+
+  calc_time = last_time + 0.5*timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz1, julian)
+
+  calc_time = last_time + 0.5*timestep + timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz2, julian)
+
+  calc_time = last_time + 0.5*timestep + 2*timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz3, julian)
+
+  where(cosz1 <= critical_cosz) cosz1 = 0.0
+  where(cosz2 <= critical_cosz) cosz2 = 0.0
+  where(cosz3 <= critical_cosz) cosz3 = 0.0
+  
+  coszavg = (cosz1 + cosz2 + cosz3) / 3.0
+  
+  interp_var = 0.0
+
+! find which time to interpolate
+
+  if(now_time == last_time) then
+    cosz = cosz1
+  elseif(now_time == last_time + real(timestep)) then
+    cosz = cosz2
+  elseif(now_time == last_time + real(2*timestep)) then
+    cosz = cosz3
+  else
+    stop "problem interpolating in gswp3_zenith"
+  end if
+
+  where(coszavg > 0.0) interp_var = cosz/coszavg*last_var
+
+! final data check
+
+where(interp_var < 0.0 .or. cosz <= 0.0) interp_var = 0.0
+
+
+end subroutine interpolate_gswp3_zenith
+
 end module interpolation_utilities
 

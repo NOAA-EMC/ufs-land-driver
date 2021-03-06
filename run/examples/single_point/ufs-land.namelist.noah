@@ -3,7 +3,14 @@
   static_file      = "ufs_land_driver_static.nc"
   init_file        = "ufs_land_driver_init.nc"
   forcing_dir      = "/ufs_land_forcing/examples/single_point"
+
+  separate_output = .false.
   output_dir       = "./"
+
+  restart_frequency_s = 0
+  restart_simulation  = .false.
+  restart_date        = "2000-01-01 00:00:00"
+  restart_dir         = "./"
 
   timestep_seconds = 1800
 
@@ -35,4 +42,19 @@
 &soil_setup
  soil_level_thickness   =  0.10,    0.30,    0.60,    1.00      ! soil level thicknesses [m]
  soil_level_nodes       =  0.05,    0.25,    0.70,    1.50      ! soil level centroids from surface [m]
+/
+
+&forcing
+ forcing_timestep_seconds       = 1800
+ forcing_type                   = "single_point"
+ forcing_filename               = "ufs_land_forcing.19980101060000.nc"
+ forcing_interp_solar           = "linear"
+ forcing_time_solar             = "instantaneous"
+ forcing_name_precipitation     = "precipitation"
+ forcing_name_temperature       = "temperature"
+ forcing_name_specific_humidity = "specific_humidity"
+ forcing_name_wind_speed        = "wind_speed"
+ forcing_name_pressure          = "surface_pressure"
+ forcing_name_sw_radiation      = "downward_shortwave"
+ forcing_name_lw_radiation      = "downward_longwave"
 /

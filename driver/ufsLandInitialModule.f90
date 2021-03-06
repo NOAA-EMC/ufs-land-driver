@@ -57,23 +57,26 @@ contains
   status = nf90_inquire_dimension(ncid, dimid, len = this%nlocations)
    if (status /= nf90_noerr) call handle_err(status)
    
+  if(namelist%begloc > this%nlocations .or. namelist%endloc > this%nlocations) &
+    stop "begloc or endloc not consistent with nlocations in static read"
+   
   status = nf90_inq_dimid(ncid, "soil_levels", dimid)
    if (status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inquire_dimension(ncid, dimid, len = this%nlevels)
    if (status /= nf90_noerr) call handle_err(status)
    
-  allocate(this%latitude             (this%nlocations))
-  allocate(this%longitude            (this%nlocations))
-  allocate(this%snow_water_equivalent(this%nlocations))
-  allocate(this%snow_depth           (this%nlocations))
-  allocate(this%canopy_water         (this%nlocations))
-  allocate(this%skin_temperature     (this%nlocations))
+  allocate(this%latitude             (namelist%lensub))
+  allocate(this%longitude            (namelist%lensub))
+  allocate(this%snow_water_equivalent(namelist%lensub))
+  allocate(this%snow_depth           (namelist%lensub))
+  allocate(this%canopy_water         (namelist%lensub))
+  allocate(this%skin_temperature     (namelist%lensub))
   allocate(this%soil_level_thickness (this%nlevels))
   allocate(this%soil_level_nodes     (this%nlevels))
-  allocate(this%soil_temperature     (this%nlocations,this%nlevels))
-  allocate(this%soil_moisture        (this%nlocations,this%nlevels))
-  allocate(this%soil_liquid          (this%nlocations,this%nlevels))
+  allocate(this%soil_temperature     (namelist%lensub,this%nlevels))
+  allocate(this%soil_moisture        (namelist%lensub,this%nlevels))
+  allocate(this%soil_liquid          (namelist%lensub,this%nlevels))
   
   status = nf90_inq_varid(ncid, "time", varid)
    if(status /= nf90_noerr) call handle_err(status)
@@ -87,32 +90,38 @@ contains
   
   status = nf90_inq_varid(ncid, "latitude", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%latitude)
+  status = nf90_get_var(ncid, varid, this%latitude, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "longitude", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%longitude)
+  status = nf90_get_var(ncid, varid, this%longitude, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "snow_water_equivalent", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%snow_water_equivalent)
+  status = nf90_get_var(ncid, varid, this%snow_water_equivalent, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "snow_depth", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%snow_depth)
+  status = nf90_get_var(ncid, varid, this%snow_depth, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "canopy_water", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%canopy_water)
+  status = nf90_get_var(ncid, varid, this%canopy_water, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inq_varid(ncid, "skin_temperature", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%skin_temperature)
+  status = nf90_get_var(ncid, varid, this%skin_temperature, &
+       start = (/namelist%begsub/), count = (/namelist%lensub/))
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "soil_level_thickness", varid)
@@ -127,17 +136,20 @@ contains
   
   status = nf90_inq_varid(ncid, "soil_temperature", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%soil_temperature, count = (/this%nlocations, this%nlevels/))
+  status = nf90_get_var(ncid, varid, this%soil_temperature, &
+       start = (/namelist%begsub,1/), count = (/namelist%lensub,this%nlevels/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inq_varid(ncid, "soil_moisture", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%soil_moisture, count = (/this%nlocations, this%nlevels/))
+  status = nf90_get_var(ncid, varid, this%soil_moisture, &
+       start = (/namelist%begsub,1/), count = (/namelist%lensub,this%nlevels/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inq_varid(ncid, "soil_liquid", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%soil_liquid, count = (/this%nlocations, this%nlevels/))
+  status = nf90_get_var(ncid, varid, this%soil_liquid, &
+       start = (/namelist%begsub,1/), count = (/namelist%lensub,this%nlevels/))
    if(status /= nf90_noerr) call handle_err(status)
 
   status = nf90_get_att(ncid, NF90_GLOBAL, "iswater", this%iswater)
@@ -149,14 +161,15 @@ contains
   
   end subroutine ReadInitial
 
-  subroutine TransferInitialNoah(this, noah)
+  subroutine TransferInitialNoah(this, namelist, noah)
   
   use ufsLandNoahType
   
   class(initial_type)  :: this
+  type(namelist_type)  :: namelist
   type(noah_type)      :: noah
   
-  if(this%nlocations /= noah%static%im) stop "vector length mismatch in ufsLandInitial_TransferInitial"
+  if(namelist%lensub /= noah%static%im) stop "vector length mismatch in ufsLandInitial_TransferInitial"
   if(this%nlevels    /= noah%static%km) stop "  soil levels mismatch in ufsLandInitial_TransferInitial"
   
   noah%model%weasd  = this%snow_water_equivalent
@@ -170,14 +183,15 @@ contains
   
   end subroutine TransferInitialNoah
 
-  subroutine TransferInitialNoahMP(this, noahmp)
+  subroutine TransferInitialNoahMP(this, namelist, noahmp)
   
   use ufsLandNoahMPType
   
   class(initial_type)  :: this
+  type(namelist_type)  :: namelist
   type(noahmp_type)    :: noahmp
   
-  if(this%nlocations /= noahmp%static%im) stop "vector length mismatch in ufsLandInitial_TransferInitial"
+  if(namelist%lensub /= noahmp%static%im) stop "vector length mismatch in ufsLandInitial_TransferInitial"
   if(this%nlevels    /= noahmp%static%km) stop "  soil levels mismatch in ufsLandInitial_TransferInitial"
   
   noahmp%model%weasd  = this%snow_water_equivalent

@@ -21,6 +21,10 @@ program ufsLandDriver
 
   call namelist%ReadNamelist()
   
+  namelist%begsub = namelist%begloc
+  namelist%endsub = namelist%endloc
+  namelist%lensub = namelist%endloc - namelist%begloc + 1
+  
   land_model : select case(namelist%land_model)
   
     case(NOAH_LAND_SURFACE_MODEL)

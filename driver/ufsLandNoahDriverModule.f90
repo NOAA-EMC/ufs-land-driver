@@ -11,6 +11,7 @@ subroutine ufsLandNoahDriverInit(namelist, static, forcing, noah)
   use ufsLandStaticModule
   use ufsLandInitialModule
   use ufsLandForcingModule
+  use ufsLandNoahRestartModule
 
   implicit none
 
@@ -19,14 +20,18 @@ subroutine ufsLandNoahDriverInit(namelist, static, forcing, noah)
   type (static_type)       :: static
   type (initial_type)      :: initial
   type (forcing_type)      :: forcing
+  type (noah_restart_type) :: restart
 
   call static%ReadStatic(namelist)
   
-  call noah%Init(namelist,static%nlocations)
+  call noah%Init(namelist,namelist%lensub)
 
-  call initial%ReadInitial(namelist)
-  
-  call initial%TransferInitialNoah(noah)
+  if(namelist%restart_simulation) then
+    call restart%ReadRestartNoah(namelist, noah)
+  else
+    call initial%ReadInitial(namelist)
+    call initial%TransferInitialNoah(namelist, noah)
+  end if
   
   call static%TransferStaticNoah(noah)
   
@@ -56,12 +61,14 @@ use ufsLandNoahType, only      : noah_type
 use ufsLandStaticModule, only  : static_type
 use ufsLandForcingModule
 use ufsLandIOModule
+use ufsLandNoahRestartModule
 
 type (namelist_type)  :: namelist
 type (noah_type)      :: noah
 type (forcing_type)   :: forcing
 type (static_type)    :: static
 type (output_type)    :: output
+type (noah_restart_type)    :: restart
 
 integer          :: timestep
 double precision :: now_time
@@ -187,7 +194,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   now_time = namelist%initial_time + timestep * namelist%timestep_seconds
 
-  call forcing%ReadForcing(namelist, now_time)
+  call forcing%ReadForcing(namelist, static, now_time)
 
   call interpolate_monthly(now_time, im, static%gvf_monthly, sigmaf)
   call interpolate_monthly(now_time, im, static%albedo_monthly, sfalb)
@@ -245,7 +252,18 @@ time_loop : do timestep = 1, namelist%run_timesteps
   evap = evap * rho * hvap
 
   call output%WriteOutputNoah(namelist, noah, forcing, now_time)
+  
+  if(namelist%restart_timesteps > 0) then
+    if(mod(timestep,namelist%restart_timesteps) == 0) then
+      call restart%WriteRestartNoah(namelist, noah, now_time)
+    end if
+  end if
 
+  if(errflg /= 0) then
+    write(*,*) "noahmpdrv_run reporting an error"
+    write(*,*) errmsg
+    stop
+  end if
 
 end do time_loop
 
