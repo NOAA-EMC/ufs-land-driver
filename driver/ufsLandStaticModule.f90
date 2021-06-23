@@ -220,21 +220,15 @@ contains
   class(static_type)  :: this
   type(noahmp_type)   :: noahmp
   
-  noahmp%static%isot    = 1
-  noahmp%static%ivegsrc = 1
-  noahmp%model%soiltyp  = this%soil_category
-  noahmp%model%vegtype  = this%vegetation_category
-  noahmp%model%slopetyp = this%slope_category
-  noahmp%model%tg3      = this%deep_soil_temperature
-  noahmp%model%emiss    = this%emissivity
-  noahmp%model%snoalb   = this%max_snow_albedo
-  noahmp%model%shdmin   = minval(this%gvf_monthly,dim=2)
-  noahmp%model%shdmax   = maxval(this%gvf_monthly,dim=2)
-  noahmp%model%xlatin   = this%latitude
+  noahmp%static%soil_source          = 1
+  noahmp%static%veg_source           = 1
+  noahmp%static%soil_category        = this%soil_category
+  noahmp%static%vegetation_category  = this%vegetation_category
+  noahmp%static%slope_category       = this%slope_category
+  noahmp%static%temperature_soil_bot = this%deep_soil_temperature
+  noahmp%model%max_vegetation_frac   = maxval(this%gvf_monthly,dim=2)
+  noahmp%model%latitude              = this%latitude
 
-  noahmp%model%dry     = .false.
-  where(this%vegetation_category /= this%iswater) noahmp%model%dry = .true.
-  
   end subroutine TransferStaticNoahMP
 
 end module ufsLandStaticModule
