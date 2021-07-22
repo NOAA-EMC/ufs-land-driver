@@ -73,6 +73,10 @@ contains
     case ("gswp3")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
+    ! add by li xu for gefs forcing  
+    case ("gefs")
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+      forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:4)//".nc"
     case default
       stop "namelist forcing_type not recognized"
   end select forcing_type_option
@@ -184,6 +188,14 @@ contains
           this%forcing_counter = 1
           write(*,*) "Resetting forcing counter to beginning of file"
         end if
+      ! add by li xu for gefs
+      case ("gefs")
+        forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+        forcing_filename = trim(forcing_filename)//next_date(1:4)//".nc"
+        if(next_date(6:19) == "01-01 00:00:00") then
+          this%forcing_counter = 1
+          write(*,*) "Resetting forcing counter to beginning of file"
+        end if        
       case default
         stop "namelist forcing_type not recognized"
     end select forcing_type_option

@@ -1,33 +1,36 @@
 &run_setup
 
-  static_file      = "ufs_land_driver_static.nc"
-  init_file        = "ufs_land_driver_init.nc"
-  forcing_dir      = "/ufs_land_forcing/examples/single_point"
+  static_file      = "./ufs-land_C96_static_fields.nc"
+  init_file        = "./ufs-land_C96_init_19700101.nc"
+  forcing_dir      = "/cpc/drought/nldas/GLDAS2/C96/"
 
-  separate_output = .false.
-  output_dir       = "./"
+  separate_output = .true.
+  output_dir       = "/run/user/4986/"
 
-  restart_frequency_s = 0
-  restart_simulation  = .false.
-  restart_date        = "2000-01-01 00:00:00"
-  restart_dir         = "./"
+  restart_frequency_s = 864000
+  restart_simulation  = .true.
+  restart_date        = "1983-08-10 23:00:00"
+  restart_dir         = "/cpc/drought/pdf/ufs/restart/"
 
-  timestep_seconds = 1800
+  timestep_seconds = 3600
 
 ! simulation_start is required
 ! either set simulation_end or run_* or run_timesteps, priority
 !   1. simulation_end 2. run_[days/hours/minutes/seconds] 3. run_timesteps
 
-  simulation_start = "1998-01-01 05:30:00"   ! start date [yyyy-mm-dd hh:mm:ss]
-  simulation_end   = "1999-01-01 06:00:00"   !   end date [yyyy-mm-dd hh:mm:ss]
+  simulation_start = "1983-12-23 23:00:00"   ! start date [yyyy-mm-dd hh:mm:ss]
+  simulation_end   = "2021-01-01 00:00:00"   !   end date [yyyy-mm-dd hh:mm:ss]
 
-  run_days         = 0   ! number of days to run
+  run_days         = 3660   ! number of days to run
   run_hours        = 0   ! number of hours to run
   run_minutes      = 0   ! number of minutes to run
   run_seconds      = 0   ! number of seconds to run
-  
+
   run_timesteps    = 0   ! number of timesteps to run
-  
+
+  begloc           = 1
+  endloc           = 16196
+
 /
 
 &land_model_option
@@ -62,16 +65,16 @@
 /
 
 &forcing
- forcing_timestep_seconds       = 1800
- forcing_type                   = "single_point"
- forcing_filename               = "ufs_land_forcing.19980101060000.nc"
- forcing_interp_solar           = "linear"
- forcing_time_solar             = "instantaneous"
- forcing_name_precipitation     = "precipitation"
+ forcing_timestep_seconds       = 10800
+ forcing_type                   = "gefs"
+ forcing_filename               = "C96_gldas2_"
+ forcing_interp_solar           = "gswp3_zenith"  ! gswp3_zenith or linear
+ forcing_time_solar             = "gswp3_average"  ! gswp3_average or instantaneous
+ forcing_name_precipitation     = "precipitation_conserve"
  forcing_name_temperature       = "temperature"
  forcing_name_specific_humidity = "specific_humidity"
  forcing_name_wind_speed        = "wind_speed"
  forcing_name_pressure          = "surface_pressure"
- forcing_name_sw_radiation      = "downward_shortwave"
- forcing_name_lw_radiation      = "downward_longwave"
+ forcing_name_sw_radiation      = "solar_radiation"
+ forcing_name_lw_radiation      = "longwave_radiation"
 /
