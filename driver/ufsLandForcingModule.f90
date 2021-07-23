@@ -208,10 +208,10 @@ contains
     status = nf90_get_var(ncid, varid, file_next_time, start = (/this%forcing_counter/))
      if(status /= nf90_noerr) call handle_err(status)
     
-    !li xu for tolerate the small difference at float64
+    !li xu for tolerate the small difference at float64 values
     if(file_next_time - next_time > 1) then
-      print*,file_next_time
-      print*,next_time
+      print*,"file_next_time = ",file_next_time
+      print*,"next_time = ",next_time
       write(*,*) "file_next_time not equal to next_time in now_time == next_time forcing"
       stop
     end if
