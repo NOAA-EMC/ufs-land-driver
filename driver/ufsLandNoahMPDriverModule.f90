@@ -223,7 +223,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   now_time = namelist%initial_time + timestep * namelist%timestep_seconds
 
-  call date_from_since("1970-01-01 00:00:00", now_time, now_date)
+  call date_from_since(namelist%reference_date, now_time, now_date)
   read(now_date(1:4),'(i4)') now_yyyy
   iyrlen = 365
   if(mod(now_yyyy,4) == 0) iyrlen = 366

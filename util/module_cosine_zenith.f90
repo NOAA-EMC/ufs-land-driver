@@ -20,7 +20,8 @@ character*19        :: now_date  ! format: yyyy-mm-dd hh:nn:ss
 real, parameter :: degrad = 3.14159265/180.
 real, parameter :: dpd    = 360./365.
 
-call date_from_since("1970-01-01 00:00:00", now_time, now_date)
+! Li Xu : this only for compute julian, any year should be okey
+call date_from_since("1800-01-01 00:00:00", now_time, now_date)
 
 call calc_sec_since(now_date(1:4)//"-01-01 00:00:00", now_date, 0, sec_since)
 

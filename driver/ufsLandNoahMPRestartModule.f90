@@ -30,12 +30,14 @@ contains
   type(noahmp_type)    :: noahmp
   double precision     :: now_time
   character*19     :: nowdate    ! current date
-  character*19     :: reference_date = "1970-01-01 00:00:00"
+  character*19     :: reference_date 
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date
   integer :: outsub
   
+  reference_date = namelist%reference_date
+
   outsub = namelist%begsub - namelist%begloc + 1
   
   call date_from_since(reference_date, now_time, nowdate)
@@ -786,11 +788,13 @@ contains
   type (noahmp_type)   :: noahmp
   double precision     :: now_time
   
-  character*19     :: reference_date = "1970-01-01 00:00:00"
+  character*19     :: reference_date 
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date
   integer :: outsub
+  
+  reference_date = namelist%reference_date
   
   call calc_sec_since(reference_date,namelist%restart_date,0,now_time)
 

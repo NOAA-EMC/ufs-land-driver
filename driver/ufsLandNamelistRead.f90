@@ -20,6 +20,7 @@ type, public :: namelist_type
   character*19   :: restart_date
   character*128  :: restart_dir
   
+  character*19   :: reference_date
   character*19   :: simulation_start
   character*19   :: simulation_end
   integer        :: run_timesteps
@@ -103,6 +104,7 @@ contains
     character*19   :: restart_date = ""
     character*128  :: restart_dir = ""
   
+    character*19   :: reference_date = "1970-01-01 00:00:00"
     character*19   :: simulation_start = ""
     character*19   :: simulation_end = ""
 
@@ -156,6 +158,7 @@ contains
     integer, parameter :: NOAHMP_LAND_SURFACE_MODEL = 2
   
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
+                            reference_date, &
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
 			    run_seconds, run_timesteps, separate_output, begloc, endloc, &
 			    restart_dir, restart_frequency_s, restart_simulation, restart_date
@@ -229,6 +232,7 @@ contains
     this%restart_dir          = restart_dir
     this%begloc               = begloc
     this%endloc               = endloc
+    this%reference_date       = reference_date
     this%simulation_start     = simulation_start
     this%simulation_end       = simulation_end
     this%run_days             = run_days
@@ -253,8 +257,8 @@ contains
     this%forcing_name_lw_radiation      = forcing_name_lw_radiation
     
     if(restart_simulation) then
-      call calc_sec_since("1970-01-01 00:00:00",restart_date,0,run_time)
-      call date_from_since("1970-01-01 00:00:00", run_time+timestep_seconds, simulation_start)
+      call calc_sec_since(reference_date,restart_date,0,run_time)
+      call date_from_since(reference_date, run_time+timestep_seconds, simulation_start)
     end if
     
     if(simulation_end /= "") then

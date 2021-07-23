@@ -21,7 +21,7 @@ integer             :: current_yyyy, current_mm, current_dd
 
 ! get the current date string assuming reference_date
 
-call date_from_since("1970-01-01 00:00:00", now_time, current_date)
+call date_from_since("1800-01-01 00:00:00", now_time, current_date)
 
 ! assume the monthly data are valid on the 15th
 
@@ -50,8 +50,8 @@ end if
 
 ! get the time the month before and after assuming reference date
 
-call calc_sec_since("1970-01-01 00:00:00",before_date,0,before_time)
-call calc_sec_since("1970-01-01 00:00:00", after_date,0, after_time)
+call calc_sec_since("1800-01-01 00:00:00",before_date,0,before_time)
+call calc_sec_since("1800-01-01 00:00:00", after_date,0, after_time)
 
 if(before_time > now_time .or. after_time < now_time) &
    stop "problem with time in interpolate_monthly"
