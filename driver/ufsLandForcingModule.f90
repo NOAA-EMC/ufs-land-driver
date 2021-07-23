@@ -171,8 +171,8 @@ contains
   integer :: times_in_file
   double precision  :: file_next_time
   
-  call date_from_since("1970-01-01 00:00:00", now_time, now_date)
-  call date_from_since("1970-01-01 00:00:00", next_time, next_date)
+  call date_from_since(namelist%reference_date, now_time, now_date)
+  call date_from_since(namelist%reference_date, next_time, next_date)
   
   write(*,*) "Searching for forcing at time: ",now_date
   
