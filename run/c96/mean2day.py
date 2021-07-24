@@ -15,7 +15,7 @@ from xu import ndates,run2,run
 
 p_in = '/cpc/drought/pdf/ufs/tmpoutput'
 
-p_out = '/cpc/drought/pdf/ufs/output/c96'
+p_out = '/cpc/drought/pdf/ufs/output/C96'
 p_g05 = '/cpc/drought/pdf/ufs/output/g05'
 
 from deco import *
@@ -47,6 +47,7 @@ def test():
 
 
 def do_day2(yyyymmdd='20200101', n=35,m=1):
+    '''daemon routine'''
     from glob import glob
 
     p_in = '/run/user/4986/'

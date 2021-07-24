@@ -4,3 +4,7 @@
 *.exe
 user_build_config
 run/ufs-land.namelist
+
+*.nc
+run/.nfs00000000063db5da0000034f
+run/c96/nohup.out

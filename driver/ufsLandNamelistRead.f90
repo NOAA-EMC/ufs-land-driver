@@ -99,6 +99,7 @@ contains
   
     integer        :: timestep_seconds = -999
 
+
     integer        :: restart_frequency_s = 0
     logical        :: restart_simulation = .false.
     character*19   :: restart_date = ""
@@ -263,8 +264,10 @@ contains
     
     if(simulation_end /= "") then
       call calc_sec_since(simulation_start,simulation_end,0,run_time)
-      if(mod(int(run_time),timestep_seconds) /= 0) stop "calculated run time not divisible by timestep"
-      this%run_timesteps = int(run_time)/timestep_seconds + 1
+      print*,run_time,int(run_time),timestep_seconds
+      !li Xu, when run_time = 2303683200.0000000,  int(run_time) is wrong, gfortran int() bug
+      if(mod(run_time,float(timestep_seconds)) /= 0) stop "calculated run time not divisible by timestep"
+      this%run_timesteps = int(run_time/timestep_seconds) + 1
     elseif(run_days /= 0 .or. run_hours /= 0 .or. run_minutes /= 0 .or. run_seconds /= 0) then
       run_time = 86400*run_days + 3600*run_hours + 60*run_minutes + run_seconds
       if(mod(int(run_time),timestep_seconds) /= 0) stop "calculated run time not divisible by timestep"

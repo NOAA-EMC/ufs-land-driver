@@ -133,7 +133,10 @@ contains
     status = nf90_get_var(ncid, varid, read_time, start = (/itime/))
      if(status /= nf90_noerr) call handle_err(status)
      
-    if (read_time == namelist%initial_time + namelist%timestep_seconds) then
+     ! li xu, again, there are some small difference at those float64 values
+     ! print*,read_time,namelist%initial_time + namelist%timestep_seconds
+     ! changed to less than 1 second    
+    if (read_time  - (namelist%initial_time + namelist%timestep_seconds) < 1) then
        this%forcing_counter = itime
        next_time = read_time
        last_time = huge(1.d0)

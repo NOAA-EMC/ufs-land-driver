@@ -2,15 +2,15 @@
 
   static_file      = "./ufs-land_C96_static_fields.nc"
   init_file        = "./ufs-land_C96_init_19480101t23.nc"
-  forcing_dir      = "./"
+  forcing_dir      = "/cpc/drought/nldas/GLDAS2/C96_1948/"
 
   separate_output = .true.
   output_dir       = "/run/user/4986/"
 
   restart_frequency_s = 864000
   restart_simulation  = .false.
-  restart_date        = "1983-08-10 23:00:00"
-  restart_dir         = "./restart/"
+  restart_date        = "1948-12-16 23:00:00"
+  restart_dir         = "/cpc/drought/pdf/ufs/restart/"
 
   reference_date = "1948-01-01 00:00:00"
 
@@ -21,7 +21,7 @@
 !   1. simulation_end 2. run_[days/hours/minutes/seconds] 3. run_timesteps
 
   simulation_start = "1948-01-02 00:00:00"   ! start date [yyyy-mm-dd hh:mm:ss]
-  simulation_end   = "1970-01-01 00:00:00"   !   end date [yyyy-mm-dd hh:mm:ss]
+  simulation_end   = "2021-01-01 00:00:00"   !   end date [yyyy-mm-dd hh:mm:ss]
 
   run_days         = 3   ! number of days to run
   run_hours        = 0   ! number of hours to run
@@ -69,7 +69,7 @@
 &forcing
  forcing_timestep_seconds       = 10800
  forcing_type                   = "gefs"
- forcing_filename               = "C96_19480102_"
+ forcing_filename               = "C96_gldas2_"
  forcing_interp_solar           = "gswp3_zenith"  ! gswp3_zenith or linear
  forcing_time_solar             = "gswp3_average"  ! gswp3_average or instantaneous
  forcing_name_precipitation     = "precipitation_conserve"
