@@ -13,10 +13,8 @@ import matplotlib.pyplot as plt
 
 from xu import ndates,run2,run
 
-p_in = '/cpc/drought/pdf/ufs/tmpoutput'
-
+p_in = '/tmp/'
 p_out = '/cpc/drought/pdf/ufs/output/C96'
-p_g05 = '/cpc/drought/pdf/ufs/output/g05'
 
 from deco import *
 
@@ -45,9 +43,8 @@ def test():
          '/tmp/tmp.nc')
 
 
-
 def do_day2(yyyymmdd='20200101', n=35,m=1):
-    '''daemon routine'''
+    '''daemon like routine'''
     from glob import glob
 
     p_in = '/run/user/4986/'
@@ -63,7 +60,7 @@ def do_day2(yyyymmdd='20200101', n=35,m=1):
             if len(files) == 0: continue
 
             count=0
-            while  len(files) < 23:
+            while  len(files) < 22:
                 print(date)
                 print('wait: ',m,'sec, for times:',count)
                 time.sleep(m)

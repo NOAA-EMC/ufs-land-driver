@@ -8,8 +8,8 @@
   output_dir       = "/run/user/4986/"
 
   restart_frequency_s = 864000
-  restart_simulation  = .false.
-  restart_date        = "1948-12-16 23:00:00"
+  restart_simulation  = .true.
+  restart_date        = "2015-12-25 23:00:00"
   restart_dir         = "/cpc/drought/pdf/ufs/restart/"
 
   reference_date = "1948-01-01 00:00:00"
@@ -20,7 +20,7 @@
 ! either set simulation_end or run_* or run_timesteps, priority
 !   1. simulation_end 2. run_[days/hours/minutes/seconds] 3. run_timesteps
 
-  simulation_start = "1948-01-02 00:00:00"   ! start date [yyyy-mm-dd hh:mm:ss]
+  simulation_start = "2015-12-25 00:00:00"   ! start date [yyyy-mm-dd hh:mm:ss]
   simulation_end   = "2021-01-01 00:00:00"   !   end date [yyyy-mm-dd hh:mm:ss]
 
   run_days         = 3   ! number of days to run

@@ -70,13 +70,16 @@ contains
   forcing_type_option : select case (trim(namelist%forcing_type))
     case ("single_point")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
-    case ("gswp3")
+    case ("gswp3")  ! for monthly files
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
-    ! add by li xu for gefs forcing  
-    case ("gefs")
+    ! add by li xu for gefs/nldas2/gldas2 forcing  
+    case ("gefs")   ! for yearly files
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:4)//".nc"
+    case ("nldas2","gldas2")  ! for daily files
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+      forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:10)//".nc"
     case default
       stop "namelist forcing_type not recognized"
   end select forcing_type_option
@@ -191,13 +194,20 @@ contains
           this%forcing_counter = 1
           write(*,*) "Resetting forcing counter to beginning of file"
         end if
-      ! add by li xu for gefs
+      ! add by li xu for gefs, nldas2 and gldas2
       case ("gefs")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
         forcing_filename = trim(forcing_filename)//next_date(1:4)//".nc"
         if(next_date(6:19) == "01-01 00:00:00") then
           this%forcing_counter = 1
           write(*,*) "Resetting forcing counter to beginning of file"
+        end if  
+      case ("nldas2","gldas2")
+        forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+        forcing_filename = trim(forcing_filename)//next_date(1:10)//".nc"
+        if(next_date(12:19) == "00:00:00") then
+          this%forcing_counter = 1
+          write(*,*) "Resetting forcing counter to beginning of file"          
         end if        
       case default
         stop "namelist forcing_type not recognized"
