@@ -3,8 +3,8 @@
   static_file      = "./ufs-land_C96_static_fields.nc"
   init_file        = "./ufs-land_C96_init_fields_1hr.nc"
   forcing_dir      = "./"
-  
-  separate_output = .true.
+
+  separate_output = .false.
   output_dir       = "./output/"
 
   restart_frequency_s = 864000
@@ -25,16 +25,16 @@
   run_hours        = 0   ! number of hours to run
   run_minutes      = 0   ! number of minutes to run
   run_seconds      = 0   ! number of seconds to run
-  
+
   run_timesteps    = 0   ! number of timesteps to run
-  
+
   begloc           = 1
   endloc           = 16196
-  
+
 /
 
 &land_model_option
- land_model        = 2   ! choose land model: 1=noah, 2=noahmp
+ land_model        = 1   ! choose land model: 1=noah, 2=noahmp
 /
 
 &structure
@@ -66,8 +66,8 @@
 
 &forcing
  forcing_timestep_seconds       = 10800
- forcing_type                   = "gefs"
- forcing_filename               = "gefs_35_forcing_c96"
+ forcing_type                   = "single_point"
+ forcing_filename               = "gefs_35_forcing_c96.nc"
  forcing_interp_solar           = "gswp3_zenith"  ! gswp3_zenith or linear
  forcing_time_solar             = "gswp3_average"  ! gswp3_average or instantaneous
  forcing_name_precipitation     = "precipitation_conserve"

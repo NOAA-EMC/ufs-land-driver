@@ -231,6 +231,8 @@ time_loop : do timestep = 1, namelist%run_timesteps
                          fake,   fh2,fake,                         &  !intent(inout)
                          errmsg, errflg)                                  !intent(out)
 
+      print*,"tskin",tskin
+      print*,"tsurf:",tsurf
 
       call lsm_noah_run                                               &
          ( im, km, grav, cp, hvap, rd, eps, epsm1, rvrdm1, ps,        &  !  ---  inputs:
@@ -246,6 +248,9 @@ time_loop : do timestep = 1, namelist%run_timesteps
            cmm, chh, evbs, evcw, sbsno, snowc, stm, snohf,            &
            smcwlt2, smcref2, wet1, errmsg, errflg                     &
          )
+
+      print*,"tskin",tskin
+      print*,"tsurf:",tsurf
 
   rho = prsl1 / (rd*t1*(one+rvrdm1*q1)) 
   hflx = hflx * rho * cp
