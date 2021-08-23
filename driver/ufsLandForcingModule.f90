@@ -73,6 +73,9 @@ contains
     case ("gswp3")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
+    case ("gdas")
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+      forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:10)//".nc"
     case default
       stop "namelist forcing_type not recognized"
   end select forcing_type_option
@@ -181,6 +184,13 @@ contains
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
         forcing_filename = trim(forcing_filename)//next_date(1:7)//".nc"
         if(next_date(9:19) == "01 00:00:00") then
+          this%forcing_counter = 1
+          write(*,*) "Resetting forcing counter to beginning of file"
+        end if
+      case ("gdas")
+        forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+        forcing_filename = trim(forcing_filename)//next_date(1:10)//".nc"
+        if(next_date(12:19) == "00:00:00") then
           this%forcing_counter = 1
           write(*,*) "Resetting forcing counter to beginning of file"
         end if
