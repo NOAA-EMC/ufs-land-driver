@@ -255,6 +255,7 @@ contains
     if(restart_simulation) then
       call calc_sec_since("1970-01-01 00:00:00",restart_date,0,run_time)
       call date_from_since("1970-01-01 00:00:00", run_time+timestep_seconds, simulation_start)
+      this%simulation_start = simulation_start
     end if
     
     if(simulation_end /= "") then
