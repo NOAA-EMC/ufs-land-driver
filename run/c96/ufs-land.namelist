@@ -5,7 +5,8 @@
   forcing_dir      = "./"
 
   separate_output = .false.
-  output_dir       = "./output/"
+  !output_dir       = "./output/"
+  output_dir       = "/run/user/4986/"
 
   restart_frequency_s = 864000
   restart_simulation  = .false.
@@ -21,7 +22,7 @@
   simulation_start = "2000-01-05 00:00:00"   ! start date [yyyy-mm-dd hh:mm:ss]
 !  simulation_end   = "2000-01-02 00:00:00"   !   end date [yyyy-mm-dd hh:mm:ss]
 
-  run_days         = 35   ! number of days to run
+  run_days         = 10  ! number of days to run
   run_hours        = 0   ! number of hours to run
   run_minutes      = 0   ! number of minutes to run
   run_seconds      = 0   ! number of seconds to run
@@ -34,7 +35,7 @@
 /
 
 &land_model_option
- land_model        = 1   ! choose land model: 1=noah, 2=noahmp
+ land_model        = 2   ! choose land model: 1=noah, 2=noahmp
 /
 
 &structure

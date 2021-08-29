@@ -209,7 +209,7 @@ contains
   noah%model%shdmax   = maxval(this%gvf_monthly,dim=2)
 
   ! modified by li xu
-  noah%model%sfcemis = 0.94
+  ! noah%model%sfcemis = 0.95
 
   noah%model%land     = .false.
   where(this%vegetation_category /= this%iswater) noah%model%land = .true.
@@ -236,7 +236,7 @@ contains
   noahmp%model%xlatin   = this%latitude
 
   ! modified by li xu, actually the noamp don't need this one
-  noah%model%sfcemis = 0.94
+  ! noah%model%sfcemis = 0.95
 
   noahmp%model%dry     = .false.
   where(this%vegetation_category /= this%iswater) noahmp%model%dry = .true.
