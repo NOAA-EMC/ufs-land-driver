@@ -259,6 +259,7 @@ contains
     
     if(restart_simulation) then
       call calc_sec_since(reference_date,restart_date,0,run_time)
+      print*,restart_date,run_time
       call date_from_since(reference_date, run_time+timestep_seconds, simulation_start)
       this%simulation_start = simulation_start
     end if

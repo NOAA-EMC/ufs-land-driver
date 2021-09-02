@@ -113,7 +113,7 @@ def nml(restart='2021-08-01',day='30'):
 def ufs(restart='20210821',n=35):
     date=ndates(0,restart,fmt='%Y-%m-%d')
     nml(date,n)
-    run2('ufsLand.exe')
+    run2('./ufsLand.exe')
     from mean2day import do_day2
     do_day2(restart,n,1)
 

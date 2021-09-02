@@ -10,17 +10,18 @@ subroutine date_from_since(since_date, sec_since, current_date)
 implicit none
 character*19 :: since_date, current_date  ! format: yyyy-mm-dd hh:nn:ss
 double precision      :: sec_since
-integer      :: count_sec, count_sav
-integer      :: since_yyyy, since_mm, since_dd, since_hh, since_nn, since_ss
+!li xu over the integer32 limit, change to integer64
+integer*8      :: count_sec, count_sav
+integer*8      :: since_yyyy, since_mm, since_dd, since_hh, since_nn, since_ss
 integer      :: current_yyyy, current_mm, current_dd, current_hh, current_nn, current_ss
 logical      :: leap_year = .false.
 integer      :: num_leap = 0
-integer      :: iyyyy, imm, limit
+integer*8      :: iyyyy, imm, limit
 integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /)
 
   current_date = "xxxx-xx-xx xx:xx:xx"
 
-  limit = huge(1)
+  limit = huge(0_8)
   if(sec_since > limit .or. sec_since < 0) stop "not capable of dealing with sec_since"
 
   read(since_date( 1: 4),  '(i4)') since_yyyy
@@ -44,10 +45,12 @@ integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 
   count_sec = count_sec - (since_hh) * 3600
   count_sec = count_sec - (since_nn) * 60
   count_sec = count_sec - (since_ss)
+
   
 ! not worrying about the complexity of non-recent leap years 
 
 ! find the year
+
 
   current_yyyy = since_yyyy
 
@@ -58,11 +61,14 @@ integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 
     else
       count_sec = count_sec + 365*86400
     end if
-    current_yyyy = current_yyyy + 1
+    current_yyyy = current_yyyy + 1 
+
   end do
+
   
   count_sec = count_sav
   current_yyyy = current_yyyy - 1
+
   
 ! find the month
 
@@ -81,6 +87,7 @@ integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 
     end if
   end do
   
+
   count_sec = count_sav
   
 ! find the day

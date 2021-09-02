@@ -82,6 +82,7 @@ real, dimension(vector_length)    :: last_var, next_var, interp_var
 
 real                              :: last_weight, next_weight
 
+
 if(last_time > now_time .or. next_time < now_time) &
    stop "problem with time in interpolate_linear"
 

@@ -135,11 +135,8 @@ contains
   
     status = nf90_get_var(ncid, varid, read_time, start = (/itime/))
      if(status /= nf90_noerr) call handle_err(status)
-     
-     ! li xu, again, there are some small difference at those float64 values
-     ! print*,read_time,namelist%initial_time + namelist%timestep_seconds
-     ! changed to less than 1 second    
-    if (read_time  - (namelist%initial_time + namelist%timestep_seconds) < 1) then
+
+    if (read_time  == (namelist%initial_time + namelist%timestep_seconds)) then
        this%forcing_counter = itime
        next_time = read_time
        last_time = huge(1.d0)
@@ -176,10 +173,13 @@ contains
   integer :: ncid, dimid, varid, status
   integer :: times_in_file
   double precision  :: file_next_time
-  
+
+
+ 
   call date_from_since(namelist%reference_date, now_time, now_date)
   call date_from_since(namelist%reference_date, next_time, next_date)
   
+
   write(*,*) "Searching for forcing at time: ",now_date
   
   if(.not. next_forcing_read) then
@@ -221,10 +221,8 @@ contains
     status = nf90_get_var(ncid, varid, file_next_time, start = (/this%forcing_counter/))
      if(status /= nf90_noerr) call handle_err(status)
     
-    !li xu for tolerate the small difference at float64 values
-    if(file_next_time - next_time > 1) then
-      print*,"file_next_time = ",file_next_time
-      print*,"next_time = ",next_time
+  
+    if(file_next_time /= next_time ) then
       write(*,*) "file_next_time not equal to next_time in now_time == next_time forcing"
       stop
     end if
@@ -277,7 +275,8 @@ contains
     
   end if ! not read_next_forcing
   
-  if(now_time == next_time) then
+
+  if( now_time == next_time ) then
 
     this%temperature        = next_temperature
     this%specific_humidity  = next_specific_humidity
@@ -348,6 +347,7 @@ contains
 
   else
 
+   print*,next_time,now_time,'is not consistent'  
    write(*,*) "Read of forcing time is not consistent with model time"
    stop
 
