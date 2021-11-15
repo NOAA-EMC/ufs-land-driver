@@ -550,29 +550,21 @@ contains
     status = nf90_create(this%filename, NF90_CLOBBER, ncid)
       if (status /= nf90_noerr) call handle_err(status)
 
-print*, 'before netcdf create',noahmp%static%vector_length,noahmp%static%soil_levels
 ! Define dimensions in the file.
 
     status = nf90_def_dim(ncid, "location"    , noahmp%static%vector_length   , dim_id_loc)
       if (status /= nf90_noerr) call handle_err(status)
-print*, 'before netcdf define dim'
     status = nf90_def_dim(ncid, "soil_levels" , noahmp%static%soil_levels     , dim_id_soil)
       if (status /= nf90_noerr) call handle_err(status)
-print*, 'before netcdf define dim'
     status = nf90_def_dim(ncid, "snow_levels" , 3                             , dim_id_snow)
       if (status /= nf90_noerr) call handle_err(status)
-print*, 'before netcdf define dim'
     status = nf90_def_dim(ncid, "snso_levels" , noahmp%static%soil_levels + 3 , dim_id_snso)
       if (status /= nf90_noerr) call handle_err(status)
-print*, 'before netcdf define dim4', NF90_UNLIMITED,ncid, dim_id_time
     status = nf90_def_dim(ncid, "time"        , NF90_UNLIMITED                , dim_id_time)
-print*, 'before netcdf define dim4'
       if (status /= nf90_noerr) call handle_err(status)
-print*, 'before netcdf define dim4'
   
 ! Define variables in the file.
 
-print*, 'before netcdf define'
     status = nf90_def_var(ncid, "time", NF90_DOUBLE, dim_id_time, varid)
       status = nf90_put_att(ncid, varid, "long_name", "time")
       status = nf90_put_att(ncid, varid, "units", "seconds since "//reference_date)
@@ -665,7 +657,7 @@ print*, 'before netcdf define'
       status = nf90_put_att(ncid, varid, "long_name", "surface radiative temperature")
       status = nf90_put_att(ncid, varid, "units", "K")
 
-    status = nf90_def_var(ncid, "precipitation_total", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
+    status = nf90_def_var(ncid, "precipitation_forcing", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "total precipitation during time integration")
       status = nf90_put_att(ncid, varid, "units", "mm")
 
@@ -733,7 +725,7 @@ print*, 'before netcdf define'
       status = nf90_put_att(ncid, varid, "long_name", "canopy water latent heat flux")
       status = nf90_put_att(ncid, varid, "units", "W/m2")
 
-    status = nf90_def_var(ncid, "sublimation_snow", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
+    status = nf90_def_var(ncid, "snow_sublimation", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "sublimation/deposit from snowpack")
       status = nf90_put_att(ncid, varid, "units", "mm/s")
 
@@ -893,10 +885,8 @@ print*, 'before netcdf define'
 
   end if
   
-print*, 'before netcdf write'
   outsub = namelist%begsub - namelist%begloc + 1
   
-print*, 'before netcdf write'
   status = nf90_open(this%filename, NF90_WRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)
   
@@ -935,7 +925,7 @@ print*, 'before netcdf write'
       start = (/outsub,this%output_counter/), count = (/noahmp%static%vector_length, 1/))
       
   status = nf90_inq_varid(ncid, "vegetation_fraction", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%vegetation_fraction     , &
+  status = nf90_put_var(ncid, varid , noahmp%model%vegetation_fraction     , &
       start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
 
   status = nf90_inq_varid(ncid, "emissivity_total", varid)

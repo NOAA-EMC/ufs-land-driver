@@ -374,7 +374,7 @@ contains
   status = nf90_put_var(ncid, varid , noahmp%static%timestep   )
 
   status = nf90_inq_varid(ncid, "vegetation_fraction", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%vegetation_fraction     , &
+  status = nf90_put_var(ncid, varid , noahmp%model%vegetation_fraction     , &
       start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
 
   status = nf90_inq_varid(ncid, "emissivity_total", varid)
@@ -715,7 +715,7 @@ contains
   status = nf90_get_var(ncid, varid , now_time)
   
   status = nf90_inq_varid(ncid, "vegetation_fraction", varid)
-  status = nf90_get_var(ncid, varid , noahmp%diag%vegetation_fraction     , &
+  status = nf90_get_var(ncid, varid , noahmp%model%vegetation_fraction     , &
       start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
 
   status = nf90_inq_varid(ncid, "emissivity_total", varid)

@@ -129,7 +129,7 @@ associate (                                                 &
    soiltyp    => noahmp%static%soil_category               ,&
    vegtype    => noahmp%static%vegetation_category         ,&
    slopetyp   => noahmp%static%slope_category              ,&
-   sigmaf     => noahmp%model%vegetation_frac              ,&
+   sigmaf     => noahmp%model%vegetation_fraction          ,&
    emiss      => noahmp%diag%emissivity_total              ,&
    albdvis    => noahmp%diag%albedo_direct(:,1)            ,&
    albdnir    => noahmp%diag%albedo_direct(:,2)            ,&
@@ -240,7 +240,6 @@ call gpvs()
 
 zorl     = z0_data(vegtype) * 100.0   ! at driver level, roughness length in cm
 
-print*, 'before time loop'
 time_loop : do timestep = 1, namelist%run_timesteps
 
   now_time = namelist%initial_time + timestep * namelist%timestep_seconds
@@ -274,7 +273,6 @@ time_loop : do timestep = 1, namelist%run_timesteps
   graupel_mp = 0.0
   ice_mp = 0.0
 
-print*, 'before noahmp call loop'
       call noahmpdrv_run                                               &
           ( im, km, itime, ps, u1, v1, t1, q1, soiltyp, vegtype,       &
             sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,           &
@@ -301,12 +299,11 @@ print*, 'before noahmp call loop'
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
   hflx = hflx * rho * con_cp
   evap = evap * rho * con_hvap
-print*, 'after noahmp call loop',hflx(1:3)
   
   where(dswsfc>0.0 .and. sfalb<0.0) dswsfc = 0.0
 
   call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
-print*, 'after write output', timestep,namelist%restart_timesteps
+
   if(namelist%restart_timesteps > 0) then
     if(mod(timestep,namelist%restart_timesteps) == 0) then
       call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
