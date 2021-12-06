@@ -203,7 +203,7 @@ contains
     status = nf90_put_att(ncid, varid, "long_name", "canopy water latent heat flux")
     status = nf90_put_att(ncid, varid, "units", "W/m2")
 
-  status = nf90_def_var(ncid, "sublimation_snow", NF90_DOUBLE, (/dim_id_loc,dim_id_time/), varid)
+  status = nf90_def_var(ncid, "snow_sublimation", NF90_DOUBLE, (/dim_id_loc,dim_id_time/), varid)
     status = nf90_put_att(ncid, varid, "long_name", "sublimation/deposit from snowpack")
     status = nf90_put_att(ncid, varid, "units", "mm/s")
 
@@ -784,8 +784,8 @@ contains
       start = (/outsub                     ,                         1, 1/) , &
       count = (/noahmp%static%vector_length, noahmp%static%soil_levels, 1/))
 
-  status = nf90_inq_varid(ncid, "snow_level_liquid", varid)
-  status = nf90_get_var(ncid, varid , noahmp%state%snow_level_liquid        , &
+  status = nf90_inq_varid(ncid, "soil_liquid_vol", varid)
+  status = nf90_get_var(ncid, varid , noahmp%state%soil_liquid_vol          , &
       start = (/outsub                     ,                         1, 1/) , &
       count = (/noahmp%static%vector_length, noahmp%static%soil_levels, 1/))
 
@@ -799,6 +799,10 @@ contains
 
   status = nf90_inq_varid(ncid, "z0_total", varid)
   status = nf90_get_var(ncid, varid , noahmp%diag%z0_total                , &
+      start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
+
+  status = nf90_inq_varid(ncid, "snow_cover_fraction", varid)
+  status = nf90_get_var(ncid, varid , noahmp%diag%snow_cover_fraction     , &
       start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
 
   status = nf90_inq_varid(ncid, "spec_humidity_surface", varid)
@@ -982,15 +986,15 @@ contains
       start = (/outsub                     ,                           1, 1/) , &
       count = (/noahmp%static%vector_length, noahmp%static%soil_levels  , 1/))
 
-  status = nf90_inq_varid(ncid, "interface_depth", varid)
-  status = nf90_get_var(ncid, varid , noahmp%model%interface_depth            , &
-      start = (/outsub                     ,                           1, 1/) , &
-      count = (/noahmp%static%vector_length, noahmp%static%soil_levels+3, 1/))
-
   status = nf90_inq_varid(ncid, "temperature_snow", varid)
   status = nf90_get_var(ncid, varid , noahmp%state%temperature_snow           , &
       start = (/outsub                     ,                           1, 1/) , &
       count = (/noahmp%static%vector_length,                           3, 1/))
+
+  status = nf90_inq_varid(ncid, "interface_depth", varid)
+  status = nf90_get_var(ncid, varid , noahmp%model%interface_depth            , &
+      start = (/outsub                     ,                           1, 1/) , &
+      count = (/noahmp%static%vector_length, noahmp%static%soil_levels+3, 1/))
 
   status = nf90_inq_varid(ncid, "snow_level_ice", varid)
   status = nf90_get_var(ncid, varid , noahmp%state%snow_level_ice             , &
