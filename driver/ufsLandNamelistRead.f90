@@ -40,6 +40,7 @@ type, public :: namelist_type
   integer        :: run_seconds
 
   integer        :: num_soil_levels
+  integer        :: num_snow_levels
   real           :: forcing_height
 
   real, allocatable, dimension(:) ::  soil_level_thickness ! soil level thicknesses [m]
@@ -118,6 +119,7 @@ contains
     integer        :: land_model = -999
 
     integer        :: num_soil_levels = -999
+    integer        :: num_snow_levels = -999
     real           :: forcing_height = -999.
 
     real, allocatable, dimension(:) ::  soil_level_thickness ! soil level thicknesses [m]
@@ -236,6 +238,7 @@ contains
     this%run_minutes          = run_minutes
     this%run_seconds          = run_seconds
     this%num_soil_levels      = num_soil_levels
+    this%num_snow_levels      = 3   ! this is currently hard-coded in CCPP sfc_noahmp_drv
     this%forcing_height       = forcing_height
     this%soil_level_thickness = soil_level_thickness
     this%soil_level_nodes     = soil_level_nodes
