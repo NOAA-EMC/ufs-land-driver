@@ -97,6 +97,7 @@ logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
 logical, allocatable, dimension(:) :: flag_guess ! defunct flag for surface layer iteration [-]
 
+integer                         :: lsnowl = -2   ! lower limit for snow vector
 real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
 
 associate (                                                 &
@@ -274,8 +275,8 @@ time_loop : do timestep = 1, namelist%run_timesteps
   ice_mp = 0.0
 
       call noahmpdrv_run                                               &
-          ( im, km, itime, ps, u1, v1, t1, q1, soiltyp, vegtype,       &
-            sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,           &
+          ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,        &
+            vegtype,sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,   &
             prsl1, prslki, zf, dry, wind, slopetyp,                    &
             shdmin, shdmax, snoalb, sfalb, flag_iter, flag_guess,      &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
