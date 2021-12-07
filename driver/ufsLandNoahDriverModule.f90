@@ -73,7 +73,8 @@ type (noah_restart_type)    :: restart
 integer          :: timestep
 double precision :: now_time
 real, allocatable, dimension(:) :: rho
-real, allocatable, dimension(:) :: prsik1,prslk1,ustar,rb,stress,fm,fh,fm10,fh2,z0pert,ztpert,fake  ! some fields needed for sfc_diff
+real, allocatable, dimension(:) :: albdvis_lnd, albdnir_lnd, albivis_lnd, albinir_lnd, adjvisbmd, adjnirbmd, adjvisdfd, adjnirdfd
+real, allocatable, dimension(:) :: prsik1,prslk1,ustar,rb,stress,fm,fh,fm10,fh2,z0pert,ztpert,garea,fake  ! some fields needed for sfc_diff
 logical, allocatable, dimension(:) :: lfake
 
 real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
@@ -163,8 +164,17 @@ allocate(   fh2(im))
 allocate(z0pert(im))
 allocate(ztpert(im))
 allocate(  fake(im))
+allocate( garea(im))
 allocate( lfake(im))
 allocate(   rho(im))
+allocate(albdvis_lnd(im))
+allocate(albdnir_lnd(im))
+allocate(albivis_lnd(im))
+allocate(albinir_lnd(im))
+allocate(adjvisbmd  (im))
+allocate(adjnirbmd  (im))
+allocate(adjvisdfd  (im))
+allocate(adjnirdfd  (im))
 
 pertvegf = 0.d0
 bexppert = 0.d0
@@ -181,6 +191,7 @@ fm       =  1.0
 fh       =  1.0
 fm10     =  1.0
 fh2      =  1.0
+garea    =  3000.0
 
 flag_iter  = .true.
 flag_guess = .false.
@@ -198,6 +209,16 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   call interpolate_monthly(now_time, im, static%gvf_monthly, sigmaf)
   call interpolate_monthly(now_time, im, static%albedo_monthly, sfalb)
+  
+  albdvis_lnd = sfalb
+  albdnir_lnd = sfalb
+  albivis_lnd = sfalb
+  albinir_lnd = sfalb
+  
+  adjvisbmd = 0.5 * 0.7 * dswsfc   ! making an assumption about radiation disaggregation
+  adjnirbmd = 0.5 * 0.7 * dswsfc   ! 50% VIS, 50% NIR
+  adjvisdfd = 0.5 * 0.3 * dswsfc   ! 30% diffuse, 70% direct
+  adjnirdfd = 0.5 * 0.3 * dswsfc
 
   snet   = dswsfc * (1.0_kind_phys - sfalb)
   prsl1  = ps * exp(-1.d0*zf/29.25d0/t1)
@@ -208,16 +229,16 @@ time_loop : do timestep = 1, namelist%run_timesteps
   prslk1 = prslki
   
       call sfc_diff_run (im,rvrdm1,eps,epsm1,grav,                 &  !intent(in)
-                         ps,t1,q1,zf,wind,                         &  !intent(in)
+                         ps,t1,q1,zf,garea,wind,                   &  !intent(in)
                          prsl1,prslki,prsik1,prslk1,               &  !intent(in)
                          sigmaf,vegtype,shdmax,ivegsrc,            &  !intent(in)
                          z0pert,ztpert,                            &  ! mg, sfc-perts !intent(in)
                          flag_iter,.false.,                        &  !intent(in)
                          fake,fake,-999,                           &  !hafs,z0 type !intent(in)
                          lfake,land,lfake,                         &  !intent(in)
+                         .true.,                                   &  !intent(in)
                          fake, tskin,fake,                         &  !intent(in)
                          fake, tsurf,fake,                         &  !intent(in)
-                         fake,snwdph,fake,                         &  !intent(in)
                          fake,  zorl,fake,                         &  !intent(inout)
                          fake,                                     &  !intent(inout)
                          fake, ustar,fake,                         &  !intent(inout)
@@ -229,17 +250,21 @@ time_loop : do timestep = 1, namelist%run_timesteps
                          fake,    fh,fake,                         &  !intent(inout)
                          fake,  fm10,fake,                         &  !intent(inout)
                          fake,   fh2,fake,                         &  !intent(inout)
-                         errmsg, errflg)                                  !intent(out)
+                         fake,  fake,fake,                         &  !intent(inout)
+                         fake,                                     &  !intent(out)
+                         errmsg, errflg)                              !intent(out)
 
 
       call lsm_noah_run                                               &
          ( im, km, grav, cp, hvap, rd, eps, epsm1, rvrdm1, ps,        &  !  ---  inputs:
            t1, q1, soiltyp, vegtype, sigmaf,                          &
-           sfcemis, dlwflx, dswsfc, snet, delt, tg3, cm, ch,          &
+           sfcemis, dlwflx, dswsfc, delt, tg3, cm, ch,                &
            prsl1, prslki, zf, land, wind, slopetyp,                   &
            shdmin, shdmax, snoalb, sfalb, flag_iter, flag_guess,      &
            lheatstrg, isot, ivegsrc,                                  &
            bexppert, xlaipert, vegfpert,pertvegf,                     &  !  ---  in/outs:
+           albdvis_lnd, albdnir_lnd, albivis_lnd, albinir_lnd,        &  
+           adjvisbmd, adjnirbmd, adjvisdfd, adjnirdfd,                &  
            weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
            canopy, trans, tsurf, zorl,                                &  !  ---  outputs:
            sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &
