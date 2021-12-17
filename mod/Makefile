@@ -12,13 +12,13 @@ OBJS =	machine.o \
 	namelist_soilveg.o \
 	set_soilveg.o \
 	sflx.o \
+	sfc_diff.o \
 	sfc_drv.o \
 	date_def.o \
 	module_sf_noahmp_glacier.o \
 	module_sf_noahmplsm.o \
 	noahmp_tables.o \
-	sfc_noahmp_drv.o \
-	sfc_diff.o
+	sfc_noahmp_drv.o
 	
 all:	$(OBJS)
 
