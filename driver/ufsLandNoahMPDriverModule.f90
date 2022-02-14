@@ -49,7 +49,7 @@ use set_soilveg_mod
 use funcphys
 use namelist_soilveg, only : z0_data
 use physcons, only : con_hvap , con_cp, con_jcal, con_eps, con_epsm1,    &
-                     con_fvirt, con_rd, con_hfus,                        &
+                     con_fvirt, con_rd, con_hfus, con_g  ,               &
 		     tfreeze=> con_t0c, rhoh2o => rhowater
 
 use interpolation_utilities
@@ -84,18 +84,30 @@ character(len=128)                 :: errmsg     ! CCPP error message
    real, allocatable, dimension(:) :: prsl1      ! pressure at forcing height [Pa]
    real, allocatable, dimension(:) :: srflag     ! snow ratio for precipitation [-]
    real, allocatable, dimension(:) :: prslki     ! Exner function at forcing height [-]
+   real, allocatable, dimension(:) :: prslk1     ! Exner function at forcing height [-]
+   real, allocatable, dimension(:) :: prsik1     ! Exner function at forcing height [-]
    real, allocatable, dimension(:) :: cmm        ! Cm*U [m/s]
    real, allocatable, dimension(:) :: chh        ! Ch*U*rho [kg/m2/s]
    real, allocatable, dimension(:) :: shdmin     ! minimum vegetation fraction(not used) [-]
    real, allocatable, dimension(:) :: smcref2    ! field capacity(not used) [m3/m3]
    real, allocatable, dimension(:) :: smcwlt2    ! wilting point(not used) [m3/m3]
+   real, allocatable, dimension(:) :: snohf      ! snow melt energy that exist pack [W/m2]
    real, allocatable, dimension(:) :: sncovr1    !  copy of snow cover(not used)[-]
    real, allocatable, dimension(:) :: snoalb     ! snow-covered-area albedo(not used) [-]
    real, allocatable, dimension(:) :: tsurf      ! copy of tskin(not used) [K]
    real, allocatable, dimension(:) :: wet1       ! top-level soil saturation(not used) [-]
+   real, allocatable, dimension(:) :: garea      ! grid cell area [m2]
+   real, allocatable, dimension(:) :: rb1        ! composite bulk richardson number
+   real, allocatable, dimension(:) :: fm1        ! composite momemtum stability
+   real, allocatable, dimension(:) :: fh1        ! composite heat/moisture stability
+   real, allocatable, dimension(:) :: stress1    ! composite surface stress
+   real, allocatable, dimension(:) :: fm101      ! composite 2-meter momemtum stability
+   real, allocatable, dimension(:) :: fh21       ! composite 10-meter heat/moisture stability
+   real, allocatable, dimension(:) :: zvfun      ! some function of vegetation used for gfs stability
 logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
-logical, allocatable, dimension(:) :: flag_guess ! defunct flag for surface layer iteration [-]
+
+logical :: thsfc_loc = .true.                    ! use local theta
 
 integer                         :: lsnowl = -2   ! lower limit for snow vector
 real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
@@ -148,6 +160,7 @@ associate (                                                 &
    canopy     => noahmp%diag%canopy_water                  ,&
    trans      => noahmp%flux%transpiration_heat            ,&
    zorl       => noahmp%diag%z0_total                      ,&
+   ustar1     => noahmp%model%friction_velocity            ,&
    smc        => noahmp%state%soil_moisture_vol            ,&
    stc        => noahmp%state%temperature_soil             ,&
    slc        => noahmp%state%soil_liquid_vol              ,&
@@ -161,9 +174,12 @@ associate (                                                 &
    evbs       => noahmp%flux%latent_heat_ground            ,&
    evcw       => noahmp%flux%latent_heat_canopy            ,&
    sbsno      => noahmp%flux%snow_sublimation              ,&
+   pah        => noahmp%flux%precip_adv_heat_total         ,&
+   ecan       => noahmp%flux%evaporation_canopy            ,&
+   etran      => noahmp%flux%transpiration                 ,&
+   edir       => noahmp%flux%evaporation_soil              ,&
    snowc      => noahmp%diag%snow_cover_fraction           ,&
    stm        => noahmp%diag%soil_moisture_total           ,&
-   snohf      => noahmp%flux%precip_adv_heat_total         ,&
    xlatin     => noahmp%model%latitude                     ,&
    xcoszin    => noahmp%model%cosine_zenith                ,&
    iyrlen     => noahmp%model%year_length                  ,&
@@ -218,23 +234,33 @@ allocate(      snet(im))
 allocate(     prsl1(im))
 allocate(    srflag(im))
 allocate(    prslki(im))
+allocate(    prslk1(im))
+allocate(    prsik1(im))
 allocate(       cmm(im))
 allocate(       chh(im))
 allocate(    shdmin(im))
 allocate(   smcref2(im))
 allocate(   smcwlt2(im))
+allocate(     snohf(im))
 allocate(   sncovr1(im))
 allocate(    snoalb(im))
 allocate(     tsurf(im))
 allocate(      wet1(im))
 allocate(       dry(im))
 allocate(flag_iter (im))
-allocate(flag_guess(im))
+allocate(     garea(im))
+allocate(       rb1(im))
+allocate(       fm1(im))
+allocate(       fh1(im))
+allocate(   stress1(im))
+allocate(     fm101(im))
+allocate(      fh21(im))
+allocate(     zvfun(im))
 
 dry        = .true.
   where(static%vegetation_category == static%iswater) dry = .false.
 flag_iter  = .true.
-flag_guess = .false.
+garea      = 3000.0 * 3000.0   ! any size >= 3km will give the same answer
 
 call set_soilveg(0,isot,ivegsrc,0)
 call gpvs()
@@ -263,10 +289,12 @@ time_loop : do timestep = 1, namelist%run_timesteps
   u1       = wind
   v1       = 0.0_kind_phys
   snet     = dswsfc * (1.0_kind_phys - sfalb)
-  prsl1    = ps * exp(-1.d0*zf/29.25d0/t1)
   srflag   = 0.0d0
     where(t1 < tfreeze) srflag = 1.d0
+  prsl1    = ps * exp(-1.d0*zf/29.25d0/t1)       !  29.26 [m/K] / T [K] is the atmospheric scale height
   prslki   = (exp(zf/29.25d0/t1))**(2.d0/7.d0)  
+  prslk1   = (exp(zf/29.25d0/t1))**(2.d0/7.d0)   !  assuming Exner function is approximately constant
+  prsik1   = (exp(zf/29.25d0/t1))**(2.d0/7.d0)   !   for these subtleties
   
   rainn_mp = 1000.0 * tprcp / delt
   rainc_mp = 0.0
@@ -277,16 +305,17 @@ time_loop : do timestep = 1, namelist%run_timesteps
       call noahmpdrv_run                                               &
           ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,        &
             vegtype,sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,   &
-            prsl1, prslki, zf, dry, wind, slopetyp,                    &
-            shdmin, shdmax, snoalb, sfalb, flag_iter, flag_guess,      &
+            prsl1, prslk1, prslki, prsik1, zf, dry, wind, slopetyp,    &
+            shdmin, shdmax, snoalb, sfalb, flag_iter,con_g,            &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
             iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,         &
-            iopt_stc, xlatin, xcoszin, iyrlen, julian,                 &
+            iopt_stc, xlatin, xcoszin, iyrlen, julian, garea,          &
             rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp,           &
             con_hvap, con_cp, con_jcal, rhoh2o, con_eps, con_epsm1,    &
-            con_fvirt, con_rd, con_hfus,                               &
+            con_fvirt, con_rd, con_hfus, thsfc_loc,                    &
             weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
-            canopy, trans, tsurf, zorl,                                &
+            canopy, trans, zorl,                                       &
+            rb1, fm1, fh1, ustar1, stress1, fm101, fh21,               &
             snowxy, tvxy, tgxy, canicexy, canliqxy, eahxy, tahxy, cmxy,&
             chxy, fwetxy, sneqvoxy, alboldxy, qsnowxy, wslakexy, zwtxy,&
             waxy, wtxy, tsnoxy, zsnsoxy, snicexy, snliqxy, lfmassxy,   &
@@ -294,8 +323,9 @@ time_loop : do timestep = 1, namelist%run_timesteps
             xsaixy, taussxy, smoiseq, smcwtdxy, deeprechxy, rechxy,    &
             albdvis, albdnir,  albivis,  albinir,emiss,                &
             sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &
-            cmm, chh, evbs, evcw, sbsno, snowc, stm, snohf,            &
-            smcwlt2, smcref2, wet1, t2mmp, q2mp, errmsg, errflg)     
+            cmm, chh, evbs, evcw, sbsno, pah, ecan, etran, edir, snowc,&
+            stm, snohf,smcwlt2, smcref2, wet1, t2mmp, q2mp,zvfun,      &
+            errmsg, errflg)     
 
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
   hflx = hflx * rho * con_cp

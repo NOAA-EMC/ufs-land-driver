@@ -159,6 +159,10 @@ contains
     status = nf90_put_att(ncid, varid, "long_name", "plant transpiration")
     status = nf90_put_att(ncid, varid, "units", "W/m2")
 
+  status = nf90_def_var(ncid, "friction_velocity", NF90_DOUBLE, (/dim_id_loc,dim_id_time/), varid)
+    status = nf90_put_att(ncid, varid, "long_name", "friction velocity")
+    status = nf90_put_att(ncid, varid, "units", "m/s")
+
   status = nf90_def_var(ncid, "z0_total", NF90_DOUBLE, (/dim_id_loc,dim_id_time/), varid)
     status = nf90_put_att(ncid, varid, "long_name", "surface roughness")
     status = nf90_put_att(ncid, varid, "units", "m")
@@ -454,6 +458,10 @@ contains
 
   status = nf90_inq_varid(ncid, "transpiration_heat", varid)
   status = nf90_put_var(ncid, varid , noahmp%flux%transpiration_heat      , &
+      start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
+
+  status = nf90_inq_varid(ncid, "friction_velocity", varid)
+  status = nf90_put_var(ncid, varid , noahmp%model%friction_velocity      , &
       start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
 
   status = nf90_inq_varid(ncid, "z0_total", varid)
@@ -795,6 +803,10 @@ contains
 
   status = nf90_inq_varid(ncid, "transpiration_heat", varid)
   status = nf90_get_var(ncid, varid , noahmp%flux%transpiration_heat      , &
+      start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
+
+  status = nf90_inq_varid(ncid, "friction_velocity", varid)
+  status = nf90_get_var(ncid, varid , noahmp%model%friction_velocity      , &
       start = (/outsub,1/), count = (/noahmp%static%vector_length, 1/))
 
   status = nf90_inq_varid(ncid, "z0_total", varid)

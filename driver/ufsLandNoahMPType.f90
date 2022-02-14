@@ -71,6 +71,7 @@ type :: noahmp_model_type
   real(kind=kind_phys), allocatable :: ch_below_canopy         (:) ! below-canopy exchange coefficient [m/s]
   real(kind=kind_phys), allocatable :: ch_vegetated_2m         (:) ! 2-m vegetated  heat exchange coefficient [m/s]
   real(kind=kind_phys), allocatable :: ch_bare_ground_2m       (:) ! 2-m bare-ground heat exchange coefficient [m/s]
+  real(kind=kind_phys), allocatable :: friction_velocity       (:) ! friction velocity [m/s]
   real(kind=kind_phys), allocatable :: rs_sunlit               (:) ! sunlit leaf stomatal resistance [s/m]
   real(kind=kind_phys), allocatable :: rs_shaded               (:) ! shaded leaf stomatal resistance [s/m]
   real(kind=kind_phys), allocatable :: leaf_air_resistance     (:) ! leaf boundary layer resistance [s/m]
@@ -283,6 +284,7 @@ contains
     allocate(this%model%ch_below_canopy         (vector_length)            ) ! below-canopy exchange coefficient [m/s]
     allocate(this%model%ch_vegetated_2m         (vector_length)            ) ! 2-m vegetated  heat exchange coefficient [m/s]
     allocate(this%model%ch_bare_ground_2m       (vector_length)            ) ! 2-m bare-ground heat exchange coefficient [m/s]
+    allocate(this%model%friction_velocity       (vector_length)            ) ! friction velocity [m/s]
     allocate(this%model%rs_sunlit               (vector_length)            ) ! sunlit leaf stomatal resistance [s/m]
     allocate(this%model%rs_shaded               (vector_length)            ) ! shaded leaf stomatal resistance [s/m]
     allocate(this%model%leaf_air_resistance     (vector_length)            ) ! leaf boundary layer resistance [s/m]
@@ -438,6 +440,7 @@ contains
     this%model%ch_below_canopy         = huge(1.0)
     this%model%ch_vegetated_2m         = huge(1.0)
     this%model%ch_bare_ground_2m       = huge(1.0)
+    this%model%friction_velocity       = huge(1.0)
     this%model%rs_sunlit               = huge(1.0)
     this%model%rs_shaded               = huge(1.0)
     this%model%leaf_air_resistance     = huge(1.0)
