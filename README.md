@@ -8,7 +8,7 @@
 
 3) Navigate to driver
 
-`cd ../ufs-land-driver`
+`cd ufs-land-driver`
 
 4) Create a `user_build_config` file
 
