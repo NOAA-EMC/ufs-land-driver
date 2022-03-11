@@ -2,12 +2,14 @@
 
   if($#ARGV == 0) {
      $response = shift(@ARGV) ;
-     print("Configure soil test environment: $response \n");
+     print("Configure environment: $response \n");
   }else {
      print "Please select from following predefined environments: \n\n";
 
-     print "   1. gfortran compiler serial \n";
-     print "   2. empty \n";
+     print "   1. NOAA Hera \n";
+     print "   2. MSU/NOAA Orion \n";
+     print "   3. NCAR Cheyenne \n";
+     print "   4. gfortran compiler serial \n";
      print "   0. exit only \n";
 
      printf "\nEnter selection : " ;
@@ -17,13 +19,52 @@
   }
 
   if ($response == 1) {
-              # generic gfortran settings
-              system "cp config/user_build_config.gfortran.serial user_build_config"; 
+              # NOAA Hera
+              system "cp config/user_build_config.hera.serial user_build_config"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+              print "NEED TO LOAD MODULES: \n"; 
+              print " \n"; 
+              print "module load intel netcdf/4.7.0 \n"; 
+              print " \n"; 
+              print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
             }
 
   elsif ($response == 2) {
-              # TBD
-              print "$response not valid at this time\n"; 
+              # MSU/NOAA Orion
+              system "cp config/user_build_config.orion.serial user_build_config"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+              print "NEED TO LOAD MODULES: \n"; 
+              print " \n"; 
+              print "module load intel/2020.2 netcdf/4.7.4 \n"; 
+              print " \n"; 
+              print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+            }
+
+  elsif ($response == 3) {
+              # NCAR Cheyenne
+              system "cp config/user_build_config.cheyenne.serial user_build_config"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+              print "Should work with default Cheyenne modules, if problems, try: \n"; 
+              print "module load intel/19.1.1 netcdf/4.8.1 \n"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+            }
+
+  elsif ($response == 4) {
+              # generic gfortran settings
+              system "cp config/user_build_config.gfortran.serial user_build_config"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+              print "Generic gfortran user_build_config created. \nYou will likely have to modify for your system.\n"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
             }
 
   else   {print "no selection $response\n"; last} 
