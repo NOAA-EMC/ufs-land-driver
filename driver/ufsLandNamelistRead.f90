@@ -60,6 +60,7 @@ type, public :: namelist_type
   integer        ::  precip_partition_option
   integer        ::  soil_temp_lower_bdy_option
   integer        ::  soil_temp_time_scheme_option
+  integer        ::  thermal_roughness_scheme_option
   integer        ::  surface_evap_resistance_option
   integer        ::  glacier_option
   
@@ -139,6 +140,7 @@ contains
     integer        ::  precip_partition_option           = -999
     integer        ::  soil_temp_lower_bdy_option        = -999
     integer        ::  soil_temp_time_scheme_option      = -999
+    integer        ::  thermal_roughness_scheme_option   = -999
     integer        ::  surface_evap_resistance_option    = -999
     integer        ::  glacier_option                    = -999
 
@@ -171,6 +173,7 @@ contains
                frozen_soil_adjust_option         , radiative_transfer_option         , &
                snow_albedo_option                , precip_partition_option           , &
                soil_temp_lower_bdy_option        , soil_temp_time_scheme_option      , &
+               thermal_roughness_scheme_option   , &
                surface_evap_resistance_option    , glacier_option                    
     namelist / forcing / forcing_timestep_seconds       ,                             &
                          forcing_type                   , forcing_filename          , &
@@ -296,6 +299,7 @@ contains
       this%precip_partition_option           = precip_partition_option
       this%soil_temp_lower_bdy_option        = soil_temp_lower_bdy_option
       this%soil_temp_time_scheme_option      = soil_temp_time_scheme_option
+      this%thermal_roughness_scheme_option   = thermal_roughness_scheme_option
       this%surface_evap_resistance_option    = surface_evap_resistance_option
       this%glacier_option                    = glacier_option
     end if

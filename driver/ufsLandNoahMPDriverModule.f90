@@ -137,6 +137,7 @@ associate (                                                 &
    iopt_snf   => noahmp%options%precip_partition           ,&
    iopt_tbot  => noahmp%options%soil_temp_lower_bdy        ,&
    iopt_stc   => noahmp%options%soil_temp_time_scheme      ,&
+   iopt_trs   => noahmp%options%thermal_roughness_scheme   ,&
    iopt_rsf   => noahmp%options%surface_evap_resistance    ,&
    iopt_gla   => noahmp%options%glacier                    ,&
    soiltyp    => noahmp%static%soil_category               ,&
@@ -309,12 +310,12 @@ time_loop : do timestep = 1, namelist%run_timesteps
             shdmin, shdmax, snoalb, sfalb, flag_iter,con_g,            &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
             iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,         &
-            iopt_stc, xlatin, xcoszin, iyrlen, julian, garea,          &
+            iopt_stc, iopt_trs,xlatin, xcoszin, iyrlen, julian, garea, &
             rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp,           &
             con_hvap, con_cp, con_jcal, rhoh2o, con_eps, con_epsm1,    &
             con_fvirt, con_rd, con_hfus, thsfc_loc,                    &
             weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
-            canopy, trans, zorl,                                       &
+            canopy, trans, tsurf, zorl,                                &
             rb1, fm1, fh1, ustar1, stress1, fm101, fh21,               &
             snowxy, tvxy, tgxy, canicexy, canliqxy, eahxy, tahxy, cmxy,&
             chxy, fwetxy, sneqvoxy, alboldxy, qsnowxy, wslakexy, zwtxy,&

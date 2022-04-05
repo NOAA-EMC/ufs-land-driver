@@ -40,6 +40,7 @@ type :: noahmp_options_type
   integer :: precip_partition           ! option for partitioning  precipitation into rainfall & snowfall
   integer :: soil_temp_lower_bdy        ! option for lower boundary condition of soil temperature
   integer :: soil_temp_time_scheme      ! option for snow/soil temperature time scheme (only layer 1)
+  integer :: thermal_roughness_scheme   ! option for thermal roughness length
   integer :: surface_evap_resistance    ! option for surface resistent to evaporation/sublimation
   integer :: glacier                    ! option for glacier treatment
 
@@ -582,6 +583,7 @@ contains
   this%options%precip_partition           = namelist%precip_partition_option
   this%options%soil_temp_lower_bdy        = namelist%soil_temp_lower_bdy_option
   this%options%soil_temp_time_scheme      = namelist%soil_temp_time_scheme_option
+  this%options%thermal_roughness_scheme   = namelist%thermal_roughness_scheme_option
   this%options%surface_evap_resistance    = namelist%surface_evap_resistance_option
   this%options%glacier                    = namelist%glacier_option
   
