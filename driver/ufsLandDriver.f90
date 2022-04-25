@@ -21,9 +21,9 @@ program ufsLandDriver
 
   call namelist%ReadNamelist()
   
-  namelist%begsub = namelist%begloc
-  namelist%endsub = namelist%endloc
-  namelist%lensub = namelist%endloc - namelist%begloc + 1
+  namelist%subset_start  = namelist%location_start
+  namelist%subset_end    = namelist%location_end
+  namelist%subset_length = namelist%location_end - namelist%location_start + 1
   
   land_model : select case(namelist%land_model)
   

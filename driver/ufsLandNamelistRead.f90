@@ -25,12 +25,13 @@ type, public :: namelist_type
   integer        :: run_timesteps
   integer        :: restart_timesteps
   
-  integer        :: begloc
-  integer        :: endloc
+  integer        :: location_start
+  integer        :: location_end
+  integer        :: location_length
 
-  integer        :: begsub
-  integer        :: endsub
-  integer        :: lensub
+  integer        :: subset_start
+  integer        :: subset_end
+  integer        :: subset_length
 
   integer        :: land_model
 
@@ -114,8 +115,12 @@ contains
     integer        :: run_seconds = -999
     integer        :: run_timesteps = -999
     
-    integer        :: begloc = 1
-    integer        :: endloc = 1
+    integer        :: location_start = -999
+    integer        :: location_end = -999
+    integer        :: location_length = -999
+    integer        :: subset_start = -999
+    integer        :: subset_end = -999
+    integer        :: subset_length = -999
     
     integer        :: land_model = -999
 
@@ -161,7 +166,7 @@ contains
   
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
-			    run_seconds, run_timesteps, separate_output, begloc, endloc, &
+			    run_seconds, run_timesteps, separate_output, location_start, location_end, &
 			    restart_dir, restart_frequency_s, restart_simulation, restart_date
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
@@ -232,8 +237,12 @@ contains
     this%restart_simulation   = restart_simulation
     this%restart_date         = restart_date
     this%restart_dir          = restart_dir
-    this%begloc               = begloc
-    this%endloc               = endloc
+    this%location_start       = location_start
+    this%location_end         = location_end
+    this%location_length      = location_end - location_start + 1
+    this%subset_start         = this%location_start
+    this%subset_end           = this%location_end
+    this%subset_length        = this%location_length
     this%simulation_start     = simulation_start
     this%simulation_end       = simulation_end
     this%run_days             = run_days
@@ -257,6 +266,20 @@ contains
     this%forcing_name_pressure          = forcing_name_pressure
     this%forcing_name_sw_radiation      = forcing_name_sw_radiation
     this%forcing_name_lw_radiation      = forcing_name_lw_radiation
+    
+    if(this%location_start <= 0 .or. this%location_end <= 0) then
+      write(*,*) "location_start = ", location_start
+      write(*,*) "location_end = ", location_end
+      write(*,*) "location_start and location_end need to be >0"
+      stop
+    end if
+    
+    if(this%location_length <= 0) then
+      write(*,*) "location_start = ", location_start
+      write(*,*) "location_end = ", location_end
+      write(*,*) "no locations to simulate"
+      stop
+    end if
     
     if(restart_simulation) then
       call calc_sec_since("1970-01-01 00:00:00",restart_date,0,run_time)

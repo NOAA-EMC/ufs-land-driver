@@ -24,7 +24,7 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
 
   call static%ReadStatic(namelist)
   
-  call noahmp%Init(namelist,namelist%lensub)
+  call noahmp%Init(namelist,namelist%subset_length)
 
   if(namelist%restart_simulation) then
     call restart%ReadRestartNoahMP(namelist, noahmp)
@@ -120,7 +120,7 @@ associate (                                                 &
    dswsfc     => forcing%downward_shortwave                ,&
    wind       => forcing%wind_speed                        ,&
    tprcp      => forcing%precipitation                     ,&
-   im         => noahmp%static%vector_length               ,&
+   im         => namelist%subset_length                    ,&
    km         => noahmp%static%soil_levels                 ,&
    delt       => noahmp%static%timestep                    ,&
    isot       => noahmp%static%soil_source                 ,&
