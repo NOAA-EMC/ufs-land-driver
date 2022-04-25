@@ -91,32 +91,32 @@ contains
   status = nf90_inquire_dimension(ncid, dimid, len = this%nlocations)
    if (status /= nf90_noerr) call handle_err(status)
    
-  if(namelist%begloc > this%nlocations .or. namelist%endloc > this%nlocations) &
-    stop "begloc or endloc not consistent with nlocations in static read"
+  if(namelist%location_start > this%nlocations .or. namelist%location_end > this%nlocations) &
+    stop "location_start or location_end in namelist not consistent with nlocations in static read"
    
-  allocate(this%temperature       (namelist%lensub))
-  allocate(this%specific_humidity (namelist%lensub))
-  allocate(this%surface_pressure  (namelist%lensub))
-  allocate(this%wind_speed        (namelist%lensub))
-  allocate(this%downward_longwave (namelist%lensub))
-  allocate(this%downward_shortwave(namelist%lensub))
-  allocate(this%precipitation     (namelist%lensub))
+  allocate(this%temperature       (namelist%subset_length))
+  allocate(this%specific_humidity (namelist%subset_length))
+  allocate(this%surface_pressure  (namelist%subset_length))
+  allocate(this%wind_speed        (namelist%subset_length))
+  allocate(this%downward_longwave (namelist%subset_length))
+  allocate(this%downward_shortwave(namelist%subset_length))
+  allocate(this%precipitation     (namelist%subset_length))
 
-  allocate(last_temperature       (namelist%lensub))
-  allocate(last_specific_humidity (namelist%lensub))
-  allocate(last_surface_pressure  (namelist%lensub))
-  allocate(last_wind_speed        (namelist%lensub))
-  allocate(last_downward_longwave (namelist%lensub))
-  allocate(last_downward_shortwave(namelist%lensub))
-  allocate(last_precipitation     (namelist%lensub))
+  allocate(last_temperature       (namelist%subset_length))
+  allocate(last_specific_humidity (namelist%subset_length))
+  allocate(last_surface_pressure  (namelist%subset_length))
+  allocate(last_wind_speed        (namelist%subset_length))
+  allocate(last_downward_longwave (namelist%subset_length))
+  allocate(last_downward_shortwave(namelist%subset_length))
+  allocate(last_precipitation     (namelist%subset_length))
 
-  allocate(next_temperature       (namelist%lensub))
-  allocate(next_specific_humidity (namelist%lensub))
-  allocate(next_surface_pressure  (namelist%lensub))
-  allocate(next_wind_speed        (namelist%lensub))
-  allocate(next_downward_longwave (namelist%lensub))
-  allocate(next_downward_shortwave(namelist%lensub))
-  allocate(next_precipitation     (namelist%lensub))
+  allocate(next_temperature       (namelist%subset_length))
+  allocate(next_specific_humidity (namelist%subset_length))
+  allocate(next_surface_pressure  (namelist%subset_length))
+  allocate(next_wind_speed        (namelist%subset_length))
+  allocate(next_downward_longwave (namelist%subset_length))
+  allocate(next_downward_shortwave(namelist%subset_length))
+  allocate(next_precipitation     (namelist%subset_length))
 
   status = nf90_inq_dimid(ncid, "time", dimid)
    if (status /= nf90_noerr) call handle_err(status)
@@ -214,43 +214,50 @@ contains
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_temperature), varid)
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, next_temperature, &
-        start = (/namelist%begsub,this%forcing_counter/), count = (/namelist%lensub, 1/))
+        start = (/namelist%subset_start,this%forcing_counter/), &
+        count = (/namelist%subset_length, 1/))
      if(status /= nf90_noerr) call handle_err(status)
   
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_specific_humidity), varid)
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, next_specific_humidity, &
-        start = (/namelist%begsub,this%forcing_counter/), count = (/namelist%lensub, 1/))
+        start = (/namelist%subset_start,this%forcing_counter/), &
+        count = (/namelist%subset_length, 1/))
      if(status /= nf90_noerr) call handle_err(status)
   
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_pressure), varid)
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, next_surface_pressure, &
-        start = (/namelist%begsub,this%forcing_counter/), count = (/namelist%lensub, 1/))
+        start = (/namelist%subset_start,this%forcing_counter/), &
+        count = (/namelist%subset_length, 1/))
      if(status /= nf90_noerr) call handle_err(status)
   
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_wind_speed), varid)
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, next_wind_speed, &
-        start = (/namelist%begsub,this%forcing_counter/), count = (/namelist%lensub, 1/))
+        start = (/namelist%subset_start,this%forcing_counter/), &
+        count = (/namelist%subset_length, 1/))
      if(status /= nf90_noerr) call handle_err(status)
   
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_lw_radiation), varid)
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, next_downward_longwave, &
-        start = (/namelist%begsub,this%forcing_counter/), count = (/namelist%lensub, 1/))
+        start = (/namelist%subset_start,this%forcing_counter/), &
+        count = (/namelist%subset_length, 1/))
      if(status /= nf90_noerr) call handle_err(status)
 
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_sw_radiation), varid)
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, next_downward_shortwave, &
-        start = (/namelist%begsub,this%forcing_counter/), count = (/namelist%lensub, 1/))
+        start = (/namelist%subset_start,this%forcing_counter/), &
+        count = (/namelist%subset_length, 1/))
      if(status /= nf90_noerr) call handle_err(status)
   
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_precipitation), varid)
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, next_precipitation, &
-        start = (/namelist%begsub,this%forcing_counter/), count = (/namelist%lensub, 1/))
+        start = (/namelist%subset_start,this%forcing_counter/), &
+        count = (/namelist%subset_length, 1/))
      if(status /= nf90_noerr) call handle_err(status)
 
     status = nf90_close(ncid)
@@ -271,7 +278,7 @@ contains
     if(namelist%forcing_time_solar == "instantaneous") then
       this%downward_shortwave = next_downward_shortwave
     elseif(namelist%forcing_time_solar == "gswp3_average") then
-      call interpolate_gswp3_zenith(now_time, next_time, namelist%lensub,             &
+      call interpolate_gswp3_zenith(now_time, next_time, namelist%subset_length,      &
                               static%latitude, static%longitude,                      &
 			      namelist%timestep_seconds,                              &
                               next_downward_shortwave,                                &
@@ -295,29 +302,29 @@ contains
 
   elseif(now_time < next_time) then
   
-    call interpolate_linear(now_time, last_time, next_time, namelist%lensub, &
+    call interpolate_linear(now_time, last_time, next_time, namelist%subset_length, &
                             last_temperature, next_temperature, this%temperature)
   
-    call interpolate_linear(now_time, last_time, next_time, namelist%lensub, &
+    call interpolate_linear(now_time, last_time, next_time, namelist%subset_length, &
                             last_specific_humidity, next_specific_humidity, this%specific_humidity)
 
-    call interpolate_linear(now_time, last_time, next_time, namelist%lensub, &
+    call interpolate_linear(now_time, last_time, next_time, namelist%subset_length, &
                             last_surface_pressure, next_surface_pressure, this%surface_pressure)
 
-    call interpolate_linear(now_time, last_time, next_time, namelist%lensub, &
+    call interpolate_linear(now_time, last_time, next_time, namelist%subset_length, &
                             last_wind_speed, next_wind_speed, this%wind_speed)
 
-    call interpolate_linear(now_time, last_time, next_time, namelist%lensub, &
+    call interpolate_linear(now_time, last_time, next_time, namelist%subset_length, &
                             last_downward_longwave, next_downward_longwave, this%downward_longwave)
 
     if(trim(namelist%forcing_interp_solar) == "linear") then
 
-      call interpolate_linear(now_time, last_time, next_time, namelist%lensub, &
+      call interpolate_linear(now_time, last_time, next_time, namelist%subset_length, &
                               last_downward_shortwave, next_downward_shortwave, this%downward_shortwave)
 
     elseif(trim(namelist%forcing_interp_solar) == "gswp3_zenith") then
 
-      call interpolate_gswp3_zenith(now_time, last_time, namelist%lensub,             &
+      call interpolate_gswp3_zenith(now_time, last_time, namelist%subset_length,      &
                               static%latitude, static%longitude,                      &
 			      namelist%timestep_seconds,                              &
                               last_downward_shortwave,                                &
