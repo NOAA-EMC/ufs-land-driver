@@ -93,8 +93,8 @@ if(last_time > now_time .or. next_time < now_time) &
 end subroutine interpolate_linear
 
 subroutine interpolate_zenith(now_time, last_time, vector_length, &
-                                    latitude, longitude, timestep,      &
-                                    last_var, interp_var)
+                              latitude, longitude, timestep,      &
+                              last_var, interp_var)
 
 use cosine_zenith
 

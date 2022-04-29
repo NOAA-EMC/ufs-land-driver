@@ -49,6 +49,20 @@ end type forcing_type
   real, allocatable, dimension(:)  :: next_downward_shortwave
   real, allocatable, dimension(:)  :: next_precipitation
      
+  integer                                       :: nweights
+  double precision, allocatable, dimension(:)   :: regrid_weights
+  integer         , allocatable, dimension(:)   :: source_lookup
+  integer         , allocatable, dimension(:)   :: destination_lookup
+  integer                                       :: nlats
+  integer                                       :: nlons
+  real            , allocatable, dimension(:,:) :: in2d_temperature
+  real            , allocatable, dimension(:,:) :: in2d_specific_humidity
+  real            , allocatable, dimension(:,:) :: in2d_surface_pressure
+  real            , allocatable, dimension(:,:) :: in2d_wind_speed
+  real            , allocatable, dimension(:,:) :: in2d_downward_longwave
+  real            , allocatable, dimension(:,:) :: in2d_downward_shortwave
+  real            , allocatable, dimension(:,:) :: in2d_precipitation
+
 contains   
 
   subroutine ReadForcingInit(this, namelist)
@@ -85,19 +99,65 @@ contains
       stop "namelist forcing_type not recognized"
   end select forcing_type_option
   
+  if(namelist%forcing_regrid == "esmf") then
+  
+    status = nf90_open(trim(namelist%forcing_regrid_weights_filename), NF90_NOWRITE, ncid)
+     if (status /= nf90_noerr) call handle_err(status)
+  
+    status = nf90_inq_dimid(ncid, "n_s", dimid)
+     if (status /= nf90_noerr) call handle_err(status)
+
+    status = nf90_inquire_dimension(ncid, dimid, len = nweights)
+     if (status /= nf90_noerr) call handle_err(status)
+   
+    allocate(regrid_weights(nweights))
+    allocate(source_lookup(nweights))
+    allocate(destination_lookup(nweights))
+    
+    status = nf90_inq_varid(ncid, "S", varid)
+     if(status /= nf90_noerr) call handle_err(status)
+
+    status = nf90_get_var(ncid, varid, regrid_weights)
+     if(status /= nf90_noerr) call handle_err(status)
+     
+    status = nf90_inq_varid(ncid, "col", varid)
+     if(status /= nf90_noerr) call handle_err(status)
+
+    status = nf90_get_var(ncid, varid, source_lookup)
+     if(status /= nf90_noerr) call handle_err(status)
+     
+    status = nf90_inq_varid(ncid, "row", varid)
+     if(status /= nf90_noerr) call handle_err(status)
+
+    status = nf90_get_var(ncid, varid, destination_lookup)
+     if(status /= nf90_noerr) call handle_err(status)
+     
+    this%nlocations = maxval(destination_lookup)
+
+    status = nf90_close(ncid)
+     if (status /= nf90_noerr) call handle_err(status)
+    
+    write(*,*) "Read weights from: "//trim(namelist%forcing_regrid_weights_filename)
+
+  end if
+  
   write(*,*) "Starting first read: "//trim(forcing_filename)
   
   status = nf90_open(forcing_filename, NF90_NOWRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)
   
-  status = nf90_inq_dimid(ncid, "location", dimid)
-   if (status /= nf90_noerr) call handle_err(status)
+  if(namelist%forcing_regrid == "none") then
+  
+    status = nf90_inq_dimid(ncid, "location", dimid)
+     if (status /= nf90_noerr) call handle_err(status)
 
-  status = nf90_inquire_dimension(ncid, dimid, len = this%nlocations)
-   if (status /= nf90_noerr) call handle_err(status)
+    status = nf90_inquire_dimension(ncid, dimid, len = this%nlocations)
+     if (status /= nf90_noerr) call handle_err(status)
    
+  end if
+  
   if(namelist%location_start > this%nlocations .or. namelist%location_end > this%nlocations) &
-    stop "location_start or location_end in namelist not consistent with nlocations in static read"
+    stop "location_start or location_end in namelist not consistent with nlocations in forcing read"
    
   allocate(this%temperature       (namelist%subset_length))
   allocate(this%specific_humidity (namelist%subset_length))
@@ -175,6 +235,7 @@ contains
   
   integer :: ncid, dimid, varid, status
   integer :: times_in_file
+  integer :: iloc, latloc, lonloc
   double precision  :: file_next_time
   
   call date_from_since("1970-01-01 00:00:00", now_time, now_date)
@@ -218,55 +279,159 @@ contains
       stop
     end if
    
-    status = nf90_inq_varid(ncid, trim(namelist%forcing_name_temperature), varid)
-     if(status /= nf90_noerr) call handle_err(status)
-    status = nf90_get_var(ncid, varid, next_temperature, &
-        start = (/namelist%subset_start,this%forcing_counter/), &
-        count = (/namelist%subset_length, 1/))
-     if(status /= nf90_noerr) call handle_err(status)
+    if(namelist%forcing_regrid == "none") then
+   
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_temperature), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, next_temperature, &
+          start = (/namelist%subset_start,this%forcing_counter/), count = (/namelist%subset_length, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
   
-    status = nf90_inq_varid(ncid, trim(namelist%forcing_name_specific_humidity), varid)
-     if(status /= nf90_noerr) call handle_err(status)
-    status = nf90_get_var(ncid, varid, next_specific_humidity, &
-        start = (/namelist%subset_start,this%forcing_counter/), &
-        count = (/namelist%subset_length, 1/))
-     if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_specific_humidity), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, next_specific_humidity, &
+          start = (/namelist%subset_start,this%forcing_counter/), count = (/namelist%subset_length, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
   
-    status = nf90_inq_varid(ncid, trim(namelist%forcing_name_pressure), varid)
-     if(status /= nf90_noerr) call handle_err(status)
-    status = nf90_get_var(ncid, varid, next_surface_pressure, &
-        start = (/namelist%subset_start,this%forcing_counter/), &
-        count = (/namelist%subset_length, 1/))
-     if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_pressure), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, next_surface_pressure, &
+          start = (/namelist%subset_start,this%forcing_counter/), count = (/namelist%subset_length, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
   
-    status = nf90_inq_varid(ncid, trim(namelist%forcing_name_wind_speed), varid)
-     if(status /= nf90_noerr) call handle_err(status)
-    status = nf90_get_var(ncid, varid, next_wind_speed, &
-        start = (/namelist%subset_start,this%forcing_counter/), &
-        count = (/namelist%subset_length, 1/))
-     if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_wind_speed), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, next_wind_speed, &
+          start = (/namelist%subset_start,this%forcing_counter/), count = (/namelist%subset_length, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
   
-    status = nf90_inq_varid(ncid, trim(namelist%forcing_name_lw_radiation), varid)
-     if(status /= nf90_noerr) call handle_err(status)
-    status = nf90_get_var(ncid, varid, next_downward_longwave, &
-        start = (/namelist%subset_start,this%forcing_counter/), &
-        count = (/namelist%subset_length, 1/))
-     if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_lw_radiation), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, next_downward_longwave, &
+          start = (/namelist%subset_start,this%forcing_counter/), count = (/namelist%subset_length, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
 
-    status = nf90_inq_varid(ncid, trim(namelist%forcing_name_sw_radiation), varid)
-     if(status /= nf90_noerr) call handle_err(status)
-    status = nf90_get_var(ncid, varid, next_downward_shortwave, &
-        start = (/namelist%subset_start,this%forcing_counter/), &
-        count = (/namelist%subset_length, 1/))
-     if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_sw_radiation), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, next_downward_shortwave, &
+          start = (/namelist%subset_start,this%forcing_counter/), count = (/namelist%subset_length, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
   
-    status = nf90_inq_varid(ncid, trim(namelist%forcing_name_precipitation), varid)
-     if(status /= nf90_noerr) call handle_err(status)
-    status = nf90_get_var(ncid, varid, next_precipitation, &
-        start = (/namelist%subset_start,this%forcing_counter/), &
-        count = (/namelist%subset_length, 1/))
-     if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_precipitation), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, next_precipitation, &
+          start = (/namelist%subset_start,this%forcing_counter/), count = (/namelist%subset_length, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
 
+    elseif(namelist%forcing_regrid == "esmf") then
+   
+      status = nf90_inq_dimid(ncid, "lat", dimid)
+       if (status /= nf90_noerr) call handle_err(status)
+
+      status = nf90_inquire_dimension(ncid, dimid, len = nlats)
+       if (status /= nf90_noerr) call handle_err(status)
+   
+      status = nf90_inq_dimid(ncid, "lon", dimid)
+       if (status /= nf90_noerr) call handle_err(status)
+
+      status = nf90_inquire_dimension(ncid, dimid, len = nlons)
+       if (status /= nf90_noerr) call handle_err(status)
+   
+      allocate(in2d_temperature       (nlons,nlats))
+      allocate(in2d_specific_humidity (nlons,nlats))
+      allocate(in2d_surface_pressure  (nlons,nlats))
+      allocate(in2d_wind_speed        (nlons,nlats))
+      allocate(in2d_downward_longwave (nlons,nlats))
+      allocate(in2d_downward_shortwave(nlons,nlats))
+      allocate(in2d_precipitation     (nlons,nlats))
+      
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_temperature), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, in2d_temperature, &
+          start = (/1, 1, this%forcing_counter/), count = (/nlons, nlats, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
+  
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_specific_humidity), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, in2d_specific_humidity, &
+          start = (/1, 1, this%forcing_counter/), count = (/nlons, nlats, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
+  
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_pressure), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, in2d_surface_pressure, &
+          start = (/1, 1, this%forcing_counter/), count = (/nlons, nlats, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
+  
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_wind_speed), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, in2d_wind_speed, &
+          start = (/1, 1, this%forcing_counter/), count = (/nlons, nlats, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
+  
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_lw_radiation), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, in2d_downward_longwave, &
+          start = (/1, 1, this%forcing_counter/), count = (/nlons, nlats, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
+
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_sw_radiation), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, in2d_downward_shortwave, &
+          start = (/1, 1, this%forcing_counter/), count = (/nlons, nlats, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
+  
+      status = nf90_inq_varid(ncid, trim(namelist%forcing_name_precipitation), varid)
+       if(status /= nf90_noerr) call handle_err(status)
+      status = nf90_get_var(ncid, varid, in2d_precipitation, &
+          start = (/1, 1, this%forcing_counter/), count = (/nlons, nlats, 1/))
+       if(status /= nf90_noerr) call handle_err(status)
+
+      next_temperature = 0.0
+      next_specific_humidity = 0.0
+      next_surface_pressure = 0.0
+      next_wind_speed = 0.0
+      next_downward_longwave = 0.0
+      next_downward_shortwave = 0.0
+      next_precipitation = 0.0
+
+      do iloc = 1, nweights                                                                                                                      
+
+        latloc = source_lookup(iloc)/nlons + 1                                                                                                
+        lonloc = source_lookup(iloc) - (latloc-1)*nlons                                                                                       
+                                                                                                                        
+        next_temperature(destination_lookup(iloc)) = next_temperature(destination_lookup(iloc)) + &                                                            
+                                     regrid_weights(iloc) * in2d_temperature(lonloc,latloc) 
+        next_specific_humidity(destination_lookup(iloc)) = next_specific_humidity(destination_lookup(iloc)) + &                                                            
+                                     regrid_weights(iloc) * in2d_specific_humidity(lonloc,latloc)                                                                
+        next_surface_pressure(destination_lookup(iloc)) = next_surface_pressure(destination_lookup(iloc)) + &                                                            
+                                     regrid_weights(iloc) * in2d_surface_pressure(lonloc,latloc)                                                                
+        next_wind_speed(destination_lookup(iloc)) = next_wind_speed(destination_lookup(iloc)) + &                                                            
+                                     regrid_weights(iloc) * in2d_wind_speed(lonloc,latloc)                                                                
+        next_downward_longwave(destination_lookup(iloc)) = next_downward_longwave(destination_lookup(iloc)) + &                                                            
+                                     regrid_weights(iloc) * in2d_downward_longwave(lonloc,latloc)                                                                
+        next_downward_shortwave(destination_lookup(iloc)) = next_downward_shortwave(destination_lookup(iloc)) + &                                                            
+                                     regrid_weights(iloc) * in2d_downward_shortwave(lonloc,latloc)                                                                
+        next_precipitation(destination_lookup(iloc)) = next_precipitation(destination_lookup(iloc)) + &                                                            
+                                     regrid_weights(iloc) * in2d_precipitation(lonloc,latloc)                                                                
+
+      end do                                                                                                                                
+
+      deallocate(in2d_temperature       )
+      deallocate(in2d_specific_humidity )
+      deallocate(in2d_surface_pressure  )
+      deallocate(in2d_wind_speed        )
+      deallocate(in2d_downward_longwave )
+      deallocate(in2d_downward_shortwave)
+      deallocate(in2d_precipitation     )
+
+    else
+
+      write(*,*) "unknown forcing regrid option"
+      stop
+    
+    end if
+   
     status = nf90_close(ncid)
 
     next_forcing_done = .true.
