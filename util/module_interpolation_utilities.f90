@@ -96,6 +96,11 @@ subroutine interpolate_zenith(now_time, last_time, vector_length, &
                               latitude, longitude, timestep,      &
                               last_var, interp_var)
 
+! The subroutine interpolates using a zenith angle interpolation assuming the data 
+!   (usually something like solar radiation) is an average of the FOLLOWING three hours.
+!   Note this may require reording the time dimension of the forcing source since it may be
+!   a backward average.
+
 use cosine_zenith
 
 implicit none
