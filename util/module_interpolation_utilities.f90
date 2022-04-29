@@ -92,7 +92,7 @@ if(last_time > now_time .or. next_time < now_time) &
 
 end subroutine interpolate_linear
 
-subroutine interpolate_gswp3_zenith(now_time, last_time, vector_length, &
+subroutine interpolate_zenith(now_time, last_time, vector_length, &
                                     latitude, longitude, timestep,      &
                                     last_var, interp_var)
 
@@ -152,7 +152,7 @@ real, parameter                   :: critical_cosz   = 0.0001
 where(interp_var < 0.0 .or. cosz <= 0.0) interp_var = 0.0
 
 
-end subroutine interpolate_gswp3_zenith
+end subroutine interpolate_zenith
 
 end module interpolation_utilities
 

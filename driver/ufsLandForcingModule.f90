@@ -8,7 +8,7 @@ private
 
 type, public :: forcing_type
 
-  integer                          :: forcing_counter
+  integer                          :: forcing_counter      ! current time index in netcdf forcing file
   integer                          :: nlocations
   double precision                 :: time
   real, allocatable, dimension(:)  :: temperature
@@ -29,7 +29,7 @@ end type forcing_type
 
   double precision                 :: last_time
   character*19                     :: last_date  ! format: yyyy-mm-dd hh:nn:ss
-  logical                          :: last_forcing_read
+  logical                          :: last_forcing_done
   real, allocatable, dimension(:)  :: last_temperature
   real, allocatable, dimension(:)  :: last_specific_humidity
   real, allocatable, dimension(:)  :: last_surface_pressure
@@ -40,7 +40,7 @@ end type forcing_type
      
   double precision                 :: next_time
   character*19                     :: next_date  ! format: yyyy-mm-dd hh:nn:ss
-  logical                          :: next_forcing_read
+  logical                          :: next_forcing_done
   real, allocatable, dimension(:)  :: next_temperature
   real, allocatable, dimension(:)  :: next_specific_humidity
   real, allocatable, dimension(:)  :: next_surface_pressure
@@ -67,13 +67,18 @@ contains
   
   this%forcing_counter = 0
   
+! Different forcing types
+!    single_point assumes all the time are in one file
+!    mm_3h assumes three-hourly stored in monthly file
+!    mm_1h assumes hourly stored in monthly file
+
   forcing_type_option : select case (trim(namelist%forcing_type))
     case ("single_point")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
-    case ("gswp3")
+    case ("mm_3h")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
-    case ("gdas")
+    case ("mm_1h")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:10)//".nc"
     case default
@@ -127,6 +132,8 @@ contains
   status = nf90_inq_varid(ncid, "time", varid)
    if(status /= nf90_noerr) call handle_err(status)
 
+! loop through times of the forcing file to find the index to start reading
+
   timeloop : do itime = 1, ntimes
   
     status = nf90_get_var(ncid, varid, read_time, start = (/itime/))
@@ -136,8 +143,8 @@ contains
        this%forcing_counter = itime
        next_time = read_time
        last_time = huge(1.d0)
-       next_forcing_read = .false.
-       last_forcing_read = .false.
+       next_forcing_done = .false.
+       last_forcing_done = .false.
        exit timeloop
     end if
     
@@ -155,7 +162,7 @@ contains
   use netcdf
   use error_handling, only : handle_err
   use time_utilities
-  use interpolation_utilities, only : interpolate_linear, interpolate_gswp3_zenith
+  use interpolation_utilities, only : interpolate_linear, interpolate_zenith
   use ufsLandStaticModule, only : static_type
   
   class(forcing_type)  :: this
@@ -175,19 +182,19 @@ contains
   
   write(*,*) "Searching for forcing at time: ",now_date
   
-  if(.not. next_forcing_read) then
+  if(.not. next_forcing_done) then
   
     forcing_type_option : select case (trim(namelist%forcing_type))
       case ("single_point")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
-      case ("gswp3")
+      case ("mm_3h")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
         forcing_filename = trim(forcing_filename)//next_date(1:7)//".nc"
         if(next_date(9:19) == "01 00:00:00") then
           this%forcing_counter = 1
           write(*,*) "Resetting forcing counter to beginning of file"
         end if
-      case ("gdas")
+      case ("mm_1h")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
         forcing_filename = trim(forcing_filename)//next_date(1:10)//".nc"
         if(next_date(12:19) == "00:00:00") then
@@ -262,11 +269,11 @@ contains
 
     status = nf90_close(ncid)
 
-    next_forcing_read = .true.
+    next_forcing_done = .true.
     
   end if ! not read_next_forcing
   
-  if(now_time == next_time) then
+  if(now_time == next_time) then  ! transfer the next forcing just read into the current forcing 
 
     this%temperature        = next_temperature
     this%specific_humidity  = next_specific_humidity
@@ -277,13 +284,18 @@ contains
     
     if(namelist%forcing_time_solar == "instantaneous") then
       this%downward_shortwave = next_downward_shortwave
-    elseif(namelist%forcing_time_solar == "gswp3_average") then
-      call interpolate_gswp3_zenith(now_time, next_time, namelist%subset_length,      &
-                              static%latitude, static%longitude,                      &
-			      namelist%timestep_seconds,                              &
-                              next_downward_shortwave,                                &
+    elseif(namelist%forcing_time_solar == "period_average") then
+      call interpolate_zenith(now_time, next_time, namelist%subset_length,             &
+                              static%latitude, static%longitude,                &
+			      namelist%timestep_seconds,                        &
+                              next_downward_shortwave,                          &
                               this%downward_shortwave)
+    else
+      write(*,*) namelist%forcing_time_solar, " namelist%forcing_time_solar not recognized"
+      stop
     end if
+    
+! since there is no future forcing in memory, prepare for next forcing read
     
     last_time               = next_time
     last_temperature        = next_temperature
@@ -294,13 +306,13 @@ contains
     last_downward_shortwave = next_downward_shortwave
     last_precipitation      = next_precipitation
     
-    next_time = last_time + namelist%forcing_timestep_seconds
-    last_forcing_read = .true.
-    next_forcing_read = .false.
+    next_time = last_time + namelist%forcing_timestep_seconds   ! increment next_time to next forcing time
+    last_forcing_done = .true.                                  ! last_time forcing is in memory
+    next_forcing_done = .false.                                 ! next_time forcing is not in memory
   
-    this%forcing_counter = this%forcing_counter + 1   ! increment forcing counter by 1
-
-  elseif(now_time < next_time) then
+    this%forcing_counter = this%forcing_counter + 1             ! increment forcing counter by 1
+    
+  elseif(now_time < next_time) then ! between forcing times
   
     call interpolate_linear(now_time, last_time, next_time, namelist%subset_length, &
                             last_temperature, next_temperature, this%temperature)
@@ -322,26 +334,31 @@ contains
       call interpolate_linear(now_time, last_time, next_time, namelist%subset_length, &
                               last_downward_shortwave, next_downward_shortwave, this%downward_shortwave)
 
-    elseif(trim(namelist%forcing_interp_solar) == "gswp3_zenith") then
+    elseif(trim(namelist%forcing_interp_solar) == "zenith") then
 
-      call interpolate_gswp3_zenith(now_time, last_time, namelist%subset_length,      &
-                              static%latitude, static%longitude,                      &
-			      namelist%timestep_seconds,                              &
-                              last_downward_shortwave,                                &
+      call interpolate_zenith(now_time, last_time, namelist%subset_length,      &
+                              static%latitude, static%longitude,                &
+			      namelist%timestep_seconds,                        &
+                              last_downward_shortwave,                          &
                               this%downward_shortwave)
+    else
+      write(*,*) namelist%forcing_time_solar, " namelist%forcing_time_solar not recognized"
+      stop
     end if
 
     this%precipitation = next_precipitation
   
-    next_forcing_read = .true.
+    next_forcing_done = .true.
 
   else
 
-   write(*,*) "Read of forcing time is not consistent with model time"
-   stop
+    write(*,*) "Read of forcing time is not consistent with model time"
+    stop
 
   end if
 
+! do a gross check on wind speed and convert forcing precipitation units
+    
   this%wind_speed     = max(this%wind_speed, 0.1)
   this%precipitation  = this%precipitation * namelist%timestep_seconds / 1000.0 ! convert mm/s to m
   

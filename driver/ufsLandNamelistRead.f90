@@ -281,6 +281,25 @@ contains
       stop
     end if
     
+    if(this%forcing_type /= "single_point" .and. &
+       this%forcing_type /= "mm_3h" .and. &
+       this%forcing_type /= "mm_1h" ) then
+      write(*,*) this%forcing_type, " namelist%forcing_type not recognized"
+      stop
+    end if
+    
+    if(this%forcing_interp_solar /= "linear" .and. &
+       this%forcing_interp_solar /= "zenith" ) then
+      write(*,*) this%forcing_interp_solar, " namelist%forcing_interp_solar not recognized"
+      stop
+    end if
+    
+    if(this%forcing_time_solar /= "instantaneous" .and. &
+       this%forcing_time_solar /= "period_average" ) then
+      write(*,*) this%forcing_time_solar, " namelist%forcing_time_solar not recognized"
+      stop
+    end if
+    
     if(restart_simulation) then
       call calc_sec_since("1970-01-01 00:00:00",restart_date,0,run_time)
       call date_from_since("1970-01-01 00:00:00", run_time+timestep_seconds, simulation_start)
