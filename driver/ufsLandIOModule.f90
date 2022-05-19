@@ -323,13 +323,13 @@ contains
   status = nf90_put_var(ncid, varid , forcing%downward_shortwave , &
       start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "sigmaf", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sigmaf          , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "sigmaf", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%sigmaf          , &
+  !    start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "sfcemis", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sfcemis         , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "sfcemis", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%sfcemis         , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snet", varid)
   status = nf90_put_var(ncid, varid , noah%model%snet            , &
@@ -339,41 +339,41 @@ contains
   status = nf90_put_var(ncid, varid , noah%model%tg3             , &
       start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "cm", varid)
-  status = nf90_put_var(ncid, varid , noah%model%cm              , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "cm", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%cm              , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "ch", varid)
-  status = nf90_put_var(ncid, varid , noah%model%ch              , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "ch", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%ch              , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "prsl1", varid)
-  status = nf90_put_var(ncid, varid , noah%model%prsl1           , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "prsl1", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%prsl1           , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "prslki", varid)
-  status = nf90_put_var(ncid, varid , noah%model%prslki          , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "prslki", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%prslki          , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "zf", varid)
-  status = nf90_put_var(ncid, varid , noah%model%zf              , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "zf", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%zf              , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "shdmin", varid)
-  status = nf90_put_var(ncid, varid , noah%model%shdmin          , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "shdmin", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%shdmin          , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "shdmax", varid)
-  status = nf90_put_var(ncid, varid , noah%model%shdmax          , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "shdmax", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%shdmax          , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "snoalb", varid)
-  status = nf90_put_var(ncid, varid , noah%model%snoalb          , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "snoalb", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%snoalb          , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "sfalb", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sfalb           , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "sfalb", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%sfalb           , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "weasd", varid)
   status = nf90_put_var(ncid, varid , noah%model%weasd           , &
@@ -418,17 +418,17 @@ contains
   status = nf90_put_var(ncid, varid , noah%model%tsurf           , &
       start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "zorl", varid)
-  status = nf90_put_var(ncid, varid , noah%model%zorl            , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "zorl", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%zorl            , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "sncovr1", varid)
-  status = nf90_put_var(ncid, varid , noah%model%sncovr1         , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! ! status = nf90_inq_varid(ncid, "sncovr1", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%sncovr1         , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "qsurf", varid)
-  status = nf90_put_var(ncid, varid , noah%model%qsurf           , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "qsurf", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%qsurf           , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "gflux", varid)
   status = nf90_put_var(ncid, varid , noah%model%gflux           , &
@@ -454,13 +454,13 @@ contains
   status = nf90_put_var(ncid, varid , noah%model%runoff          , &
       start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "cmm", varid)
-  status = nf90_put_var(ncid, varid , noah%model%cmm             , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "cmm", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%cmm             , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "chh", varid)
-  status = nf90_put_var(ncid, varid , noah%model%chh             , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "chh", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%chh             , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "evbs", varid)
   status = nf90_put_var(ncid, varid , noah%model%evbs            , &
@@ -486,13 +486,13 @@ contains
   status = nf90_put_var(ncid, varid , noah%model%snohf           , &
       start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "smcwlt2", varid)
-  status = nf90_put_var(ncid, varid , noah%model%smcwlt2         , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "smcwlt2", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%smcwlt2         , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
-  status = nf90_inq_varid(ncid, "smcref2", varid)
-  status = nf90_put_var(ncid, varid , noah%model%smcref2         , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
+  ! status = nf90_inq_varid(ncid, "smcref2", varid)
+  ! status = nf90_put_var(ncid, varid , noah%model%smcref2         , &
+  !     start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "wet1", varid)
   status = nf90_put_var(ncid, varid , noah%model%wet1            , &
