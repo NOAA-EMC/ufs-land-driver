@@ -160,7 +160,7 @@ contains
 
     status = nf90_def_var(ncid, "snwdph", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "snow depth (water equiv) over land")
-      status = nf90_put_att(ncid, varid, "units", "m")
+      status = nf90_put_att(ncid, varid, "units", "mm")
 
     status = nf90_def_var(ncid, "tskin", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "ground surface skin temperature")
@@ -168,7 +168,7 @@ contains
 
     status = nf90_def_var(ncid, "tprcp", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "total precipitation")
-      status = nf90_put_att(ncid, varid, "units", "mm")
+      status = nf90_put_att(ncid, varid, "units", "m")
 
     status = nf90_def_var(ncid, "srflag", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "snow/rain flag for precipitation")
@@ -188,11 +188,11 @@ contains
 
     status = nf90_def_var(ncid, "canopy", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "canopy moisture content")
-      status = nf90_put_att(ncid, varid, "units", "m")
+      status = nf90_put_att(ncid, varid, "units", "mm")
 
     status = nf90_def_var(ncid, "trans", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "total plant transpiration")
-      status = nf90_put_att(ncid, varid, "units", "m/s")
+      status = nf90_put_att(ncid, varid, "units", "W/m2")
 
     status = nf90_def_var(ncid, "tsurf", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "surface skin temperature (after iteration)")
@@ -220,7 +220,7 @@ contains
 
     status = nf90_def_var(ncid, "evap", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "evaporation from latent heat flux")
-      status = nf90_put_att(ncid, varid, "units", "mm/s")
+      status = nf90_put_att(ncid, varid, "units", "W/m2")
 
     status = nf90_def_var(ncid, "hflx", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "sensible heat flux")
@@ -228,11 +228,11 @@ contains
 
     status = nf90_def_var(ncid, "ep", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "potential evaporation")
-      status = nf90_put_att(ncid, varid, "units", "?")
+      status = nf90_put_att(ncid, varid, "units", "W/m2")
 
     status = nf90_def_var(ncid, "runoff", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "surface runoff")
-      status = nf90_put_att(ncid, varid, "units", "m/s")
+      status = nf90_put_att(ncid, varid, "units", "mm/s")
 
     status = nf90_def_var(ncid, "cmm", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "ch * rho")
@@ -244,11 +244,11 @@ contains
 
     status = nf90_def_var(ncid, "evbs", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "direct soil evaporation")
-      status = nf90_put_att(ncid, varid, "units", "m/s")
+      status = nf90_put_att(ncid, varid, "units", "W/m2")
 
     status = nf90_def_var(ncid, "evcw", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "canopy water evaporation")
-      status = nf90_put_att(ncid, varid, "units", "m/s")
+      status = nf90_put_att(ncid, varid, "units", "W/m2")
 
     status = nf90_def_var(ncid, "sbsno", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "sublimation/deposit from snopack")
@@ -260,7 +260,7 @@ contains
 
     status = nf90_def_var(ncid, "stm", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "total soil column moisture content")
-      status = nf90_put_att(ncid, varid, "units", "m")
+      status = nf90_put_att(ncid, varid, "units", "mm")
 
     status = nf90_def_var(ncid, "snohf", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "snow/freezing-rain latent heat flux ")
