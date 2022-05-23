@@ -22,6 +22,7 @@
               # NOAA Hera
               system "cp config/user_build_config.hera.serial user_build_config"; 
               print "=====================================================================\n"; 
+              print "================== hera configure environment set ===================\n"; 
               print "=====================================================================\n"; 
               print "NEED TO LOAD MODULES: \n"; 
               print " \n"; 
@@ -36,6 +37,7 @@
               # MSU/NOAA Orion
               system "cp config/user_build_config.orion.serial user_build_config"; 
               print "=====================================================================\n"; 
+              print "================= orion configure environment set ===================\n"; 
               print "=====================================================================\n"; 
               print "NEED TO LOAD MODULES: \n"; 
               print " \n"; 
@@ -50,6 +52,7 @@
               # NCAR Cheyenne
               system "cp config/user_build_config.cheyenne.serial user_build_config"; 
               print "=====================================================================\n"; 
+              print "================ cheyenne configure environment set =================\n"; 
               print "=====================================================================\n"; 
               print "Should work with default Cheyenne modules, if problems, try: \n"; 
               print "module load intel/19.1.1 netcdf/4.8.1 \n"; 
