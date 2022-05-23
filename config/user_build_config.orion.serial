@@ -1,12 +1,12 @@
 
 #===============================================================================
-#  Baseline configuration for NCAR Cheyenne
+#  Baseline configuration for MSU Orion
 #===============================================================================
 
  COMPILERF90    =       ifort
  FREESOURCE     =       #-ffree-form  -ffree-line-length-none
  F90FLAGS       =       -r8 -init=huge
- NETCDFMOD      =       -I/apps/intel-2020.2/netcdf-4.7.4/include
- NETCDFLIB      =       -L/apps/intel-2020.2/netcdf-4.7.4/lib -lnetcdf -lnetcdff
+ NETCDFMOD      =       -I${NETCDF}/include
+ NETCDFLIB      =       -L${NETCDF}/lib -lnetcdf -lnetcdff
  PHYSDIR        =       ../ccpp-physics/physics
 
