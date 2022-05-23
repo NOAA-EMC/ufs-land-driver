@@ -25,7 +25,7 @@
               print "=====================================================================\n"; 
               print "NEED TO LOAD MODULES: \n"; 
               print " \n"; 
-              print "module load intel netcdf/4.7.0 \n"; 
+              print "module load intel/2020 netcdf/4.7.0 \n"; 
               print " \n"; 
               print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
               print "=====================================================================\n"; 
