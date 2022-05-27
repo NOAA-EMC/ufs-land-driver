@@ -86,6 +86,7 @@ contains
 !    single_point assumes all the time are in one file
 !    mm_3h assumes three-hourly stored in monthly file
 !    mm_1h assumes hourly stored in monthly file
+!    dd_1h assumes hourly stored in daily file
 
   forcing_type_option : select case (trim(namelist%forcing_type))
     case ("single_point")
@@ -94,6 +95,9 @@ contains
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
     case ("mm_1h")
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+      forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
+    case ("dd_1h")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:10)//".nc"
     case default
@@ -265,6 +269,13 @@ contains
           write(*,*) "Resetting forcing counter to beginning of file"
         end if
       case ("mm_1h")
+        forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+        forcing_filename = trim(forcing_filename)//next_date(1:7)//".nc"
+        if(next_date(12:19) == "01 00:00:00") then
+          this%forcing_counter = 1
+          write(*,*) "Resetting forcing counter to beginning of file"
+        end if
+      case ("dd_1h")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
         forcing_filename = trim(forcing_filename)//next_date(1:10)//".nc"
         if(next_date(12:19) == "00:00:00") then

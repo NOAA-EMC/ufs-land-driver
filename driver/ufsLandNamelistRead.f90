@@ -290,7 +290,8 @@ contains
     
     if(this%forcing_type /= "single_point" .and. &
        this%forcing_type /= "mm_3h" .and. &
-       this%forcing_type /= "mm_1h" ) then
+       this%forcing_type /= "mm_1h" .and. &
+       this%forcing_type /= "dd_1h" ) then
       write(*,*) this%forcing_type, " namelist%forcing_type not recognized"
       stop
     end if
