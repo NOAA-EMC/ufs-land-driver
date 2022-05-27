@@ -62,6 +62,7 @@ end type forcing_type
   real            , allocatable, dimension(:,:) :: in2d_downward_longwave
   real            , allocatable, dimension(:,:) :: in2d_downward_shortwave
   real            , allocatable, dimension(:,:) :: in2d_precipitation
+  real            , allocatable, dimension(:)   :: elevation_difference
 
 contains   
 
@@ -114,19 +115,19 @@ contains
     allocate(source_lookup(nweights))
     allocate(destination_lookup(nweights))
     
-    status = nf90_inq_varid(ncid, "S", varid)
+    status = nf90_inq_varid(ncid, "regrid_weights", varid)
      if(status /= nf90_noerr) call handle_err(status)
 
     status = nf90_get_var(ncid, varid, regrid_weights)
      if(status /= nf90_noerr) call handle_err(status)
      
-    status = nf90_inq_varid(ncid, "col", varid)
+    status = nf90_inq_varid(ncid, "source_lookup", varid)
      if(status /= nf90_noerr) call handle_err(status)
 
     status = nf90_get_var(ncid, varid, source_lookup)
      if(status /= nf90_noerr) call handle_err(status)
      
-    status = nf90_inq_varid(ncid, "row", varid)
+    status = nf90_inq_varid(ncid, "destination_lookup", varid)
      if(status /= nf90_noerr) call handle_err(status)
 
     status = nf90_get_var(ncid, varid, destination_lookup)
@@ -134,10 +135,18 @@ contains
      
     this%nlocations = maxval(destination_lookup)
 
+    allocate(elevation_difference(this%nlocations))
+
+    status = nf90_inq_varid(ncid, "elevation_difference", varid)
+     if(status /= nf90_noerr) call handle_err(status)
+    status = nf90_get_var(ncid, varid, elevation_difference, &
+        start = (/namelist%subset_start/), count = (/namelist%subset_length/))
+     if(status /= nf90_noerr) call handle_err(status)
+
     status = nf90_close(ncid)
      if (status /= nf90_noerr) call handle_err(status)
     
-    write(*,*) "Read weights from: "//trim(namelist%forcing_regrid_weights_filename)
+    write(*,*) "Read weights and elevation adjustment from: "//trim(namelist%forcing_regrid_weights_filename)
 
   end if
   
@@ -325,13 +334,13 @@ contains
 
     elseif(namelist%forcing_regrid == "esmf") then
    
-      status = nf90_inq_dimid(ncid, "lat", dimid)
+      status = nf90_inq_dimid(ncid, "latitude", dimid)
        if (status /= nf90_noerr) call handle_err(status)
 
       status = nf90_inquire_dimension(ncid, dimid, len = nlats)
        if (status /= nf90_noerr) call handle_err(status)
    
-      status = nf90_inq_dimid(ncid, "lon", dimid)
+      status = nf90_inq_dimid(ncid, "longitude", dimid)
        if (status /= nf90_noerr) call handle_err(status)
 
       status = nf90_inquire_dimension(ncid, dimid, len = nlons)
@@ -395,27 +404,35 @@ contains
       next_downward_shortwave = 0.0
       next_precipitation = 0.0
 
-      do iloc = 1, nweights                                                                                                                      
+      do iloc = 1, nweights
 
-        latloc = source_lookup(iloc)/nlons + 1                                                                                                
-        lonloc = source_lookup(iloc) - (latloc-1)*nlons                                                                                       
-                                                                                                                        
-        next_temperature(destination_lookup(iloc)) = next_temperature(destination_lookup(iloc)) + &                                                            
+        latloc = source_lookup(iloc)/nlons + 1
+        lonloc = source_lookup(iloc) - (latloc-1)*nlons
+
+        next_temperature(destination_lookup(iloc)) = next_temperature(destination_lookup(iloc)) + &
                                      regrid_weights(iloc) * in2d_temperature(lonloc,latloc) 
-        next_specific_humidity(destination_lookup(iloc)) = next_specific_humidity(destination_lookup(iloc)) + &                                                            
-                                     regrid_weights(iloc) * in2d_specific_humidity(lonloc,latloc)                                                                
-        next_surface_pressure(destination_lookup(iloc)) = next_surface_pressure(destination_lookup(iloc)) + &                                                            
-                                     regrid_weights(iloc) * in2d_surface_pressure(lonloc,latloc)                                                                
-        next_wind_speed(destination_lookup(iloc)) = next_wind_speed(destination_lookup(iloc)) + &                                                            
-                                     regrid_weights(iloc) * in2d_wind_speed(lonloc,latloc)                                                                
-        next_downward_longwave(destination_lookup(iloc)) = next_downward_longwave(destination_lookup(iloc)) + &                                                            
-                                     regrid_weights(iloc) * in2d_downward_longwave(lonloc,latloc)                                                                
-        next_downward_shortwave(destination_lookup(iloc)) = next_downward_shortwave(destination_lookup(iloc)) + &                                                            
-                                     regrid_weights(iloc) * in2d_downward_shortwave(lonloc,latloc)                                                                
-        next_precipitation(destination_lookup(iloc)) = next_precipitation(destination_lookup(iloc)) + &                                                            
-                                     regrid_weights(iloc) * in2d_precipitation(lonloc,latloc)                                                                
+        next_specific_humidity(destination_lookup(iloc)) = next_specific_humidity(destination_lookup(iloc)) + &
+                                     regrid_weights(iloc) * in2d_specific_humidity(lonloc,latloc)
+        next_surface_pressure(destination_lookup(iloc)) = next_surface_pressure(destination_lookup(iloc)) + &
+                                     regrid_weights(iloc) * in2d_surface_pressure(lonloc,latloc)
+        next_wind_speed(destination_lookup(iloc)) = next_wind_speed(destination_lookup(iloc)) + &
+                                     regrid_weights(iloc) * in2d_wind_speed(lonloc,latloc)
+        next_downward_longwave(destination_lookup(iloc)) = next_downward_longwave(destination_lookup(iloc)) + &
+                                     regrid_weights(iloc) * in2d_downward_longwave(lonloc,latloc)
+        next_downward_shortwave(destination_lookup(iloc)) = next_downward_shortwave(destination_lookup(iloc)) + &
+                                     regrid_weights(iloc) * in2d_downward_shortwave(lonloc,latloc)
+        next_precipitation(destination_lookup(iloc)) = next_precipitation(destination_lookup(iloc)) + &
+                                     regrid_weights(iloc) * in2d_precipitation(lonloc,latloc)
 
-      end do                                                                                                                                
+      end do
+
+! adjust for elevation difference between input forcing and model grid
+! cap elevation difference at 2000 meters, arbitrarily, to be consistent with pre-process regrid method
+! need to explore need to do this
+
+      where(elevation_difference >  2000.0) elevation_difference =  2000.0
+      where(elevation_difference < -2000.0) elevation_difference = -2000.0
+      next_temperature = next_temperature + elevation_difference * 0.0065
 
       deallocate(in2d_temperature       )
       deallocate(in2d_specific_humidity )
