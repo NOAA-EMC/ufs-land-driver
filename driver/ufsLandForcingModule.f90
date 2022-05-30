@@ -224,11 +224,14 @@ contains
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, file_next_time, start = (/this%forcing_counter/))
      if(status /= nf90_noerr) call handle_err(status)
-     
-    if(file_next_time /= next_time) then
+
+
+    if( (file_next_time - next_time) > 0.01 ) then  ! xu will stop to run for some reason
+      print*,file_next_time,next_time
       write(*,*) "file_next_time not equal to next_time in now_time == next_time forcing"
       stop
     end if
+
    
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_temperature), varid)
      if(status /= nf90_noerr) call handle_err(status)
