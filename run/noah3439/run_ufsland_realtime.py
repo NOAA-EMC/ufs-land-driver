@@ -20,7 +20,7 @@ from xu import ndates, run2
 
 def nml(restart='2021-08-01', day='30'):
     nml = f'''
-    
+
     &run_setup
 
   static_file      = "/cpc/drought/pdf/noahmp/conus3439/ll_0p5_static_conus_3439.nc"
@@ -110,6 +110,11 @@ def nml(restart='2021-08-01', day='30'):
     '''
     with open('ufs-land.namelist', 'w') as f:
         f.write(nml)
+
+
+
+
+
 
 
 def ufs(restart='20210821', n=35):

@@ -135,6 +135,8 @@ contains
   
     status = nf90_get_var(ncid, varid, read_time, start = (/itime/))
      if(status /= nf90_noerr) call handle_err(status)
+
+    read_time = float(int(read_time))
      
     if (read_time == namelist%initial_time + namelist%timestep_seconds) then
        this%forcing_counter = itime
@@ -225,9 +227,9 @@ contains
     status = nf90_get_var(ncid, varid, file_next_time, start = (/this%forcing_counter/))
      if(status /= nf90_noerr) call handle_err(status)
 
+    file_next_time = float(int(file_next_time))
 
-    if( (file_next_time - next_time) > 0.01 ) then  ! xu will stop to run for some reason
-      print*,file_next_time,next_time
+    if(file_next_time /= next_time) then
       write(*,*) "file_next_time not equal to next_time in now_time == next_time forcing"
       stop
     end if
