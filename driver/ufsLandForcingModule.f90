@@ -70,12 +70,16 @@ contains
   forcing_type_option : select case (trim(namelist%forcing_type))
     case ("single_point")
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
-    case ("gswp3")
+    case ("gswp3") !month
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:7)//".nc"
-    case ("gdas")
+    ! add by li xu for gefs/nldas/gldas2 forcing
+    case ("gdas","nldas2","gldas2") ! day
       forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
       forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:10)//".nc"
+    case ("gefs")   ! for yearly files
+      forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+      forcing_filename = trim(forcing_filename)//namelist%simulation_start(1:4)//".nc"
     case default
       stop "namelist forcing_type not recognized"
   end select forcing_type_option
@@ -131,6 +135,8 @@ contains
   
     status = nf90_get_var(ncid, varid, read_time, start = (/itime/))
      if(status /= nf90_noerr) call handle_err(status)
+
+    read_time = float(int(read_time))
      
     if (read_time == namelist%initial_time + namelist%timestep_seconds) then
        this%forcing_counter = itime
@@ -194,6 +200,21 @@ contains
           this%forcing_counter = 1
           write(*,*) "Resetting forcing counter to beginning of file"
         end if
+    ! add by li xu for gefs, nldas2 and gldas2
+      case ("gefs")
+        forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+        forcing_filename = trim(forcing_filename)//next_date(1:4)//".nc"
+        if(next_date(6:19) == "01-01 00:00:00") then
+          this%forcing_counter = 1
+          write(*,*) "Resetting forcing counter to beginning of file"
+        end if
+      case ("nldas2","gldas2")
+        forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
+        forcing_filename = trim(forcing_filename)//next_date(1:10)//".nc"
+        if(next_date(12:19) == "00:00:00") then
+          this%forcing_counter = 1
+          write(*,*) "Resetting forcing counter to beginning of file"
+        end if
       case default
         stop "namelist forcing_type not recognized"
     end select forcing_type_option
@@ -205,11 +226,14 @@ contains
      if(status /= nf90_noerr) call handle_err(status)
     status = nf90_get_var(ncid, varid, file_next_time, start = (/this%forcing_counter/))
      if(status /= nf90_noerr) call handle_err(status)
-     
+
+    file_next_time = float(int(file_next_time))
+
     if(file_next_time /= next_time) then
       write(*,*) "file_next_time not equal to next_time in now_time == next_time forcing"
       stop
     end if
+
    
     status = nf90_inq_varid(ncid, trim(namelist%forcing_name_temperature), varid)
      if(status /= nf90_noerr) call handle_err(status)
