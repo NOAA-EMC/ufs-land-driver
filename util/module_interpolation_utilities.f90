@@ -21,7 +21,7 @@ integer             :: current_yyyy, current_mm, current_dd
 
 ! get the current date string assuming reference_date
 
-call date_from_since("1970-01-01 00:00:00", now_time, current_date)
+call date_from_since("1800-01-01 00:00:00", now_time, current_date)
 
 ! assume the monthly data are valid on the 15th
 
@@ -50,8 +50,8 @@ end if
 
 ! get the time the month before and after assuming reference date
 
-call calc_sec_since("1970-01-01 00:00:00",before_date,0,before_time)
-call calc_sec_since("1970-01-01 00:00:00", after_date,0, after_time)
+call calc_sec_since("1800-01-01 00:00:00",before_date,0,before_time)
+call calc_sec_since("1800-01-01 00:00:00", after_date,0, after_time)
 
 if(before_time > now_time .or. after_time < now_time) &
    stop "problem with time in interpolate_monthly"
@@ -81,6 +81,7 @@ integer                           :: vector_length
 real, dimension(vector_length)    :: last_var, next_var, interp_var
 
 real                              :: last_weight, next_weight
+
 
 if(last_time > now_time .or. next_time < now_time) &
    stop "problem with time in interpolate_linear"
@@ -147,12 +148,83 @@ real, parameter                   :: critical_cosz   = 0.0001
 
   where(coszavg > 0.0) interp_var = cosz/coszavg*last_var
 
+!  print*,'------interpolate_gswp3_zenith------'
+!  print*,'now_time,last_time,now-last'
+!  print*,now_time/3600,last_time/3600,(now_time-last_time)/3600
+!  print*,'cosz1,cosz2,cosz3,coszavg,cosz,last_var,interp_var'
+!  print*,cosz1(1700),cosz2(1700),cosz3(1700),coszavg(1700),&
+!	cosz(1700),last_var(1700),interp_var(1700)
+
 ! final data check
 
 where(interp_var < 0.0 .or. cosz <= 0.0) interp_var = 0.0
 
 
 end subroutine interpolate_gswp3_zenith
+
+subroutine interpolate_gswp3_zenith1(now_time, last_time, next_time, vector_length, &
+                                    latitude, longitude, timestep,      &
+                                    last_var, next_var, interp_var)
+
+use cosine_zenith
+
+implicit none
+
+double precision                  :: now_time, last_time, next_time
+integer                           :: vector_length, timestep, num_timestep
+real, dimension(vector_length)    :: latitude, longitude, last_var,next_var, interp_var
+
+double precision                  :: calc_time, tdiff
+real, dimension(vector_length)    :: cosz_last, cosz_now, cosz_next
+
+real                              :: julian
+real, parameter                   :: critical_energy = 50.0
+real, parameter                   :: critical_cosz   = 0.0001
+
+!  print*,'in SUB2, now_time,last_time:',now_time,last_time
+  if(now_time < last_time) &
+     stop "in SUB2: problem with time in interpolate_zenith_angle"
+
+! Hailan Wang 6/17/2022
+! num_timestep: check temporal resolution of atmospheric forcing (e.g., 3-hourly, 6-hourly)
+! tdiff: time difference between now_time and last_time / timestep 
+  num_timestep = ( next_time - last_time ) / timestep
+  tdiff = ( now_time - last_time ) / timestep
+
+! calculate zenith angle at now_time (0.5 hour forward)
+
+  calc_time = last_time + 0.5*timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz_last, julian)
+
+  calc_time = last_time + (0.5 + tdiff ) *timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz_now, julian)
+
+  calc_time = last_time + (0.5 + num_timestep) *timestep 
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz_next, julian)
+
+  where(cosz_last <= critical_cosz) cosz_last = 0.0
+  where(cosz_now  <= critical_cosz) cosz_now = 0.0
+  where(cosz_next <= critical_cosz) cosz_next = 0.0
+  
+  interp_var = 0.0
+
+! for interpolation, only use max(last_var, next_var), scaled by cosz/cosz_last(or next)
+!
+  where(last_var>next_var.and.last_var>0) interp_var=cosz_now/cosz_last*last_var
+  where(last_var<next_var.and.next_var>0) interp_var=cosz_now/cosz_next*next_var
+
+!  print*,'------interpolate_gswp3_zenith------'
+!  print*,'now_time,last_time,now-last'
+!  print*,now_time/3600,last_time/3600,(now_time-last_time)/3600
+!  print*,'cosz_last,cosz_now,cosz_next,last_var,next_var,interp_var'
+!  print*,cosz_last(1700),cosz_now(1700),cosz_next(1700),last_var(1700),&
+!	next_var(1700),interp_var(1700)
+
+! final data check
+
+where(interp_var < 0.0 .or. cosz_now <= 0.0) interp_var = 0.0
+
+end subroutine interpolate_gswp3_zenith1
 
 end module interpolation_utilities
 
