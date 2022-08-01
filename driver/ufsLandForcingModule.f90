@@ -271,7 +271,7 @@ contains
       case ("mm_1h")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
         forcing_filename = trim(forcing_filename)//next_date(1:7)//".nc"
-        if(next_date(12:19) == "01 00:00:00") then
+        if(next_date(9:19) == "01 00:00:00") then
           this%forcing_counter = 1
           write(*,*) "Resetting forcing counter to beginning of file"
         end if
@@ -296,6 +296,9 @@ contains
      
     if(file_next_time /= next_time) then
       write(*,*) "file_next_time not equal to next_time in now_time == next_time forcing"
+      write(*,*) "file_next_time: ",file_next_time
+      write(*,*) "next_time: ",next_time
+      write(*,*) "difference: ",file_next_time - next_time
       stop
     end if
    
