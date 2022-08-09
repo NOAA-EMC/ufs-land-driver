@@ -66,6 +66,8 @@ type, public :: namelist_type
   integer        ::  glacier_option
   
   integer        ::  forcing_timestep_seconds
+  character*128  ::  forcing_regrid
+  character*128  ::  forcing_regrid_weights_filename
   character*128  ::  forcing_type
   character*128  ::  forcing_filename
   character*128  ::  forcing_interp_solar
@@ -150,6 +152,8 @@ contains
     integer        ::  glacier_option                    = -999
 
     integer        ::  forcing_timestep_seconds = -999
+    character*128  ::  forcing_regrid = ""
+    character*128  ::  forcing_regrid_weights_filename = ""
     character*128  ::  forcing_type = ""
     character*128  ::  forcing_filename = ""
     character*128  ::  forcing_interp_solar = ""
@@ -180,7 +184,8 @@ contains
                soil_temp_lower_bdy_option        , soil_temp_time_scheme_option      , &
                thermal_roughness_scheme_option   , &
                surface_evap_resistance_option    , glacier_option                    
-    namelist / forcing / forcing_timestep_seconds       ,                             &
+    namelist / forcing / forcing_timestep_seconds       , forcing_regrid            , &
+                         forcing_regrid_weights_filename,                             &
                          forcing_type                   , forcing_filename          , &
 			 forcing_interp_solar           , forcing_time_solar        , &
                          forcing_name_precipitation     , forcing_name_temperature  , &
@@ -255,6 +260,8 @@ contains
     this%soil_level_thickness = soil_level_thickness
     this%soil_level_nodes     = soil_level_nodes
     this%forcing_timestep_seconds       = forcing_timestep_seconds
+    this%forcing_regrid                 = forcing_regrid
+    this%forcing_regrid_weights_filename= forcing_regrid_weights_filename
     this%forcing_type                   = forcing_type
     this%forcing_filename               = forcing_filename
     this%forcing_interp_solar           = forcing_interp_solar
@@ -278,6 +285,38 @@ contains
       write(*,*) "location_start = ", location_start
       write(*,*) "location_end = ", location_end
       write(*,*) "no locations to simulate"
+      stop
+    end if
+    
+    if(this%forcing_type /= "single_point" .and. &
+       this%forcing_type /= "mm_3h" .and. &
+       this%forcing_type /= "mm_1h" .and. &
+       this%forcing_type /= "dd_1h" ) then
+      write(*,*) this%forcing_type, " namelist%forcing_type not recognized"
+      stop
+    end if
+    
+    if(this%forcing_regrid /= "none" .and. &
+       this%forcing_regrid /= "esmf" ) then
+      write(*,*) this%forcing_regrid, " namelist%forcing_regrid not recognized"
+      stop
+    end if
+    
+    if(this%forcing_regrid_weights_filename == "" .and. &
+       this%forcing_regrid == "esmf" ) then
+      write(*,*) "using esmf regrid weights but no forcing_regrid_weights_filename provided in namelist"
+      stop
+    end if
+    
+    if(this%forcing_interp_solar /= "linear" .and. &
+       this%forcing_interp_solar /= "zenith" ) then
+      write(*,*) this%forcing_interp_solar, " namelist%forcing_interp_solar not recognized"
+      stop
+    end if
+    
+    if(this%forcing_time_solar /= "instantaneous" .and. &
+       this%forcing_time_solar /= "period_average" ) then
+      write(*,*) this%forcing_time_solar, " namelist%forcing_time_solar not recognized"
       stop
     end if
     
