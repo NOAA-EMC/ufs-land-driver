@@ -50,7 +50,7 @@ contains
 
   write(*,*) "Creating: "//trim(this%filename)
 
-  status = nf90_create(this%filename, NF90_CLOBBER, ncid)
+  status = nf90_create(this%filename, NF90_NETCDF4, ncid)
     if (status /= nf90_noerr) call handle_err(status)
 
 ! Define dimensions in the file.
