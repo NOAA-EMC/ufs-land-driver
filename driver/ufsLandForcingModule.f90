@@ -55,6 +55,8 @@ end type forcing_type
   integer         , allocatable, dimension(:)   :: destination_lookup
   integer                                       :: nlats
   integer                                       :: nlons
+  integer                                       :: weights_vector_start
+  integer                                       :: weights_vector_end
   real            , allocatable, dimension(:,:) :: in2d_temperature
   real            , allocatable, dimension(:,:) :: in2d_specific_humidity
   real            , allocatable, dimension(:,:) :: in2d_surface_pressure
@@ -78,7 +80,8 @@ contains
   
   double precision     :: read_time
   
-  integer :: ncid, dimid, varid, status, ntimes, itime
+  integer :: ncid, dimid, varid, status, ntimes, itime, iloc
+  logical :: found_weight_loc = .false.
   
   this%forcing_counter = 0
   
@@ -136,7 +139,17 @@ contains
 
     status = nf90_get_var(ncid, varid, destination_lookup)
      if(status /= nf90_noerr) call handle_err(status)
-     
+    
+    do iloc = 1, nweights
+      if(.not.found_weight_loc .and. destination_lookup(iloc) == namelist%subset_start) then
+        weights_vector_start = iloc
+        found_weight_loc = .true.
+      end if
+      if(destination_lookup(iloc) == namelist%subset_end) then
+        weights_vector_end = iloc
+      end if
+    end do
+    
     this%nlocations = maxval(destination_lookup)
 
     allocate(elevation_difference(this%nlocations))
@@ -248,7 +261,7 @@ contains
   
   integer :: ncid, dimid, varid, status
   integer :: times_in_file
-  integer :: iloc, latloc, lonloc
+  integer :: iloc, latloc, lonloc, vector_shift
   double precision  :: file_next_time
   
   call date_from_since("1970-01-01 00:00:00", now_time, now_date)
@@ -418,24 +431,26 @@ contains
       next_downward_shortwave = 0.0
       next_precipitation = 0.0
 
-      do iloc = 1, nweights
+      do iloc = weights_vector_start, weights_vector_end
 
         latloc = source_lookup(iloc)/nlons + 1
         lonloc = source_lookup(iloc) - (latloc-1)*nlons
+        
+        vector_shift = destination_lookup(iloc) - namelist%subset_start + 1
 
-        next_temperature(destination_lookup(iloc)) = next_temperature(destination_lookup(iloc)) + &
+        next_temperature(vector_shift) = next_temperature(vector_shift) + &
                                      regrid_weights(iloc) * in2d_temperature(lonloc,latloc) 
-        next_specific_humidity(destination_lookup(iloc)) = next_specific_humidity(destination_lookup(iloc)) + &
+        next_specific_humidity(vector_shift) = next_specific_humidity(vector_shift) + &
                                      regrid_weights(iloc) * in2d_specific_humidity(lonloc,latloc)
-        next_surface_pressure(destination_lookup(iloc)) = next_surface_pressure(destination_lookup(iloc)) + &
+        next_surface_pressure(vector_shift) = next_surface_pressure(vector_shift) + &
                                      regrid_weights(iloc) * in2d_surface_pressure(lonloc,latloc)
-        next_wind_speed(destination_lookup(iloc)) = next_wind_speed(destination_lookup(iloc)) + &
+        next_wind_speed(vector_shift) = next_wind_speed(vector_shift) + &
                                      regrid_weights(iloc) * in2d_wind_speed(lonloc,latloc)
-        next_downward_longwave(destination_lookup(iloc)) = next_downward_longwave(destination_lookup(iloc)) + &
+        next_downward_longwave(vector_shift) = next_downward_longwave(vector_shift) + &
                                      regrid_weights(iloc) * in2d_downward_longwave(lonloc,latloc)
-        next_downward_shortwave(destination_lookup(iloc)) = next_downward_shortwave(destination_lookup(iloc)) + &
+        next_downward_shortwave(vector_shift) = next_downward_shortwave(vector_shift) + &
                                      regrid_weights(iloc) * in2d_downward_shortwave(lonloc,latloc)
-        next_precipitation(destination_lookup(iloc)) = next_precipitation(destination_lookup(iloc)) + &
+        next_precipitation(vector_shift) = next_precipitation(vector_shift) + &
                                      regrid_weights(iloc) * in2d_precipitation(lonloc,latloc)
 
       end do
