@@ -423,6 +423,41 @@ contains
           start = (/1, 1, this%forcing_counter/), count = (/nlons, nlats, 1/))
        if(status /= nf90_noerr) call handle_err(status)
 
+! Do some broad error checks on the input data, will stop for negative temperature, pressure and longwave, 
+!  and large negative specific humidity, wind speed, downward shortwave and precipitation
+! For small negative specific humidity, wind speed, downward shortwave and precipitation, set to zero
+
+      if(minval(in2d_temperature       ) < 0    .or. minval(in2d_surface_pressure)  < 0 .or. &
+         minval(in2d_downward_longwave)  < 0    .or. &
+         minval(in2d_wind_speed        ) < -10  .or. minval(in2d_specific_humidity) < -0.1 .or. &
+         minval(in2d_downward_shortwave) < -100 .or. minval(in2d_precipitation)     < -1) then
+        write(*,*) "Problem with one or more of these 2D inputs"
+        write(*,*) "input 2D temperature,        min value = ", minval(in2d_temperature)
+        write(*,*) "input 2D surface_pressure,   min value = ", minval(in2d_surface_pressure)
+        write(*,*) "input 2D downward_longwave,  min value = ", minval(in2d_downward_longwave)
+        write(*,*) "input 2D wind_speed,         min value = ", minval(in2d_wind_speed)
+        write(*,*) "input 2D specific_humidity,  min value = ", minval(in2d_specific_humidity)
+        write(*,*) "input 2D downward_shortwave, min value = ", minval(in2d_downward_shortwave)
+        write(*,*) "input 2D precipitation,      min value = ", minval(in2d_precipitation)
+        stop
+      end if
+      if(minval(in2d_specific_humidity) < 0) then
+        write(*,*) "input 2D specific_humidity negative, setting to 0, min value = ", minval(in2d_specific_humidity)
+        where(in2d_specific_humidity < 0) in2d_specific_humidity = 0.000001
+      end if
+      if(minval(in2d_wind_speed) < 0) then
+        write(*,*) "input 2D wind_speed negative, setting to 0, min value = ", minval(in2d_wind_speed)
+        where(in2d_wind_speed < 0) in2d_wind_speed = 0.01
+      end if
+      if(minval(in2d_downward_shortwave) < 0) then
+        write(*,*) "input 2D downward_shortwave negative, setting to 0, min value = ", minval(in2d_downward_shortwave)
+        where(in2d_downward_shortwave < 0) in2d_downward_shortwave = 0.0
+      end if
+      if(minval(in2d_precipitation) < 0) then
+        write(*,*) "input 2D precipitation negative, setting to 0, min value = ", minval(in2d_precipitation)
+        where(in2d_precipitation < 0) in2d_precipitation = 0.0
+      end if
+
       next_temperature = 0.0
       next_specific_humidity = 0.0
       next_surface_pressure = 0.0
