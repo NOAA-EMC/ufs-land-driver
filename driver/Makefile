@@ -38,13 +38,13 @@ ufsLandNoahMPDriverModule.o:	ufsLandNamelistRead.o ufsLandStaticModule.o ufsLand
 			../util/module_interpolation_utilities.o ../util/module_cosine_zenith.o \
 			../util/module_time_utilities.o \
                         ../mod/machine.o  ../mod/set_soilveg.o \
-                        ../mod/physcons.o ../mod/sfc_noahmp_drv.o ../mod/funcphys.o
+                        ../mod/physcons.o ../mod/noahmpdrv.o ../mod/funcphys.o
 ufsLandNoahDriverModule.o:	ufsLandNamelistRead.o ufsLandStaticModule.o ufsLandNoahType.o \
                         ufsLandInitialModule.o ufsLandForcingModule.o ufsLandIOModule.o \
 			ufsLandNoahRestartModule.o \
 			../util/module_interpolation_utilities.o \
                         ../mod/machine.o  ../mod/set_soilveg.o \
-                        ../mod/physcons.o ../mod/sfc_drv.o ../mod/funcphys.o
+                        ../mod/physcons.o ../mod/lsm_noah.o ../mod/funcphys.o
 ufsLandNoahMPRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahMPType.o
 ufsLandNoahRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o
 ufsLandIOModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o \

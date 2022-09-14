@@ -107,6 +107,7 @@ character(len=128)                 :: errmsg     ! CCPP error message
 logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
 
+logical :: do_mynnsfclay = .false.               ! flag for activating mynnsfclay
 logical :: thsfc_loc = .true.                    ! use local theta
 
 integer                         :: lsnowl = -2   ! lower limit for snow vector
@@ -224,6 +225,10 @@ associate (                                                 &
    smcwtdxy   => noahmp%state%soil_moisture_wtd            ,&
    deeprechxy => noahmp%flux%deep_recharge                 ,&
    rechxy     => noahmp%flux%recharge                      ,&
+   pblh       => noahmp%model%pbl_height                   ,&
+   rmol1      => noahmp%model%mo_length_inverse            ,&
+   flhc1      => noahmp%model%heat_flux_multiplier         ,&
+   flqc1      => noahmp%model%moisture_flux_multiplier     ,&
    t2mmp      => noahmp%diag%temperature_2m                ,&
    q2mp       => noahmp%diag%spec_humidity_2m               &
    )
@@ -302,11 +307,13 @@ time_loop : do timestep = 1, namelist%run_timesteps
   snow_mp = 0.0
   graupel_mp = 0.0
   ice_mp = 0.0
+  
+  if(iopt_sfc == 4) do_mynnsfclay = .true.
 
       call noahmpdrv_run                                               &
           ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,        &
             vegtype,sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,   &
-            prsl1, prslk1, prslki, prsik1, zf, dry, wind, slopetyp,    &
+            prsl1, prslk1, prslki, prsik1, zf,pblh, dry, wind, slopetyp,    &
             shdmin, shdmax, snoalb, sfalb, flag_iter,con_g,            &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
             iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,         &
@@ -317,6 +324,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
             canopy, trans, tsurf, zorl,                                &
             rb1, fm1, fh1, ustar1, stress1, fm101, fh21,               &
+            rmol1,flhc1,flqc1,do_mynnsfclay,                           &
             snowxy, tvxy, tgxy, canicexy, canliqxy, eahxy, tahxy, cmxy,&
             chxy, fwetxy, sneqvoxy, alboldxy, qsnowxy, wslakexy, zwtxy,&
             waxy, wtxy, tsnoxy, zsnsoxy, snicexy, snliqxy, lfmassxy,   &
