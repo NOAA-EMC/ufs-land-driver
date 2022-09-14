@@ -86,6 +86,8 @@ type :: noah_model_type
   real(kind=kind_phys), allocatable :: smcwlt2   (:) ! dry soil moisture threshold                  im
   real(kind=kind_phys), allocatable :: smcref2   (:) ! soil moisture threshold                      im
   real(kind=kind_phys), allocatable :: wet1      (:) ! normalized soil wetness                      im
+  real(kind=kind_phys), allocatable :: lai       (:) ! leaf area index (dimensionless)             im   !
+  real(kind=kind_phys), allocatable :: rca       (:) ! canopy resistance (s/m)                     im   !
 
   real(kind=kind_phys), allocatable :: smc(:,:) ! total soil moisture content (fractional)   im,km
   real(kind=kind_phys), allocatable :: stc(:,:) ! soil temp (k)                              im,km
@@ -185,6 +187,8 @@ contains
     allocate(this%model%smcwlt2   (vector_length))
     allocate(this%model%smcref2   (vector_length))
     allocate(this%model%wet1      (vector_length))
+    allocate(this%model%lai       (vector_length))
+    allocate(this%model%rca       (vector_length))
 
     allocate(this%model%smc  (vector_length,namelist%num_soil_levels))
     allocate(this%model%stc  (vector_length,namelist%num_soil_levels))
@@ -267,6 +271,8 @@ contains
     this%model%smcwlt2    = huge(1.0)
     this%model%smcref2    = huge(1.0)
     this%model%wet1       = huge(1.0)
+    this%model%lai        = huge(1.0)
+    this%model%rca        = huge(1.0)
     this%model%smc        = huge(1.0)
     this%model%stc        = huge(1.0)
     this%model%slc        = huge(1.0)

@@ -28,12 +28,12 @@ OBJS =	../driver/ufsLandDriver.o \
 	../mod/namelist_soilveg.o \
 	../mod/set_soilveg.o \
 	../mod/sflx.o \
-	../mod/sfc_drv.o \
+	../mod/lsm_noah.o \
 	../mod/date_def.o \
 	../mod/module_sf_noahmp_glacier.o \
 	../mod/module_sf_noahmplsm.o \
 	../mod/noahmp_tables.o \
-	../mod/sfc_noahmp_drv.o \
+	../mod/noahmpdrv.o \
 	../mod/sfc_diff.o
 
 all:	ufsLand.exe

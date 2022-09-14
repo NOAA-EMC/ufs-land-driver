@@ -148,7 +148,9 @@ associate (                             &
    snohf      => noah%model%snohf      ,&
    smcwlt2    => noah%model%smcwlt2    ,&
    smcref2    => noah%model%smcref2    ,&
-   wet1       => noah%model%wet1        &
+   wet1       => noah%model%wet1       ,&
+   lai        => noah%model%lai        ,&
+   rca        => noah%model%rca         &
    )
 
 
@@ -269,7 +271,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
            canopy, trans, tsurf, zorl,                                &  !  ---  outputs:
            sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &
            cmm, chh, evbs, evcw, sbsno, snowc, stm, snohf,            &
-           smcwlt2, smcref2, wet1, errmsg, errflg                     &
+           smcwlt2, smcref2, wet1, lai, rca, errmsg, errflg           &
          )
 
   rho = prsl1 / (rd*t1*(one+rvrdm1*q1)) 
@@ -285,7 +287,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
   end if
 
   if(errflg /= 0) then
-    write(*,*) "noahmpdrv_run reporting an error"
+    write(*,*) "lsm_noah_run reporting an error"
     write(*,*) errmsg
     stop
   end if

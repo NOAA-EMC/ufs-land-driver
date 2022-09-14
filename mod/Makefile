@@ -13,12 +13,12 @@ OBJS =	machine.o \
 	set_soilveg.o \
 	sflx.o \
 	sfc_diff.o \
-	sfc_drv.o \
+	lsm_noah.o \
 	date_def.o \
-	module_sf_noahmp_glacier.o \
 	module_sf_noahmplsm.o \
+	module_sf_noahmp_glacier.o \
 	noahmp_tables.o \
-	sfc_noahmp_drv.o
+	noahmpdrv.o
 	
 all:	$(OBJS)
 
@@ -43,8 +43,8 @@ set_soilveg.o: $(PHYSDIR)/set_soilveg.f
 sflx.o: $(PHYSDIR)/sflx.f
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/sflx.f
 
-sfc_drv.o: $(PHYSDIR)/sfc_drv.f
-	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/sfc_drv.f
+lsm_noah.o: $(PHYSDIR)/lsm_noah.f
+	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/lsm_noah.f
 
 date_def.o: $(PHYSDIR)/date_def.f
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/date_def.f
@@ -58,8 +58,8 @@ module_sf_noahmplsm.o: $(PHYSDIR)/module_sf_noahmplsm.f90
 noahmp_tables.o: $(PHYSDIR)/noahmp_tables.f90
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/noahmp_tables.f90
 
-sfc_noahmp_drv.o: $(PHYSDIR)/sfc_noahmp_drv.F90
-	$(COMPILERF90) -cpp -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/sfc_noahmp_drv.F90
+noahmpdrv.o: $(PHYSDIR)/noahmpdrv.F90
+	$(COMPILERF90) -cpp -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/noahmpdrv.F90
 
 sfc_diff.o: $(PHYSDIR)/sfc_diff.f
 	$(COMPILERF90) -cpp -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/sfc_diff.f
@@ -70,13 +70,15 @@ clean:
 #
 # Dependencies:
 #
-physcon.o:		machine.o
-funcphys.o:		machine.o physcons.o
-surface_perturbation.o: machine.o
-set_soilveg.o:		namelist_soilveg.o
-sflx.o: 		machine.o physcons.o namelist_soilveg.o
-sfc_drv.o:		machine.o physcons.o funcphys.o surface_perturbation.o sflx.o 
-sfc_diff.o:		machine.o
-noahmp_sfc_drv.o:	set_soilveg.o machine.o date_def.o funcphys.o module_sf_noahmplsm.o \
-                        module_sf_noahmp_glacier.o noahmp_tables.o
+physcon.o:		        machine.o
+funcphys.o:		        machine.o physcons.o
+surface_perturbation.o:         machine.o
+set_soilveg.o:		        namelist_soilveg.o
+sflx.o: 		        machine.o physcons.o namelist_soilveg.o
+lsm_noah.o:		        machine.o physcons.o funcphys.o surface_perturbation.o sflx.o 
+sfc_diff.o:		        machine.o
+module_sf_noahmp_glacier.o:	module_sf_noahmplsm.o
+noahmpdrv.o:	                set_soilveg.o machine.o date_def.o funcphys.o \
+                                module_sf_noahmplsm.o \
+                                module_sf_noahmp_glacier.o noahmp_tables.o
 

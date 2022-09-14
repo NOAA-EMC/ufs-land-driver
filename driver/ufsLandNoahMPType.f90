@@ -76,6 +76,10 @@ type :: noahmp_model_type
   real(kind=kind_phys), allocatable :: rs_sunlit               (:) ! sunlit leaf stomatal resistance [s/m]
   real(kind=kind_phys), allocatable :: rs_shaded               (:) ! shaded leaf stomatal resistance [s/m]
   real(kind=kind_phys), allocatable :: leaf_air_resistance     (:) ! leaf boundary layer resistance [s/m]
+  real(kind=kind_phys), allocatable :: pbl_height              (:) ! height of pbl [m]
+  real(kind=kind_phys), allocatable :: mo_length_inverse       (:) ! reciprocle of M-O length [1/m]
+  real(kind=kind_phys), allocatable :: heat_flux_multiplier    (:) ! heat flux multiplier [W/m^2/K]
+  real(kind=kind_phys), allocatable :: moisture_flux_multiplier(:) ! moisture flux multiplier [kg/m^2/s]
 
 end type noahmp_model_type
 
@@ -289,6 +293,10 @@ contains
     allocate(this%model%rs_sunlit               (vector_length)            ) ! sunlit leaf stomatal resistance [s/m]
     allocate(this%model%rs_shaded               (vector_length)            ) ! shaded leaf stomatal resistance [s/m]
     allocate(this%model%leaf_air_resistance     (vector_length)            ) ! leaf boundary layer resistance [s/m]
+    allocate(this%model%pbl_height              (vector_length)            ) ! height of pbl [m]
+    allocate(this%model%mo_length_inverse       (vector_length)            ) ! reciprocle of M-O length [1/m]
+    allocate(this%model%heat_flux_multiplier    (vector_length)            ) ! heat flux multiplier [W/m^2/K]
+    allocate(this%model%moisture_flux_multiplier(vector_length)            ) ! moisture flux multiplier [kg/m^2/s]
 
     allocate(this%forcing%air_pressure_forcing  (vector_length)            ) ! forcing air pressure [Pa]
     allocate(this%forcing%precip_convective     (vector_length)            ) ! convective precipitation [mm/s]
@@ -445,6 +453,10 @@ contains
     this%model%rs_sunlit               = huge(1.0)
     this%model%rs_shaded               = huge(1.0)
     this%model%leaf_air_resistance     = huge(1.0)
+    this%model%pbl_height              = huge(1.0)
+    this%model%mo_length_inverse       = huge(1.0)
+    this%model%heat_flux_multiplier    = huge(1.0)
+    this%model%moisture_flux_multiplier= huge(1.0)
 
     this%forcing%air_pressure_forcing  = huge(1.0)
     this%forcing%precip_convective     = huge(1.0)
