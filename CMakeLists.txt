@@ -29,7 +29,7 @@ find_package(NetCDF REQUIRED COMPONENTS Fortran )
 
 set( UFSLAND_LINKER_LANGUAGE Fortran )
 
-list ( APPEND util_files
+list ( APPEND sorc_files
 ./util/module_cosine_zenith.f90
 ./util/module_error_handling.f90
 ./util/module_interpolation_utilities.f90
@@ -62,7 +62,7 @@ list ( APPEND util_files
 )
 
 ecbuild_add_library( TARGET   ufslanddriver
-                     SOURCES  ${util_files}
+                     SOURCES  ${sorc_files}
                      INSTALL_HEADERS LISTED
                      LINKER_LANGUAGE ${UFSLAND_LINKER_LANGUAGE}
                     )
