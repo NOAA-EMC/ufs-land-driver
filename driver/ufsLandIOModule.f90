@@ -919,286 +919,286 @@ contains
       start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
       
   status = nf90_inq_varid(ncid, "vegetation_fraction", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%vegetation_fraction     , &
+  status = nf90_put_var(ncid, varid , noahmp%model%vegetation_fraction%data     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "emissivity_total", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%emissivity_total        , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%emissivity_total%data        , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "albedo_direct_vis", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_direct(:,1)      , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_direct%data(:,1)      , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "albedo_direct_nir", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_direct(:,2)      , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_direct%data(:,2)      , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "albedo_diffuse_vis", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_diffuse(:,1)     , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_diffuse%data(:,1)     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "albedo_diffuse_nir", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_diffuse(:,2)     , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_diffuse%data(:,2)     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "temperature_soil_bot", varid)
-  status = nf90_put_var(ncid, varid , noahmp%static%temperature_soil_bot  , &
+  status = nf90_put_var(ncid, varid , noahmp%static%temperature_soil_bot%data  , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "cm_noahmp", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%cm_noahmp              , &
+  status = nf90_put_var(ncid, varid , noahmp%model%cm_noahmp%data              , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "ch_noahmp", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%ch_noahmp              , &
+  status = nf90_put_var(ncid, varid , noahmp%model%ch_noahmp%data              , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "forcing_height", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%forcing_height         , &
+  status = nf90_put_var(ncid, varid , noahmp%model%forcing_height%data         , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "max_vegetation_frac", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%max_vegetation_frac    , &
+  status = nf90_put_var(ncid, varid , noahmp%model%max_vegetation_frac%data    , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "albedo_total", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_total            , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%albedo_total%data            , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snow_water_equiv", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%snow_water_equiv       , &
+  status = nf90_put_var(ncid, varid , noahmp%state%snow_water_equiv%data       , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snow_depth", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%snow_depth             , &
+  status = nf90_put_var(ncid, varid , noahmp%state%snow_depth%data             , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "temperature_radiative", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%temperature_radiative  , &
+  status = nf90_put_var(ncid, varid , noahmp%state%temperature_radiative%data  , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "soil_moisture_vol", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%soil_moisture_vol        , &
+  status = nf90_put_var(ncid, varid , noahmp%state%soil_moisture_vol%data        , &
       start = (/namelist%subset_start ,                         1, 1/) , &
       count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
 
   status = nf90_inq_varid(ncid, "temperature_soil", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%temperature_soil         , &
+  status = nf90_put_var(ncid, varid , noahmp%state%temperature_soil%data         , &
       start = (/namelist%subset_start ,                         1, 1/) , &
       count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
 
   status = nf90_inq_varid(ncid, "soil_liquid_vol", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%soil_liquid_vol          , &
+  status = nf90_put_var(ncid, varid , noahmp%state%soil_liquid_vol%data          , &
       start = (/namelist%subset_start ,                         1, 1/) , &
       count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
 
   status = nf90_inq_varid(ncid, "canopy_water", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%canopy_water            , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%canopy_water%data            , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "transpiration_heat", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%transpiration_heat      , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%transpiration_heat%data      , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "z0_total", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%z0_total                , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%z0_total%data                , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snow_cover_fraction", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%snow_cover_fraction     , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%snow_cover_fraction%data     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "spec_humidity_surface", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%spec_humidity_surface   , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%spec_humidity_surface%data   , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "ground_heat_total", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%ground_heat_total       , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%ground_heat_total%data       , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "runoff_baseflow", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%runoff_baseflow         , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%runoff_baseflow%data         , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "latent_heat_total", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%latent_heat_total       , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%latent_heat_total%data       , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "sensible_heat_total", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%sensible_heat_total     , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%sensible_heat_total%data     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "evaporation_potential", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%evaporation_potential   , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%evaporation_potential%data   , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "runoff_surface", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%runoff_surface          , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%runoff_surface%data          , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "latent_heat_ground", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%latent_heat_ground      , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%latent_heat_ground%data      , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "latent_heat_canopy", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%latent_heat_canopy      , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%latent_heat_canopy%data      , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snow_sublimation", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%snow_sublimation        , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%snow_sublimation%data        , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "soil_moisture_total", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%soil_moisture_total     , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%soil_moisture_total%data     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "precip_adv_heat_total", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%precip_adv_heat_total   , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%precip_adv_heat_total%data   , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "cosine_zenith", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%cosine_zenith          , &
+  status = nf90_put_var(ncid, varid , noahmp%model%cosine_zenith%data          , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snow_levels", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%snow_levels            , &
+  status = nf90_put_var(ncid, varid , noahmp%model%snow_levels%data            , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "temperature_leaf", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%temperature_leaf       , &
+  status = nf90_put_var(ncid, varid , noahmp%state%temperature_leaf%data       , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "temperature_ground", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%temperature_ground     , &
+  status = nf90_put_var(ncid, varid , noahmp%state%temperature_ground%data     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "canopy_ice", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%canopy_ice             , &
+  status = nf90_put_var(ncid, varid , noahmp%state%canopy_ice%data             , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "canopy_liquid", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%canopy_liquid          , &
+  status = nf90_put_var(ncid, varid , noahmp%state%canopy_liquid%data          , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "vapor_pres_canopy_air", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%vapor_pres_canopy_air  , &
+  status = nf90_put_var(ncid, varid , noahmp%state%vapor_pres_canopy_air%data  , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "temperature_canopy_air", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%temperature_canopy_air , &
+  status = nf90_put_var(ncid, varid , noahmp%state%temperature_canopy_air%data , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "canopy_wet_fraction", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%canopy_wet_fraction     , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%canopy_wet_fraction%data     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snow_water_equiv_old", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%snow_water_equiv_old   , &
+  status = nf90_put_var(ncid, varid , noahmp%state%snow_water_equiv_old%data   , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snow_albedo_old", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%snow_albedo_old         , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%snow_albedo_old%data         , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snowfall", varid)
-  status = nf90_put_var(ncid, varid , noahmp%forcing%snowfall             , &
+  status = nf90_put_var(ncid, varid , noahmp%forcing%snowfall%data             , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "lake_water", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%lake_water             , &
+  status = nf90_put_var(ncid, varid , noahmp%state%lake_water%data             , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "depth_water_table", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%depth_water_table       , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%depth_water_table%data       , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "aquifer_water", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%aquifer_water          , &
+  status = nf90_put_var(ncid, varid , noahmp%state%aquifer_water%data          , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "saturated_water", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%saturated_water        , &
+  status = nf90_put_var(ncid, varid , noahmp%state%saturated_water%data        , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "leaf_carbon", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%leaf_carbon            , &
+  status = nf90_put_var(ncid, varid , noahmp%state%leaf_carbon%data            , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "root_carbon", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%root_carbon            , &
+  status = nf90_put_var(ncid, varid , noahmp%state%root_carbon%data            , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "stem_carbon", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%stem_carbon            , &
+  status = nf90_put_var(ncid, varid , noahmp%state%stem_carbon%data            , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "wood_carbon", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%wood_carbon            , &
+  status = nf90_put_var(ncid, varid , noahmp%state%wood_carbon%data            , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "soil_carbon_stable", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%soil_carbon_stable     , &
+  status = nf90_put_var(ncid, varid , noahmp%state%soil_carbon_stable%data     , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "soil_carbon_fast", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%soil_carbon_fast       , &
+  status = nf90_put_var(ncid, varid , noahmp%state%soil_carbon_fast%data       , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "leaf_area_index", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%leaf_area_index         , &
+  status = nf90_put_var(ncid, varid , noahmp%model%leaf_area_index%data         , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "stem_area_index", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%stem_area_index         , &
+  status = nf90_put_var(ncid, varid , noahmp%model%stem_area_index%data         , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "snow_age", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%snow_age               , &
+  status = nf90_put_var(ncid, varid , noahmp%state%snow_age%data               , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "soil_moisture_wtd", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%soil_moisture_wtd      , &
+  status = nf90_put_var(ncid, varid , noahmp%state%soil_moisture_wtd%data      , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "deep_recharge", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%deep_recharge           , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%deep_recharge%data           , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "recharge", varid)
-  status = nf90_put_var(ncid, varid , noahmp%flux%recharge                , &
+  status = nf90_put_var(ncid, varid , noahmp%flux%recharge%data                , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "temperature_2m", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%temperature_2m          , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%temperature_2m%data          , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "spec_humidity_2m", varid)
-  status = nf90_put_var(ncid, varid , noahmp%diag%spec_humidity_2m        , &
+  status = nf90_put_var(ncid, varid , noahmp%diag%spec_humidity_2m%data        , &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   status = nf90_inq_varid(ncid, "eq_soil_water_vol", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%eq_soil_water_vol          , &
+  status = nf90_put_var(ncid, varid , noahmp%state%eq_soil_water_vol%data          , &
       start = (/namelist%subset_start ,                           1, 1/) , &
       count = (/namelist%subset_length, noahmp%static%soil_levels  , 1/))
 
   status = nf90_inq_varid(ncid, "interface_depth", varid)
-  status = nf90_put_var(ncid, varid , noahmp%model%interface_depth            , &
+  status = nf90_put_var(ncid, varid , noahmp%model%interface_depth%data            , &
       start = (/namelist%subset_start ,                           1, 1/) , &
       count = (/namelist%subset_length, noahmp%static%soil_levels+3, 1/))
 
   status = nf90_inq_varid(ncid, "temperature_snow", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%temperature_snow           , &
+  status = nf90_put_var(ncid, varid , noahmp%state%temperature_snow%data           , &
       start = (/namelist%subset_start ,                           1, 1/) , &
       count = (/namelist%subset_length,                           3, 1/))
 
   status = nf90_inq_varid(ncid, "snow_level_ice", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%snow_level_ice             , &
+  status = nf90_put_var(ncid, varid , noahmp%state%snow_level_ice%data             , &
       start = (/namelist%subset_start ,                           1, 1/) , &
       count = (/namelist%subset_length,                           3, 1/))
 
   status = nf90_inq_varid(ncid, "snow_level_liquid", varid)
-  status = nf90_put_var(ncid, varid , noahmp%state%snow_level_liquid          , &
+  status = nf90_put_var(ncid, varid , noahmp%state%snow_level_liquid%data          , &
       start = (/namelist%subset_start ,                           1, 1/) , &
       count = (/namelist%subset_length,                           3, 1/))
   

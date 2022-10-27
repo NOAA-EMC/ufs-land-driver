@@ -13,6 +13,7 @@ OBJS =	../driver/ufsLandDriver.o \
 	../driver/ufsLandNamelistRead.o \
 	../driver/ufsLandNoahType.o \
 	../driver/ufsLandNoahMPType.o \
+	../driver/ufsLandGenericType.o \
 	../driver/ufsLandStaticModule.o \
 	../driver/ufsLandInitialModule.o \
 	../driver/ufsLandIOModule.o \

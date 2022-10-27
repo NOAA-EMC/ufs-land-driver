@@ -220,14 +220,14 @@ contains
   class(static_type)  :: this
   type(noahmp_type)   :: noahmp
   
-  noahmp%static%soil_source          = 1
-  noahmp%static%veg_source           = 1
-  noahmp%static%soil_category        = this%soil_category
-  noahmp%static%vegetation_category  = this%vegetation_category
-  noahmp%static%slope_category       = this%slope_category
-  noahmp%static%temperature_soil_bot = this%deep_soil_temperature
-  noahmp%model%max_vegetation_frac   = maxval(this%gvf_monthly,dim=2)
-  noahmp%model%latitude              = this%latitude
+  noahmp%static%soil_source               = 1
+  noahmp%static%veg_source                = 1
+  noahmp%static%soil_category%data        = this%soil_category
+  noahmp%static%vegetation_category%data  = this%vegetation_category
+  noahmp%static%slope_category%data       = this%slope_category
+  noahmp%static%temperature_soil_bot%data = this%deep_soil_temperature
+  noahmp%model%max_vegetation_frac%data   = maxval(this%gvf_monthly,dim=2)
+  noahmp%model%latitude%data              = this%latitude
 
   end subroutine TransferStaticNoahMP
 

@@ -185,7 +185,7 @@ contains
 
   subroutine TransferInitialNoahMP(this, namelist, noahmp)
   
-    use ufsLandNoahMPType
+  use ufsLandNoahMPType
   
   class(initial_type)  :: this
   type(namelist_type)  :: namelist
@@ -194,13 +194,13 @@ contains
   if(namelist%subset_length /= noahmp%static%vector_length)   stop "vector length mismatch in ufsLandInitial_TransferInitial"
   if(this%nlevels    /= noahmp%static%soil_levels) stop "  soil levels mismatch in ufsLandInitial_TransferInitial"
   
-  noahmp%state%snow_water_equiv       = this%snow_water_equivalent
-  noahmp%state%snow_depth             = this%snow_depth * 1000.0  ! driver wants mm
-  noahmp%diag%canopy_water            = this%canopy_water
-  noahmp%state%temperature_radiative  = this%skin_temperature
-  noahmp%state%temperature_soil       = this%soil_temperature
-  noahmp%state%soil_moisture_vol      = this%soil_moisture
-  noahmp%state%soil_liquid_vol        = this%soil_liquid
+  noahmp%state%snow_water_equiv%data       = this%snow_water_equivalent
+  noahmp%state%snow_depth%data             = this%snow_depth * 1000.0  ! driver wants mm
+  noahmp%diag%canopy_water%data            = this%canopy_water
+  noahmp%state%temperature_radiative%data  = this%skin_temperature
+  noahmp%state%temperature_soil%data       = this%soil_temperature
+  noahmp%state%soil_moisture_vol%data      = this%soil_moisture
+  noahmp%state%soil_liquid_vol%data        = this%soil_liquid
   
   end subroutine TransferInitialNoahMP
 
