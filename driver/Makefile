@@ -50,7 +50,7 @@ ufsLandNoahDriverModule.o:	ufsLandNamelistRead.o ufsLandStaticModule.o ufsLandNo
                         ../mod/physcons.o ../mod/lsm_noah.o ../mod/funcphys.o
 ufsLandNoahMPRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahMPType.o ufsLandNetcdf.o ufsLandGenericIO.o
 ufsLandNoahRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o
-ufsLandIOModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o \
+ufsLandIOModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ufsLandGenericIO.o \
                         ../util/module_error_handling.o ../util/module_time_utilities.o
 ufsLandGenericIO.o:	ufsLandNamelistRead.o ufsLandNoahMPType.o ufsLandNetcdf.o
 ufsLandNoahType.o:	ufsLandNamelistRead.o 

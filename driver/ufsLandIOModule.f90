@@ -513,7 +513,6 @@ contains
   use NamelistRead
   use ufsLandNoahMPType
   use ufsLandForcingModule
-  use ufsLandNetcdf
   use ufsLandGenericIO
 
   class(output_type)   :: this  
