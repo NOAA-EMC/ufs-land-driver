@@ -1357,7 +1357,7 @@ contains
     character(len=128) :: restart_names(200)
     
     allocate(indata%data (vector_length))
-    indata%data       = huge(1.0)
+    indata%data       = huge(real(1.0,4))
     indata%name       = in_name
     indata%long_name  = in_longname
     indata%units      = in_units
@@ -1386,7 +1386,7 @@ contains
     character(len=128) :: restart_names(200)
     
     allocate(indata%data (vector_length, ztop:zbot))
-    indata%data       = huge(1.0)
+    indata%data       = huge(real(1.0,4))
     indata%name       = in_name
     indata%long_name  = in_longname
     indata%units      = in_units
