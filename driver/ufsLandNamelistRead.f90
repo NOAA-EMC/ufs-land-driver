@@ -4,6 +4,8 @@ implicit none
 save
 private
 
+integer, parameter :: maximum_names = 200
+
 type, public :: namelist_type
 
   character*128  :: static_file
@@ -79,6 +81,9 @@ type, public :: namelist_type
   character*128  ::  forcing_name_specific_humidity
   character*128  ::  forcing_name_wind_speed
   character*128  ::  forcing_name_temperature
+  
+  character*128, dimension(maximum_names)  ::  output_names
+  character*128, dimension(maximum_names)  ::  restart_names
   
   contains
 
@@ -166,6 +171,9 @@ contains
     character*128  ::  forcing_name_sw_radiation = ""
     character*128  ::  forcing_name_lw_radiation = ""
 
+    character*128, dimension(maximum_names)  ::  output_names = ""
+    character*128, dimension(maximum_names)  ::  restart_names = ""
+  
     integer, parameter :: NOAHMP_LAND_SURFACE_MODEL = 2
   
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
@@ -192,7 +200,8 @@ contains
                          forcing_name_specific_humidity , forcing_name_wind_speed   , &
 			 forcing_name_pressure          , forcing_name_sw_radiation , &
                          forcing_name_lw_radiation
-			 
+    namelist / io / output_names, restart_names
+    
 !---------------------------------------------------------------------
 !  read input file, part 1
 !---------------------------------------------------------------------
@@ -202,6 +211,7 @@ contains
      read(30, land_model_option)
      read(30, structure)
      read(30, forcing)
+     read(30, io)
     close(30)
 
     allocate (soil_level_thickness (1:num_soil_levels))   ! soil level thicknesses [m]
@@ -273,6 +283,9 @@ contains
     this%forcing_name_pressure          = forcing_name_pressure
     this%forcing_name_sw_radiation      = forcing_name_sw_radiation
     this%forcing_name_lw_radiation      = forcing_name_lw_radiation
+    
+    this%output_names  = output_names
+    this%restart_names = restart_names
     
     if(this%location_start <= 0 .or. this%location_end <= 0) then
       write(*,*) "location_start = ", location_start

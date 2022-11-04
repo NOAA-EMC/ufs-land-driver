@@ -110,7 +110,6 @@ type :: noahmp_diag_type
   type(real1d)  :: incanopy_gap_fraction  ! within canopy gap fraction for beam [-]
   type(real1d)  :: precip_frozen_frac     ! precipitation snow fraction [-]
   type(real1d)  :: snow_cover_fraction    ! snow cover fraction on the ground [-]
-  type(real1d)  :: vegetation_fraction    ! vegetation fraction [0.0-1.0]
   type(real1d)  :: canopy_wet_fraction    ! wetted or snowed fraction of canopy [-]
   type(real1d)  :: canopy_water           ! canopy-intercepted water [mm]
   type(real1d)  :: depth_water_table      ! depth to water table [m]
@@ -218,19 +217,18 @@ end type noahmp_flux_type
 
 type, public :: noahmp_type
 
-  type (noahmp_static_type)  :: static
-  type (noahmp_options_type) :: options
-  type (noahmp_model_type)   :: model
-  type (noahmp_forcing_type) :: forcing
-  type (noahmp_diag_type)    :: diag
-  type (noahmp_state_type)   :: state
-  type (noahmp_flux_type)    :: flux
+  type (noahmp_static_type)      :: static
+  type (noahmp_options_type)     :: options
+  type (noahmp_model_type)       :: model
+  type (noahmp_forcing_type)     :: forcing
+  type (noahmp_diag_type)        :: diag
+  type (noahmp_state_type)       :: state
+  type (noahmp_flux_type)        :: flux
 
   contains
 
-    procedure, public  :: Init         
-    procedure, private :: InitAllocate 
-    procedure, private :: InitDefault     
+    procedure, public  :: Init
+    procedure, private :: InitRestart
     procedure, public  :: TransferNamelist         
     procedure, public  :: InitStates         
 
@@ -242,17 +240,6 @@ contains
 
     class(noahmp_type) :: this
     type(namelist_type) :: namelist
-    integer :: vector_length
-
-    call this%InitAllocate(namelist,vector_length)
-    call this%InitDefault()
-
-  end subroutine Init
-
-  subroutine InitAllocate(this, namelist, vector_length)
-
-    class(noahmp_type) :: this
-    type(namelist_type) :: namelist
     integer :: vector_length, soil_levels, snow_index
 
     this%static%vector_length   = vector_length
@@ -260,322 +247,1237 @@ contains
     this%static%max_snow_levels = namelist%num_snow_levels
     soil_levels = namelist%num_soil_levels
     snow_index = -1*namelist%num_snow_levels + 1
+    
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Begin noahmp%static variables
 
-    allocate(this%static%vegetation_category%data    (vector_length)            ) ! vegetation type (integer index)
-    allocate(this%static%soil_category%data          (vector_length)            ) ! soil texture type (integer index)
-    allocate(this%static%slope_category%data         (vector_length)            ) ! slope category (integer index)
-    allocate(this%static%soil_interface_depth%data   (vector_length)            ) ! soil layer-bottom depth from surface [m]
-    allocate(this%static%ice_flag%data               (vector_length)            ) ! ice flag (1->ice)
-    allocate(this%static%surface_type%data           (vector_length)            ) ! surface type flag 1->soil; 2->lake
-    allocate(this%static%crop_type%data              (vector_length)            ) ! crop type category
-    allocate(this%static%temperature_soil_bot%data   (vector_length)            ) ! soil bottom boundary condition temperature [K]
+    call InitInt1d (this%static%vegetation_category , &
+                    vector_length                   , &
+                    "vegetation_category"           , &
+                    "categorical vegetation type"   , &
+                    ""                              , &
+                    namelist%output_names, namelist%restart_names)
 
-    allocate(this%model%latitude%data                (vector_length)            ) ! latitude [radians]
-    allocate(this%model%cosine_zenith%data           (vector_length)            ) ! cosine solar zenith angle [-1,1]
-    allocate(this%model%forcing_height%data          (vector_length)            ) ! forcing height [m]
-    allocate(this%model%vegetation_fraction%data     (vector_length)            ) ! vegetation fraction [0.0-1.0]
-    allocate(this%model%max_vegetation_frac%data     (vector_length)            ) ! annual maximum vegetation fraction [0.0-1.0]
-    allocate(this%model%snow_levels%data             (vector_length)            ) ! active snow levels [-]
-    allocate(this%model%interface_depth%data         (vector_length,snow_index:soil_levels)) ! layer-bottom depth from snow surf [m]
-    allocate(this%model%snow_soil_thickness%data     (vector_length,snow_index:soil_levels)) ! thickness of each snow/soil level [m]
-    allocate(this%model%leaf_area_index%data         (vector_length)            ) ! leaf area index [-]
-    allocate(this%model%stem_area_index%data         (vector_length)            ) ! stem area index [-]
-    allocate(this%model%growing_deg_days%data        (vector_length)            ) ! growing degree days [-]
-    allocate(this%model%plant_growth_stage%data      (vector_length)            ) ! plant growing stage [-]
-    allocate(this%model%cm_noahmp%data               (vector_length)            ) ! grid momentum drag coefficient [m/s]
-    allocate(this%model%ch_noahmp%data               (vector_length)            ) ! grid heat exchange coefficient [m/s]
-    allocate(this%model%ch_vegetated%data            (vector_length)            ) ! vegetated heat exchange coefficient [m/s]
-    allocate(this%model%ch_bare_ground%data          (vector_length)            ) ! bare-ground heat exchange coefficient [m/s]
-    allocate(this%model%ch_leaf%data                 (vector_length)            ) ! leaf exchange coefficient [m/s]
-    allocate(this%model%ch_below_canopy%data         (vector_length)            ) ! below-canopy exchange coefficient [m/s]
-    allocate(this%model%ch_vegetated_2m%data         (vector_length)            ) ! 2-m vegetated  heat exchange coefficient [m/s]
-    allocate(this%model%ch_bare_ground_2m%data       (vector_length)            ) ! 2-m bare-ground heat exchange coefficient [m/s]
-    allocate(this%model%friction_velocity%data       (vector_length)            ) ! friction velocity [m/s]
-    allocate(this%model%rs_sunlit%data               (vector_length)            ) ! sunlit leaf stomatal resistance [s/m]
-    allocate(this%model%rs_shaded%data               (vector_length)            ) ! shaded leaf stomatal resistance [s/m]
-    allocate(this%model%leaf_air_resistance%data     (vector_length)            ) ! leaf boundary layer resistance [s/m]
-    allocate(this%model%pbl_height%data              (vector_length)            ) ! height of pbl [m]
-    allocate(this%model%mo_length_inverse%data       (vector_length)            ) ! reciprocle of M-O length [1/m]
-    allocate(this%model%heat_flux_multiplier%data    (vector_length)            ) ! heat flux multiplier [W/m^2/K]
-    allocate(this%model%moisture_flux_multiplier%data(vector_length)            ) ! moisture flux multiplier [kg/m^2/s]
+    call InitInt1d (this%static%soil_category , &
+                    vector_length             , &
+                    "soil_category"           , &
+                    "categorical soil type"   , &
+                    ""                        , &
+                    namelist%output_names, namelist%restart_names)
 
-    allocate(this%forcing%air_pressure_forcing%data  (vector_length)            ) ! forcing air pressure [Pa]
-    allocate(this%forcing%precip_convective%data     (vector_length)            ) ! convective precipitation [mm/s]
-    allocate(this%forcing%precip_non_convective%data (vector_length)            ) ! non-convective precipitation [mm/s]
-    allocate(this%forcing%precip_snow%data           (vector_length)            ) ! snow precipitation [mm/s]
-    allocate(this%forcing%precip_graupel%data        (vector_length)            ) ! graupel precipitation [mm/s]
-    allocate(this%forcing%precip_hail%data           (vector_length)            ) ! hail precipitation [mm/s]
-    allocate(this%forcing%snowfall%data              (vector_length)            ) ! land model partitioned snowfall [mm/s]
-    allocate(this%forcing%rainfall%data              (vector_length)            ) ! land model partitioned rainfall [mm/s]
+    call InitInt1d (this%static%slope_category , &
+                    vector_length              , &
+                    "slope_category"           , &
+                    "categorical slope type"   , &
+                    ""                         , &
+                    namelist%output_names, namelist%restart_names)
 
-    allocate(this%diag%z0_total%data                 (vector_length)            ) ! weighted z0 sent to coupled model [m]
-    allocate(this%diag%albedo_total%data             (vector_length)            ) ! total surface albedo [-]
-    allocate(this%diag%albedo_direct%data            (vector_length,2)          ) ! direct vis/nir albedo [-]
-    allocate(this%diag%albedo_diffuse%data           (vector_length,2)          ) ! diffuse vis/nir albedo [-]
-    allocate(this%diag%albedo_direct_snow%data       (vector_length,2)          ) ! direct vis/nir snow albedo [-]
-    allocate(this%diag%albedo_diffuse_snow%data      (vector_length,2)          ) ! diffuse vis/nir snow albedo [-]
-    allocate(this%diag%emissivity_total%data         (vector_length)            ) ! grid emissivity [-]
-    allocate(this%diag%canopy_gap_fraction%data      (vector_length)            ) ! between canopy gap fraction [-]
-    allocate(this%diag%incanopy_gap_fraction%data    (vector_length)            ) ! within canopy gap fraction for beam [-]
-    allocate(this%diag%precip_frozen_frac%data       (vector_length)            ) ! precipitation snow fraction [-]
-    allocate(this%diag%snow_cover_fraction%data      (vector_length)            ) ! snow cover fraction on the ground [-]
-    allocate(this%diag%vegetation_fraction%data      (vector_length)            ) ! vegetation fraction [0.0-1.0]
-    allocate(this%diag%canopy_wet_fraction%data      (vector_length)            ) ! wetted or snowed fraction of canopy [-]
-    allocate(this%diag%canopy_water%data             (vector_length)            ) ! canopy-intercepted water [mm]
-    allocate(this%diag%depth_water_table%data        (vector_length)            ) ! depth to water table [m]
-    allocate(this%diag%lai_sunlit%data               (vector_length)            ) ! sunlit leaf area index [m2/m2]
-    allocate(this%diag%lai_shaded%data               (vector_length)            ) ! shaded leaf area index [m2/m2]
-    allocate(this%diag%snow_ice_frac_old%data        (vector_length,snow_index:0)) ! snow ice fraction at last timestep [-]
-    allocate(this%diag%snow_albedo_old%data          (vector_length)            ) ! snow albedo at last time step [-]
-    allocate(this%diag%evaporation_potential%data    (vector_length)            ) ! potential evaporation [mm/s]
-    allocate(this%diag%soil_moisture_total%data      (vector_length)            ) ! total soil moisture in all levels [mm]
-    allocate(this%diag%temperature_veg_2m%data       (vector_length)            ) ! vegetated 2-m air temperature [K]
-    allocate(this%diag%temperature_bare_2m%data      (vector_length)            ) ! bare ground 2-m air temperature [K]
-    allocate(this%diag%temperature_2m%data           (vector_length)            ) ! composite 2-m air temperature [K]
-    allocate(this%diag%spec_humidity_veg_2m%data     (vector_length)            ) ! vegetated 2-m air specific humidity [K]
-    allocate(this%diag%spec_humidity_bare_2m%data    (vector_length)            ) ! bare ground 2-m air specfic humidity [K]
-    allocate(this%diag%spec_humidity_2m%data         (vector_length)            ) ! composite 2-m air specfic humidity [K]
-    allocate(this%diag%spec_humidity_surface%data    (vector_length)            ) ! surface specific humidty [kg/kg]
+    call InitReal1d(this%static%soil_interface_depth , &
+                    vector_length                    , &
+                    "soil_interface_depth"           , &
+                    "depths of soil interface"       , &
+                    "m"                              , &
+                    namelist%output_names, namelist%restart_names)
 
-    allocate(this%state%temperature_soil%data        (vector_length,soil_levels)) ! soil temperature [K]
-    allocate(this%state%temperature_snow%data        (vector_length,snow_index:0)) ! snow temperature [K]
-    allocate(this%state%temperature_canopy_air%data  (vector_length)            ) ! canopy air temperature [K]
-    allocate(this%state%temperature_radiative%data   (vector_length)            ) ! surface radiative temperature [K]
-    allocate(this%state%temperature_leaf%data        (vector_length)            ) ! leaf temperature [K]
-    allocate(this%state%temperature_ground%data      (vector_length)            ) ! grid ground surface temperature [K]
-    allocate(this%state%temperature_bare_grd%data    (vector_length)            ) ! bare ground surface temperature [K]
-    allocate(this%state%temperature_veg_grd%data     (vector_length)            ) ! below_canopy ground surface temperature [K]
-    allocate(this%state%vapor_pres_canopy_air%data   (vector_length)            ) ! canopy air vapor pressure [Pa]
-    allocate(this%state%soil_liquid_vol%data         (vector_length,soil_levels)) ! volumetric liquid soil moisture [m3/m3]
-    allocate(this%state%soil_moisture_vol%data       (vector_length,soil_levels)) ! volumetric soil moisture (ice + liq.) [m3/m3]
-    allocate(this%state%snow_water_equiv%data        (vector_length)            ) ! snow water equivalent [kg/m2]
-    allocate(this%state%snow_level_ice%data          (vector_length,snow_index:0)) ! snow level ice [mm]
-    allocate(this%state%snow_level_liquid%data       (vector_length,snow_index:0)) ! snow level liquid [mm]
-    allocate(this%state%canopy_liquid%data           (vector_length)            ) ! canopy-intercepted liquid [mm]
-    allocate(this%state%canopy_ice%data              (vector_length)            ) ! canopy-intercepted ice [mm]
-    allocate(this%state%aquifer_water%data           (vector_length)            ) ! water storage in aquifer [mm]
-    allocate(this%state%saturated_water%data         (vector_length)            ) ! water in aquifer+saturated soil [mm]
-    allocate(this%state%lake_water%data              (vector_length)            ) ! lake water storage [mm]
-    allocate(this%state%soil_moisture_wtd%data       (vector_length)            ) ! (opt_run=5) soil water content between bottom of the soil and water table [m3/m3]
-    allocate(this%state%eq_soil_water_vol%data       (vector_length,soil_levels)) ! (opt_run=5) equilibrium soil water content [m3/m3]
-    allocate(this%state%leaf_carbon%data             (vector_length)            ) ! leaf mass [g/m2]
-    allocate(this%state%root_carbon%data             (vector_length)            ) ! mass of fine roots [g/m2]
-    allocate(this%state%stem_carbon%data             (vector_length)            ) ! stem mass [g/m2]
-    allocate(this%state%wood_carbon%data             (vector_length)            ) ! mass of wood (incl. woody roots) [g/m2]
-    allocate(this%state%soil_carbon_stable%data      (vector_length)            ) ! stable soil carbon [g/m2]
-    allocate(this%state%soil_carbon_fast%data        (vector_length)            ) ! short-lived soil carbon [g/m2]
-    allocate(this%state%grain_carbon%data            (vector_length)            ) ! grain mass [g/m2]
-    allocate(this%state%foliage_nitrogen%data        (vector_length)            ) ! foliage nitrogen [%] [1-saturated]
-    allocate(this%state%snow_water_equiv_old%data    (vector_length)            ) ! snow water equivalent at last time step [kg/m2]
-    allocate(this%state%snow_depth%data              (vector_length)            ) ! snow depth [m]
-    allocate(this%state%snow_age%data                (vector_length)            ) ! non-dimensional snow age [-]
+    call InitInt1d (this%static%ice_flag , &
+                    vector_length        , &
+                    "ice_flag"           , &
+                    "ice flag: 1->ice"   , &
+                    ""                   , &
+                    namelist%output_names, namelist%restart_names)
 
-    allocate(this%flux%sw_absorbed_total%data        (vector_length)            ) ! total absorbed solar radiation [W/m2]
-    allocate(this%flux%sw_reflected_total%data       (vector_length)            ) ! total reflected solar radiation [W/m2]
-    allocate(this%flux%lw_absorbed_total%data        (vector_length)            ) ! total net lw rad [W/m2]  [+ to atm]
-    allocate(this%flux%sensible_heat_total%data      (vector_length)            ) ! total sensible heat [W/m2] [+ to atm]
-    allocate(this%flux%transpiration_heat%data       (vector_length)            ) ! transpiration heat flux [W/m2] [+ to atm]
-    allocate(this%flux%latent_heat_canopy%data       (vector_length)            ) ! canopy evaporation heat flux [W/m2] [+ to atm]
-    allocate(this%flux%latent_heat_ground%data       (vector_length)            ) ! ground evaporation heat flux [W/m2] [+ to atm]
-    allocate(this%flux%latent_heat_total%data        (vector_length)            ) ! total latent heat flux [W/m2] [+ to atm]
-    allocate(this%flux%ground_heat_total%data        (vector_length)            ) ! ground heat flux [W/m2]   [+ to soil]
-    allocate(this%flux%precip_adv_heat_total%data    (vector_length)            ) ! precipitation advected heat - total [W/m2)
-    allocate(this%flux%sw_absorbed_veg%data          (vector_length)            ) ! solar radiation absorbed by vegetation [W/m2]
-    allocate(this%flux%sw_absorbed_ground%data       (vector_length)            ) ! solar radiation absorbed by ground [W/m2]
-    allocate(this%flux%lw_absorbed_grd_veg%data      (vector_length)            ) ! below-canopy ground absorbed longwave radiation [W/m2]
-    allocate(this%flux%lw_absorbed_leaf%data         (vector_length)            ) ! leaf absorbed longwave radiation [W/m2]
-    allocate(this%flux%lw_absorbed_grd_bare%data     (vector_length)            ) ! bare ground net longwave radiation [W/m2]
-    allocate(this%flux%sensible_heat_grd_veg%data    (vector_length)            ) ! below-canopy ground sensible heat flux [W/m2]
-    allocate(this%flux%sensible_heat_leaf%data       (vector_length)            ) ! leaf-to-canopy sensible heat flux [W/m2]
-    allocate(this%flux%sensible_heat_grd_bar%data    (vector_length)            ) ! bare ground sensible heat flux [W/m2]
-    allocate(this%flux%latent_heat_trans%data        (vector_length)            ) ! transpiration [W/m2]
-    allocate(this%flux%latent_heat_leaf%data         (vector_length)            ) ! leaf evaporation [W/m2]
-    allocate(this%flux%latent_heat_grd_veg%data      (vector_length)            ) ! below-canopy ground evaporation heat flux [W/m2]
-    allocate(this%flux%latent_heat_grd_bare%data     (vector_length)            ) ! bare ground evaporation heat flux [W/m2]
-    allocate(this%flux%snow_sublimation%data         (vector_length)            ) ! snow sublimation [W/m2]
-    allocate(this%flux%ground_heat_veg%data          (vector_length)            ) ! below-canopy ground heat flux [W/m2]
-    allocate(this%flux%ground_heat_bare%data         (vector_length)            ) ! bare ground heat flux [W/m2]
-    allocate(this%flux%precip_adv_heat_veg%data      (vector_length)            ) ! precipitation advected heat - vegetation net [W/m2]
-    allocate(this%flux%precip_adv_heat_grd_v%data    (vector_length)            ) ! precipitation advected heat - below-canopy net [W/m2]
-    allocate(this%flux%precip_adv_heat_grd_b%data    (vector_length)            ) ! precipitation advected heat - bare ground net [W/m2]
-    allocate(this%flux%transpiration%data            (vector_length)            ) ! transpiration [mm/s]
-    allocate(this%flux%evaporation_canopy%data       (vector_length)            ) ! canopy evaporation [mm/s]
-    allocate(this%flux%evaporation_soil%data         (vector_length)            ) ! soil surface evaporation [mm/s]
-    allocate(this%flux%runoff_surface%data           (vector_length)            ) ! surface runoff [mm/s] 
-    allocate(this%flux%runoff_baseflow%data          (vector_length)            ) ! baseflow runoff [mm/s]
-    allocate(this%flux%snowmelt_out%data             (vector_length)            ) ! snowmelt out bottom of pack [mm/s]
-    allocate(this%flux%snowmelt_shallow%data         (vector_length)            ) ! shallow snow melt [mm/timestep]
-    allocate(this%flux%snowmelt_shallow_1%data       (vector_length)            ) ! additional shallow snow melt [mm/timestep]
-    allocate(this%flux%snowmelt_shallow_2%data       (vector_length)            ) ! additional shallow snow melt [mm/timestep]
-    allocate(this%flux%deep_recharge%data            (vector_length)            ) ! (opt_run=5) recharge to or from the water table when deep [m]
-    allocate(this%flux%recharge%data                 (vector_length)            ) ! (opt_run=5) recharge to or from the water table when shallow [m]
-    allocate(this%flux%par_absorbed%data             (vector_length)            ) ! absorbed photosynthesis active radiation [W/m2]
-    allocate(this%flux%photosynthesis%data           (vector_length)            ) ! total photosynthesis [umol CO2/m2/s] [+ out]
-    allocate(this%flux%net_eco_exchange%data         (vector_length)            ) ! net ecosystem exchange [g/m2/s CO2]
-    allocate(this%flux%global_prim_prod%data         (vector_length)            ) ! global primary production [g/m2/s C]
-    allocate(this%flux%net_prim_prod%data            (vector_length)            ) ! net primary productivity [g/m2/s C]
+    call InitInt1d (this%static%surface_type              , &
+                    vector_length                         , &
+                    "surface_type"                        , &
+                    "surface type flag: 1->soil; 2->lake" , &
+                    ""                                    , &
+                    namelist%output_names, namelist%restart_names)
 
-  end subroutine InitAllocate
+    call InitInt1d (this%static%crop_type   , &
+                    vector_length           , &
+                    "crop_type"             , &
+                    "categorical crop type" , &
+                    ""                      , &
+                    namelist%output_names, namelist%restart_names)
 
-  subroutine InitDefault(this)
+    call InitReal1d(this%static%temperature_soil_bot           , &
+                    vector_length                              , &
+                    "temperature_soil_bot"                     , &
+                    "deep soil temperature boundary condition" , &
+                    "K"                                        , &
+                    namelist%output_names, namelist%restart_names)
 
-    class(noahmp_type) :: this
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Begin noahmp%model variables
 
-    this%static%vegetation_category%data    = huge(1)
-    this%static%soil_category%data          = huge(1)
-    this%static%slope_category%data         = huge(1)
-    this%static%soil_interface_depth%data   = huge(1.0)
-    this%static%ice_flag%data               = huge(1)
-    this%static%surface_type%data           = huge(1)
-    this%static%crop_type%data              = huge(1)
-    this%static%temperature_soil_bot%data   = huge(1.0)
+    call InitReal1d(this%model%latitude  , &
+                    vector_length        , &
+                    "latitude"           , &
+                    "grid cell latitude" , &
+                    "degrees_north"      , &
+                    namelist%output_names, namelist%restart_names)
 
-    this%model%latitude%data                = huge(1.0)
-    this%model%cosine_zenith%data           = huge(1.0)
-    this%model%forcing_height%data          = huge(1.0)
-    this%model%vegetation_fraction%data     = huge(1.0)
-    this%model%max_vegetation_frac%data     = huge(1.0)
-    this%model%snow_levels%data             = huge(1.0)
-    this%model%interface_depth%data         = huge(1.0)
-    this%model%snow_soil_thickness%data     = huge(1.0)
-    this%model%leaf_area_index%data         = huge(1.0)
-    this%model%stem_area_index%data         = huge(1.0)
-    this%model%growing_deg_days%data        = huge(1.0)
-    this%model%plant_growth_stage%data      = huge(1)
-    this%model%cm_noahmp%data               = huge(1.0)
-    this%model%ch_noahmp%data               = huge(1.0)
-    this%model%ch_vegetated%data            = huge(1.0)
-    this%model%ch_bare_ground%data          = huge(1.0)
-    this%model%ch_leaf%data                 = huge(1.0)
-    this%model%ch_below_canopy%data         = huge(1.0)
-    this%model%ch_vegetated_2m%data         = huge(1.0)
-    this%model%ch_bare_ground_2m%data       = huge(1.0)
-    this%model%friction_velocity%data       = huge(1.0)
-    this%model%rs_sunlit%data               = huge(1.0)
-    this%model%rs_shaded%data               = huge(1.0)
-    this%model%leaf_air_resistance%data     = huge(1.0)
-    this%model%pbl_height%data              = huge(1.0)
-    this%model%mo_length_inverse%data       = huge(1.0)
-    this%model%heat_flux_multiplier%data    = huge(1.0)
-    this%model%moisture_flux_multiplier%data= huge(1.0)
+    call InitReal1d(this%model%cosine_zenith       , &
+                    vector_length                  , &
+                    "cosine_zenith"                , &
+                    "cosine of solar zenith angle" , &
+                    "-"                            , &
+                    namelist%output_names, namelist%restart_names)
 
-    this%forcing%air_pressure_forcing%data  = huge(1.0)
-    this%forcing%precip_convective%data     = huge(1.0)
-    this%forcing%precip_non_convective%data = huge(1.0)
-    this%forcing%precip_snow%data           = huge(1.0)
-    this%forcing%precip_graupel%data        = huge(1.0)
-    this%forcing%precip_hail%data           = huge(1.0)
-    this%forcing%snowfall%data              = huge(1.0)
-    this%forcing%rainfall%data              = huge(1.0)
+    call InitReal1d(this%model%forcing_height , &
+                    vector_length             , &
+                    "forcing_height"          , &
+                    "height of forcing"       , &
+                    "m"                       , &
+                    namelist%output_names, namelist%restart_names)
 
-    this%diag%z0_total%data                 = huge(1.0)
-    this%diag%albedo_total%data             = huge(1.0)
-    this%diag%albedo_direct%data            = huge(1.0)
-    this%diag%albedo_diffuse%data           = huge(1.0)
-    this%diag%albedo_direct_snow%data       = huge(1.0)
-    this%diag%albedo_diffuse_snow%data      = huge(1.0)
-    this%diag%emissivity_total%data         = huge(1.0)
-    this%diag%canopy_gap_fraction%data      = huge(1.0)
-    this%diag%incanopy_gap_fraction%data    = huge(1.0)
-    this%diag%precip_frozen_frac%data       = huge(1.0)
-    this%diag%snow_cover_fraction%data      = huge(1.0)
-    this%diag%vegetation_fraction%data      = huge(1.0)
-    this%diag%canopy_wet_fraction%data      = huge(1.0)
-    this%diag%canopy_water%data             = huge(1.0)
-    this%diag%depth_water_table%data        = huge(1.0)
-    this%diag%lai_sunlit%data               = huge(1.0)
-    this%diag%lai_shaded%data               = huge(1.0)
-    this%diag%snow_ice_frac_old%data        = huge(1.0)
-    this%diag%snow_albedo_old%data          = huge(1.0)
-    this%diag%evaporation_potential%data    = huge(1.0)
-    this%diag%soil_moisture_total%data      = huge(1.0)
-    this%diag%temperature_veg_2m%data       = huge(1.0)
-    this%diag%temperature_bare_2m%data      = huge(1.0)
-    this%diag%temperature_2m%data           = huge(1.0)
-    this%diag%spec_humidity_veg_2m%data     = huge(1.0)
-    this%diag%spec_humidity_bare_2m%data    = huge(1.0)
-    this%diag%spec_humidity_2m%data         = huge(1.0)
-    this%diag%spec_humidity_surface%data    = huge(1.0)
+    call InitReal1d(this%model%vegetation_fraction      , &
+                    vector_length                       , &
+                    "vegetation_fraction"               , &
+                    "vegetation areal coverage on grid" , &
+                    "fraction"                          , &
+                    namelist%output_names, namelist%restart_names)
 
-    this%state%temperature_soil%data        = huge(1.0)
-    this%state%temperature_snow%data        = huge(1.0)
-    this%state%temperature_canopy_air%data  = huge(1.0)
-    this%state%temperature_radiative%data   = huge(1.0)
-    this%state%temperature_leaf%data        = huge(1.0)
-    this%state%temperature_ground%data      = huge(1.0)
-    this%state%temperature_bare_grd%data    = huge(1.0)
-    this%state%temperature_veg_grd%data     = huge(1.0)
-    this%state%vapor_pres_canopy_air%data   = huge(1.0)
-    this%state%soil_liquid_vol%data         = huge(1.0)
-    this%state%soil_moisture_vol%data       = huge(1.0)
-    this%state%snow_water_equiv%data        = huge(1.0)
-    this%state%snow_level_ice%data          = huge(1.0)
-    this%state%snow_level_liquid%data       = huge(1.0)
-    this%state%canopy_liquid%data           = huge(1.0)
-    this%state%canopy_ice%data              = huge(1.0)
-    this%state%aquifer_water%data           = huge(1.0)
-    this%state%saturated_water%data         = huge(1.0)
-    this%state%lake_water%data              = huge(1.0)
-    this%state%soil_moisture_wtd%data       = huge(1.0)
-    this%state%eq_soil_water_vol%data       = huge(1.0)
-    this%state%leaf_carbon%data             = huge(1.0)
-    this%state%root_carbon%data             = huge(1.0)
-    this%state%stem_carbon%data             = huge(1.0)
-    this%state%wood_carbon%data             = huge(1.0)
-    this%state%soil_carbon_stable%data      = huge(1.0)
-    this%state%soil_carbon_fast%data        = huge(1.0)
-    this%state%grain_carbon%data            = huge(1.0)
-    this%state%foliage_nitrogen%data        = huge(1.0)
-    this%state%snow_water_equiv_old%data    = huge(1.0)
-    this%state%snow_depth%data              = huge(1.0)
-    this%state%snow_age%data                = huge(1.0)
+    call InitReal1d(this%model%max_vegetation_frac              , &
+                    vector_length                               , &
+                    "max_vegetation_frac"                       , &
+                    "maximum vegetation areal coverage on grid" , &
+                    "fraction"                                  , &
+                    namelist%output_names, namelist%restart_names)
 
-    this%flux%sw_absorbed_total%data        = huge(1.0)
-    this%flux%sw_reflected_total%data       = huge(1.0)
-    this%flux%lw_absorbed_total%data        = huge(1.0)
-    this%flux%sensible_heat_total%data      = huge(1.0)
-    this%flux%transpiration_heat%data       = huge(1.0)
-    this%flux%latent_heat_canopy%data       = huge(1.0)
-    this%flux%latent_heat_ground%data       = huge(1.0)
-    this%flux%latent_heat_total%data        = huge(1.0)
-    this%flux%ground_heat_total%data        = huge(1.0)
-    this%flux%precip_adv_heat_total%data    = huge(1.0)
-    this%flux%sw_absorbed_veg%data          = huge(1.0)
-    this%flux%sw_absorbed_ground%data       = huge(1.0)
-    this%flux%lw_absorbed_grd_veg%data      = huge(1.0)
-    this%flux%lw_absorbed_leaf%data         = huge(1.0)
-    this%flux%lw_absorbed_grd_bare%data     = huge(1.0)
-    this%flux%sensible_heat_grd_veg%data    = huge(1.0)
-    this%flux%sensible_heat_leaf%data       = huge(1.0)
-    this%flux%sensible_heat_grd_bar%data    = huge(1.0)
-    this%flux%latent_heat_trans%data        = huge(1.0)
-    this%flux%latent_heat_leaf%data         = huge(1.0)
-    this%flux%latent_heat_grd_veg%data      = huge(1.0)
-    this%flux%latent_heat_grd_bare%data     = huge(1.0)
-    this%flux%snow_sublimation%data         = huge(1.0)
-    this%flux%ground_heat_veg%data          = huge(1.0)
-    this%flux%ground_heat_bare%data         = huge(1.0)
-    this%flux%precip_adv_heat_veg%data      = huge(1.0)
-    this%flux%precip_adv_heat_grd_v%data    = huge(1.0)
-    this%flux%precip_adv_heat_grd_b%data    = huge(1.0)
-    this%flux%transpiration%data            = huge(1.0)
-    this%flux%evaporation_canopy%data       = huge(1.0)
-    this%flux%evaporation_soil%data         = huge(1.0)
-    this%flux%runoff_surface%data           = huge(1.0)
-    this%flux%runoff_baseflow%data          = huge(1.0)
-    this%flux%snowmelt_out%data             = huge(1.0)
-    this%flux%snowmelt_shallow%data         = huge(1.0)
-    this%flux%snowmelt_shallow_1%data       = huge(1.0)
-    this%flux%snowmelt_shallow_2%data       = huge(1.0)
-    this%flux%deep_recharge%data            = huge(1.0)
-    this%flux%recharge%data                 = huge(1.0)
-    this%flux%par_absorbed%data             = huge(1.0)
-    this%flux%photosynthesis%data           = huge(1.0)
-    this%flux%net_eco_exchange%data         = huge(1.0)
-    this%flux%global_prim_prod%data         = huge(1.0)
-    this%flux%net_prim_prod%data            = huge(1.0)
+    call InitReal1d(this%model%snow_levels , &
+                    vector_length          , &
+                    "snow_levels"          , &
+                    "active snow levels"   , &
+                    "-"                    , &
+                    namelist%output_names, namelist%restart_names)
 
-  end subroutine InitDefault
+    call InitReal2d(this%model%interface_depth                , &
+                    vector_length                             , &
+                    snow_index, soil_levels                   , &
+                    "interface_depth"                         , &
+                    "depth to layer bottom from snow surface" , &
+                    "m"                                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%model%snow_soil_thickness , &
+                    vector_length                  , &
+                    snow_index, soil_levels        , &
+                    "snow_soil_thickness"          , &
+                    "thickness of snow/soil level" , &
+                    "m"                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%leaf_area_index , &
+                    vector_length              , &
+                    "leaf_area_index"          , &
+                    "leaf area per grid area"  , &
+                    "-"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%stem_area_index , &
+                    vector_length              , &
+                    "stem_area_index"          , &
+                    "stem area per grid area"  , &
+                    "-"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%growing_deg_days       , &
+                    vector_length                     , &
+                    "growing_deg_days"                , &
+                    "accumulated growing degree days" , &
+                    "K"                               , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitInt1d (this%model%plant_growth_stage , &
+                    vector_length                 , &
+                    "plant_growth_stage"          , &
+                    "plant growth stage"          , &
+                    "-"                           , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%cm_noahmp                  , &
+                    vector_length                         , &
+                    "cm_noahmp"                           , &
+                    "surface exchange coeff for momentum" , &
+                    "m/s"                                 , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%ch_noahmp                     , &
+                    vector_length                            , &
+                    "ch_noahmp"                              , &
+                    "surface exchange coeff heat & moisture" , &
+                    "m/s"                                    , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%ch_vegetated                                          , &
+                    vector_length                                                    , &
+                    "ch_vegetated"                                                   , &
+                    "surface exchange coeff heat & moisture over vegetated fraction" , &
+                    "m/s"                                                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%ch_bare_ground                                   , &
+                    vector_length                                               , &
+                    "ch_bare_ground"                                            , &
+                    "surface exchange coeff heat & moisture over bare fraction" , &
+                    "m/s"                                                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%ch_leaf                                       , &
+                    vector_length                                            , &
+                    "ch_leaf"                                                , &
+                    "surface exchange coeff heat & moisture at leaf surface" , &
+                    "m/s"                                                    , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%ch_below_canopy                            , &
+                    vector_length                                         , &
+                    "ch_below_canopy"                                     , &
+                    "surface exchange coeff heat & moisture below canopy" , &
+                    "m/s"                                                 , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%ch_vegetated_2m                                          , &
+                    vector_length                                                       , &
+                    "ch_vegetated_2m"                                                   , &
+                    "2m surface exchange coeff heat & moisture over vegetated fraction" , &
+                    "m/s"                                                               , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%ch_bare_ground_2m                                   , &
+                    vector_length                                                  , &
+                    "ch_bare_ground_2m"                                            , &
+                    "2m surface exchange coeff heat & moisture over bare fraction" , &
+                    "m/s"                                                          , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%friction_velocity , &
+                    vector_length                , &
+                    "friction_velocity"          , &
+                    "friction velocity"          , &
+                    "m/s"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%rs_sunlit              , &
+                    vector_length                     , &
+                    "rs_sunlit"                       , &
+                    "sunlit leaf stomatal resistance" , &
+                    "s/m"                             , &
+                    namelist%output_names, namelist%restart_names)
+ 
+    call InitReal1d(this%model%rs_shaded              , &
+                    vector_length                     , &
+                    "rs_shaded"                       , &
+                    "shaded leaf stomatal resistance" , &
+                    "s/m"                             , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%leaf_air_resistance   , &
+                    vector_length                    , &
+                    "leaf_air_resistance"            , &
+                    "leaf boundary layer resistance" , &
+                    "s/m"                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%pbl_height                , &
+                    vector_length                        , &
+                    "pbl_height"                         , &
+                    "height of planetary boundary layer" , &
+                    "m"                                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%mo_length_inverse , &
+                    vector_length                , &
+                    "mo_length_inverse"          , &
+                    "reciprocal of M-O length"   , &
+                    "1/m"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%heat_flux_multiplier , &
+                    vector_length                   , &
+                    "heat_flux_multiplier"          , &
+                    "heat flux multiplier"          , &
+                    "W/m^2/K"                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%model%moisture_flux_multiplier , &
+                    vector_length                       , &
+                    "moisture_flux_multiplier"          , &
+                    "moisture flux multiplier"          , &
+                    "kg/m^2/s"                          , &
+                    namelist%output_names, namelist%restart_names)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Begin noahmp%forcing variables
+
+    call InitReal1d(this%forcing%air_pressure_forcing       , &
+                    vector_length                           , &
+                    "air_pressure_forcing"                  , &
+                    "atmospheric pressure at forcing level" , &
+                    "Pa"                                    , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%precip_convective          , &
+                    vector_length                           , &
+                    "precip_convective"                     , &
+                    "convective component of precipitation" , &
+                    "mm/s"                                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%precip_non_convective          , &
+                    vector_length                               , &
+                    "precip_non_convective"                     , &
+                    "non-convective component of precipitation" , &
+                    "mm/s"                                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%precip_snow , &
+                    vector_length            , &
+                    "precip_snow"            , &
+                    "snow precipitation"     , &
+                    "mm/s"                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%precip_graupel , &
+                    vector_length               , &
+                    "precip_graupel"            , &
+                    "graupel precipitation"     , &
+                    "mm/s"                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%precip_hail , &
+                    vector_length            , &
+                    "precip_hail"            , &
+                    "hail precipitation"     , &
+                    "mm/s"                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%snowfall             , &
+                    vector_length                     , &
+                    "snowfall"                        , &
+                    "land model partitioned snowfall" , &
+                    "mm/s"                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%rainfall             , &
+                    vector_length                     , &
+                    "rainfall"                        , &
+                    "land model partitioned rainfall" , &
+                    "mm/s"                            , &
+                    namelist%output_names, namelist%restart_names)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Begin noahmp%diag variables
+
+    call InitReal1d(this%diag%z0_total                                    , &
+                    vector_length                                         , &
+                    "z0_total"                                            , &
+                    "grid composite surface roughness sent to atmosphere" , &
+                    "m"                                                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%albedo_total  , &
+                    vector_length           , &
+                    "albedo_total"          , &
+                    "grid composite albedo" , &
+                    "fraction"              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%diag%albedo_direct                 , &
+                    vector_length                           , &
+                    1, 2                                    , &
+                    "albedo_direct"                         , &
+                    "surface albedo - direct vis(1)/nir(2)" , &
+                    "fraction"                              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%diag%albedo_diffuse                 , &
+                    vector_length                            , &
+                    1, 2                                     , &
+                    "albedo_diffuse"                         , &
+                    "surface albedo - diffuse vis(1)/nir(2)" , &
+                    "fraction"                               , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%diag%albedo_direct_snow         , &
+                    vector_length                        , &
+                    1, 2                                 , &
+                    "albedo_direct_snow"                 , &
+                    "snow albedo - direct vis(1)/nir(2)" , &
+                    "fraction"                           , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%diag%albedo_diffuse_snow         , &
+                    vector_length                         , &
+                    1, 2                                  , &
+                    "albedo_diffuse_snow"                 , &
+                    "snow albedo - diffuse vis(1)/nir(2)" , &
+                    "fraction"                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%emissivity_total          , &
+                    vector_length                       , &
+                    "emissivity_total"                  , &
+                    "grid composite surface emissivity" , &
+                    "-"                                 , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%canopy_gap_fraction , &
+                    vector_length                 , &
+                    "canopy_gap_fraction"         , &
+                    "between-canopy gap fraction" , &
+                    "fraction"                    , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%incanopy_gap_fraction , &
+                    vector_length                   , &
+                    "incanopy_gap_fraction"         , &
+                    "within-canopy gap fraction"    , &
+                    "fraction"                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%precip_frozen_frac    , &
+                    vector_length                   , &
+                    "precip_frozen_frac"            , &
+                    "precipitation frozen fraction" , &
+                    "fraction"                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%snow_cover_fraction , &
+                    vector_length                 , &
+                    "snow_cover_fraction"         , &
+                    "snow cover fraction"         , &
+                    "fraction"                    , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%canopy_wet_fraction         , &
+                    vector_length                         , &
+                    "canopy_wet_fraction"                 , &
+                    "wetted or snowed fraction of canopy" , &
+                    "fraction"                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%canopy_water    , &
+                    vector_length             , &
+                    "canopy_water"            , &
+                    "canopy moisture content" , &
+                    "m"                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%depth_water_table , &
+                    vector_length               , &
+                    "depth_water_table"         , &
+                    "depth to water table"      , &
+                    "m"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%lai_sunlit     , &
+                    vector_length            , &
+                    "lai_sunlit"             , &
+                    "sunlit leaf area index" , &
+                    "m2/m2"                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%lai_shaded     , &
+                    vector_length            , &
+                    "lai_shaded"             , &
+                    "shaded leaf area index" , &
+                    "m2/m2"                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%diag%snow_ice_frac_old          , &
+                    vector_length                        , &
+                    snow_index, 0                        , &
+                    "snow_ice_frac_old"                  , &
+                    "snow ice fraction at last timestep" , &
+                    "fraction"                           , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%snow_albedo_old       , &
+                    vector_length                   , &
+                    "snow_albedo_old"               , &
+                    "snow albedo at last time step" , &
+                    "fraction"                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%evaporation_potential , &
+                    vector_length                   , &
+                    "evaporation_potential"         , &
+                    "potential evaporation"         , &
+                    "mm/s"                          , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%soil_moisture_total       , &
+                    vector_length                       , &
+                    "soil_moisture_total"               , &
+                    "total soil moisture in all levels" , &
+                    "mm"                                , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%temperature_veg_2m                   , &
+                    vector_length                                  , &
+                    "temperature_veg_2m"                           , &
+                    "2-m air temperature over vegetation fraction" , &
+                    "K"                                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%temperature_bare_2m                   , &
+                    vector_length                                   , &
+                    "temperature_bare_2m"                           , &
+                    "2-m air temperature over bare ground fraction" , &
+                    "K"                                             , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%temperature_2m        , &
+                    vector_length                   , &
+                    "temperature_2m"                , &
+                    "composite 2-m air temperature" , &
+                    "K"                             , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%spec_humidity_veg_2m                       , &
+                    vector_length                                        , &
+                    "spec_humidity_veg_2m"                               , &
+                    "2-m air specific humidity over vegetation fraction" , &
+                    "kg/kg"                                              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%spec_humidity_bare_2m                      , &
+                    vector_length                                        , &
+                    "spec_humidity_bare_2m"                              , &
+                    "2-m air specific humidity over vegetation fraction" , &
+                    "kg/kg"                                              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%spec_humidity_2m           , &
+                    vector_length                        , &
+                    "spec_humidity_2m"                   , &
+                    "composite 2-m air specfic humidity" , &
+                    "kg/kg"                              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%spec_humidity_surface       , &
+                    vector_length                         , &
+                    "spec_humidity_surface"               , &
+                    "kg/kg"                               , &
+                    "diagnostic specific humidity at sfc" , &
+                    namelist%output_names, namelist%restart_names)
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Begin noahmp%state variables
+
+    call InitReal2d(this%state%temperature_soil , &
+                    vector_length               , &
+                    1, soil_levels              , &
+                    "temperature_soil"          , &
+                    "soil level temperature"    , &
+                    "K"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%state%temperature_snow , &
+                    vector_length               , &
+                    snow_index, 0               , &
+                    "temperature_snow"          , &
+                    "snow level temperature"    , &
+                    "K"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%temperature_canopy_air , &
+                    vector_length                     , &
+                    "temperature_canopy_air"          , &
+                    "canopy air space temperature"    , &
+                    "K"                               , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%temperature_radiative          , &
+                    vector_length                             , &
+                    "temperature_radiative"                   , &
+                    "composite surface radiative temperature" , &
+                    "K"                                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%temperature_leaf , &
+                    vector_length               , &
+                    "temperature_leaf"          , &
+                    "leaf surface temperature"  , &
+                    "K"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%temperature_ground          , &
+                    vector_length                          , &
+                    "temperature_ground"                   , &
+                    "composite ground surface temperature" , &
+                    "K"                                    , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%temperature_bare_grd   , &
+                    vector_length                     , &
+                    "temperature_bare_grd"            , &
+                    "bare ground surface temperature" , &
+                    "K"                               , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%temperature_veg_grd            , &
+                    vector_length                             , &
+                    "temperature_veg_grd"                     , &
+                    "below-canopy ground surface temperature" , &
+                    "K"                                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%vapor_pres_canopy_air , &
+                    vector_length                    , &
+                    "vapor_pres_canopy_air"          , &
+                    "canopy air vapor pressure"      , &
+                    "Pa"                             , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%state%soil_liquid_vol                , &
+                    vector_length                             , &
+                    1, soil_levels                            , &
+                    "soil_liquid_vol"                         , &
+                    "volumetric liquid content in soil level" , &
+                    "m3/m3"                                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%state%soil_moisture_vol                , &
+                    vector_length                               , &
+                    1, soil_levels                              , &
+                    "soil_moisture_vol"                         , &
+                    "volumetric moisture content in soil level" , &
+                    "m3/m3"                                     , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%snow_water_equiv , &
+                    vector_length               , &
+                    "snow_water_equiv"          , &
+                    "snow water equivalent"     , &
+                    "mm"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%state%snow_level_ice , &
+                    vector_length             , &
+                    snow_index, 0             , &
+                    "snow_level_ice"          , &
+                    "snow level ice content"  , &
+                    "mm"                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%state%snow_level_liquid , &
+                    vector_length                , &
+                    snow_index, 0                , &
+                    "snow_level_liquid"          , &
+                    "snow level liquid content"  , &
+                    "mm"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%canopy_liquid    , &
+                    vector_length               , &
+                    "canopy_liquid"             , &
+                    "canopy-intercepted liquid" , &
+                    "mm"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%canopy_ice    , &
+                    vector_length            , &
+                    "canopy_ice"             , &
+                    "canopy-intercepted ice" , &
+                    "mm"                     , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%aquifer_water   , &
+                    vector_length              , &
+                    "aquifer_water"            , &
+                    "water storage in aquifer" , &
+                    "mm"                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%saturated_water        , &
+                    vector_length                     , &
+                    "saturated_water"                 , &
+                    "water in aquifer+saturated soil" , &
+                    "mm"                              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%lake_water , &
+                    vector_length         , &
+                    "lake_water"          , &
+                    "lake water storage"  , &
+                    "mm"                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%soil_moisture_wtd                                    , &
+                    vector_length                                                   , &
+                    "soil_moisture_wtd"                                             , &
+                    "soil water content between bottom of the soil and water table" , &
+                    "m3/m3"                                                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal2d(this%state%eq_soil_water_vol     , &
+                    vector_length                    , &
+                    1, soil_levels                   , &
+                    "eq_soil_water_vol"              , &
+                    "equilibrium soil water content" , &
+                    "m3/m3"                          , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%leaf_carbon , &
+                    vector_length          , &
+                    "leaf_carbon"          , &
+                    "leaf carbon mass"     , &
+                    "g/m2"                 , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%root_carbon   , &
+                    vector_length            , &
+                    "root_carbon"            , &
+                    "fine roots carbon mass" , &
+                    "g/m2"                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%stem_carbon , &
+                    vector_length          , &
+                    "stem_carbon"          , &
+                    "stem carbon mass"     , &
+                    "g/m2"                 , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%wood_carbon                 , &
+                    vector_length                          , &
+                    "wood_carbon"                          , &
+                    "wood (incl. woody roots) carbon mass" , &
+                    "g/m2"                                 , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%soil_carbon_stable , &
+                    vector_length                 , &
+                    "soil_carbon_stable"          , &
+                    "stable soil carbon mass"     , &
+                    "g/m2"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%soil_carbon_fast    , &
+                    vector_length                  , &
+                    "soil_carbon_fast"             , &
+                    "short-lived soil carbon mass" , &
+                    "g/m2"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%grain_carbon , &
+                    vector_length           , &
+                    "grain_carbon"          , &
+                    "grain carbon mass"     , &
+                    "g/m2"                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%foliage_nitrogen , &
+                    vector_length               , &
+                    "foliage_nitrogen"          , &
+                    "foliage nitrogen"          , &
+                    "percent"                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%snow_water_equiv_old           , &
+                    vector_length                             , &
+                    "snow_water_equiv_old"                    , &
+                    "snow water equivalent at last time step" , &
+                    "mm"                                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%snow_depth , &
+                    vector_length         , &
+                    "snow_depth"          , &
+                    "snow depth"          , &
+                    "m"                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%state%snow_age        , &
+                    vector_length              , &
+                    "snow_age"                 , &
+                    "non-dimensional snow age" , &
+                    "-"                        , &
+                    namelist%output_names, namelist%restart_names)
+                    
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Begin noahmp%flux variables
+
+    call InitReal1d(this%flux%sw_absorbed_total      , &
+                    vector_length                    , &
+                    "sw_absorbed_total"              , &
+                    "total absorbed solar radiation" , &
+                    "W/m2"                           , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%sw_reflected_total      , &
+                    vector_length                     , &
+                    "sw_reflected_total"              , &
+                    "total reflected solar radiation" , &
+                    "W/m2"                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%lw_absorbed_total    , &
+                    vector_length                  , &
+                    "lw_absorbed_total"            , &
+                    "total net longwave radiation" , &
+                    "W/m2"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%sensible_heat_total  , &
+                    vector_length                  , &
+                    "sensible_heat_total"          , &
+                    "composite sensible heat flux" , &
+                    "W/m2"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%transpiration_heat    , &
+                    vector_length                   , &
+                    "transpiration_heat"            , &
+                    "plant transpiration heat flux" , &
+                    "W/m2"                          , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%latent_heat_canopy   , &
+                    vector_length                  , &
+                    "latent_heat_canopy"           , &
+                    "canopy evaporation heat flux" , &
+                    "W/m2"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%latent_heat_ground   , &
+                    vector_length                  , &
+                    "latent_heat_ground"           , &
+                    "direct soil latent heat flux" , &
+                    "W/m2"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%latent_heat_total   , &
+                    vector_length                 , &
+                    "latent_heat_total"           , &
+                    "total grid latent heat flux" , &
+                    "W/m2"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%ground_heat_total    , &
+                    vector_length                  , &
+                    "ground_heat_total"            , &
+                    "total heat flux into surface" , &
+                    "W/m2"                         , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%precip_adv_heat_total         , &
+                    vector_length                           , &
+                    "precip_adv_heat_total"                 , &
+                    "composite precipitation advected heat" , &
+                    "W/m2"                                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%sw_absorbed_veg                , &
+                    vector_length                            , &
+                    "sw_absorbed_veg"                        , &
+                    "solar radiation absorbed by vegetation" , &
+                    "W/m2"                                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%sw_absorbed_ground         , &
+                    vector_length                        , &
+                    "sw_absorbed_ground"                 , &
+                    "solar radiation absorbed by ground" , &
+                    "W/m2"                               , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%lw_absorbed_grd_veg                     , &
+                    vector_length                                     , &
+                    "lw_absorbed_grd_veg"                             , &
+                    "below-canopy ground absorbed longwave radiation" , &
+                    "W/m2"                                            , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%lw_absorbed_leaf         , &
+                    vector_length                      , &
+                    "lw_absorbed_leaf"                 , &
+                    "leaf absorbed longwave radiation" , &
+                    "W/m2"                             , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%lw_absorbed_grd_bare       , &
+                    vector_length                        , &
+                    "lw_absorbed_grd_bare"               , &
+                    "bare ground net longwave radiation" , &
+                    "W/m2"                               , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%sensible_heat_grd_veg          , &
+                    vector_length                            , &
+                    "sensible_heat_grd_veg"                  , &
+                    "below-canopy ground sensible heat flux" , &
+                    "W/m2"                                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%sensible_heat_leaf        , &
+                    vector_length                       , &
+                    "sensible_heat_leaf"                , &
+                    "leaf-to-canopy sensible heat flux" , &
+                    "W/m2"                              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%sensible_heat_grd_bar  , &
+                    vector_length                    , &
+                    "sensible_heat_grd_bar"          , &
+                    "bare ground sensible heat flux" , &
+                    "W/m2"                           , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%latent_heat_trans , &
+                    vector_length               , &
+                    "latent_heat_trans"         , &
+                    "transpiration heat flux"   , &
+                    "W/m2"                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%latent_heat_leaf   , &
+                    vector_length                , &
+                    "latent_heat_leaf"           , &
+                    "leaf evaporation heat flux" , &
+                    "W/m2"                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%latent_heat_grd_veg               , &
+                    vector_length                               , &
+                    "latent_heat_grd_veg"                       , &
+                    "below-canopy ground evaporation heat flux" , &
+                    "W/m2"                                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%latent_heat_grd_bare      , &
+                    vector_length                       , &
+                    "latent_heat_grd_bare"              , &
+                    "bare ground evaporation heat flux" , &
+                    "W/m2"                              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%snow_sublimation , &
+                    vector_length              , &
+                    "snow_sublimation"         , &
+                    "snow sublimation"         , &
+                    "mm/s"                     , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%ground_heat_veg       , &
+                    vector_length                   , &
+                    "ground_heat_veg"               , &
+                    "below-canopy ground heat flux" , &
+                    "W/m2"                          , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%ground_heat_bare , &
+                    vector_length              , &
+                    "ground_heat_bare"         , &
+                    "bare ground heat flux"    , &
+                    "W/m2"                     , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%precip_adv_heat_veg              , &
+                    vector_length                              , &
+                    "precip_adv_heat_veg"                      , &
+                    "precipitation advected heat - vegetation" , &
+                    "W/m2"                                     , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%precip_adv_heat_grd_v              , &
+                    vector_length                                , &
+                    "precip_adv_heat_grd_v"                      , &
+                    "precipitation advected heat - below-canopy" , &
+                    "W/m2"                                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%precip_adv_heat_grd_b             , &
+                    vector_length                               , &
+                    "precip_adv_heat_grd_b"                     , &
+                    "precipitation advected heat - bare ground" , &
+                    "W/m2"                                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%transpiration    , &
+                    vector_length              , &
+                    "transpiration"            , &
+                    "transpiration water flux" , &
+                    "mm/s"                     , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%evaporation_canopy    , &
+                    vector_length                   , &
+                    "evaporation_canopy"            , &
+                    "canopy evaporation water flux" , &
+                    "mm/s"                          , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%evaporation_soil            , &
+                    vector_length                         , &
+                    "evaporation_soil"                    , &
+                    "soil surface evaporation water flux" , &
+                    "mm/s"                                , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%runoff_surface    , &
+                    vector_length               , &
+                    "runoff_surface"            , &
+                    "surface runoff water flux" , &
+                    "mm/s"                      , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%runoff_baseflow    , &
+                    vector_length                , &
+                    "runoff_baseflow"            , &
+                    "drainage runoff water flux" , &
+                    "mm/s"                       , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%snowmelt_out        , &
+                    vector_length                 , &
+                    "snowmelt_out"                , &
+                    "snowmelt out bottom of pack" , &
+                    "mm/s"                        , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%snowmelt_shallow , &
+                    vector_length              , &
+                    "snowmelt_shallow"         , &
+                    "shallow snow melt"        , &
+                    "mm/timestep"              , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%snowmelt_shallow_1   , &
+                    vector_length                  , &
+                    "snowmelt_shallow_1"           , &
+                    "additional shallow snow melt" , &
+                    "mm/timestep"                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%snowmelt_shallow_2   , &
+                    vector_length                  , &
+                    "snowmelt_shallow_2"           , &
+                    "additional shallow snow melt" , &
+                    "mm/timestep"                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%deep_recharge                         , &
+                    vector_length                                   , &
+                    "deep_recharge"                                 , &
+                    "recharge to the water table when deep"         , &
+                    "m"                                             , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%recharge                                 , &
+                    vector_length                                      , &
+                    "recharge"                                         , &
+                    "recharge to the water table when shallow"         , &
+                    "m"                                                , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%par_absorbed                     , &
+                    vector_length                              , &
+                    "par_absorbed"                             , &
+                    "absorbed photosynthesis active radiation" , &
+                    "W/m2"                                     , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%photosynthesis , &
+                    vector_length            , &
+                    "photosynthesis"         , &
+                    "total photosynthesis"   , &
+                    "umol CO2/m2/s"          , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%net_eco_exchange , &
+                    vector_length              , &
+                    "net_eco_exchange"         , &
+                    "net ecosystem exchange"   , &
+                    "g/m2/s CO2"               , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%global_prim_prod  , &
+                    vector_length               , &
+                    "global_prim_prod"          , &
+                    "global primary production" , &
+                    "g/m2/s C"                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%net_prim_prod    , &
+                    vector_length              , &
+                    "net_prim_prod"            , &
+                    "net primary productivity" , &
+                    "g/m2/s C"                 , &
+                    namelist%output_names, namelist%restart_names)
+
+! Set the default restart flags
+
+    call this%InitRestart(namelist)
+
+  end subroutine Init
+  
+  subroutine InitInt1d(indata, vector_length, in_name, in_longname, &
+                       in_units, output_names, restart_names)
+  
+    type(int1d) :: indata
+    integer :: vector_length, iname, numnames
+    character(len=*)   :: in_name
+    character(len=*)   :: in_longname
+    character(len=*)   :: in_units
+    character(len=128) :: output_names(200)
+    character(len=128) :: restart_names(200)
+    
+    allocate(indata%data (vector_length))
+    indata%data       = huge(1)
+    indata%name       = in_name
+    indata%long_name  = in_longname
+    indata%units      = in_units
+    
+    numnames = count(output_names /= "")
+    do iname = 1, numnames
+      if(indata%name == output_names(iname)) indata%output_flag = .true.
+    end do
+
+    numnames = count(restart_names /= "")
+    do iname = 1, numnames
+      if(indata%name == restart_names(iname)) indata%restart_flag = .true.
+    end do
+  
+  end subroutine InitInt1d
+
+  subroutine InitReal1d(indata, vector_length, in_name, in_longname, &
+                        in_units, output_names, restart_names)
+  
+    type(real1d) :: indata
+    integer :: vector_length, iname, numnames
+    character(len=*)   :: in_name
+    character(len=*)   :: in_longname
+    character(len=*)   :: in_units
+    character(len=128) :: output_names(200)
+    character(len=128) :: restart_names(200)
+    
+    allocate(indata%data (vector_length))
+    indata%data       = huge(1.0)
+    indata%name       = in_name
+    indata%long_name  = in_longname
+    indata%units      = in_units
+  
+    numnames = count(output_names /= "")
+    do iname = 1, numnames
+      if(indata%name == output_names(iname)) indata%output_flag = .true.
+    end do
+
+    numnames = count(restart_names /= "")
+    do iname = 1, numnames
+      if(indata%name == restart_names(iname)) indata%restart_flag = .true.
+    end do
+  
+  end subroutine InitReal1d
+
+  subroutine InitReal2d(indata, vector_length, ztop, zbot, in_name, in_longname,&
+                        in_units, output_names, restart_names)
+  
+    type(real2d) :: indata
+    integer :: vector_length, ztop, zbot, iname, numnames
+    character(len=*)   :: in_name
+    character(len=*)   :: in_longname
+    character(len=*)   :: in_units
+    character(len=128) :: output_names(200)
+    character(len=128) :: restart_names(200)
+    
+    allocate(indata%data (vector_length, ztop:zbot))
+    indata%data       = huge(1.0)
+    indata%name       = in_name
+    indata%long_name  = in_longname
+    indata%units      = in_units
+  
+    numnames = count(output_names /= "")
+    do iname = 1, numnames
+      if(indata%name == output_names(iname)) indata%output_flag = .true.
+    end do
+
+    numnames = count(restart_names /= "")
+    do iname = 1, numnames
+      if(indata%name == restart_names(iname)) indata%restart_flag = .true.
+    end do
+  
+  end subroutine InitReal2d
+
+  subroutine InitRestart(this, namelist)
+
+    class(noahmp_type)  :: this
+    type(namelist_type) :: namelist
+    
+    this%model%vegetation_fraction%restart_flag    = .true.
+    this%diag%emissivity_total%restart_flag        = .true.
+    this%diag%albedo_direct%restart_flag           = .true.
+    this%diag%albedo_diffuse%restart_flag          = .true.
+    this%static%temperature_soil_bot%restart_flag  = .true.
+    this%model%cm_noahmp%restart_flag              = .true.
+    this%model%ch_noahmp%restart_flag              = .true.
+    this%model%forcing_height%restart_flag         = .true.
+    this%model%max_vegetation_frac%restart_flag    = .true.
+    this%diag%albedo_total%restart_flag            = .true.
+    this%state%snow_water_equiv%restart_flag       = .true.
+    this%state%snow_depth%restart_flag             = .true.
+    this%state%temperature_radiative%restart_flag  = .true.
+    this%state%soil_moisture_vol%restart_flag      = .true.
+    this%state%temperature_soil%restart_flag       = .true.
+    this%state%soil_liquid_vol%restart_flag        = .true.
+    this%diag%canopy_water%restart_flag            = .true.
+    this%flux%transpiration_heat%restart_flag      = .true.
+    this%model%friction_velocity%restart_flag      = .true.
+    this%diag%z0_total%restart_flag                = .true.
+    this%diag%snow_cover_fraction%restart_flag     = .true.
+    this%diag%spec_humidity_surface%restart_flag   = .true.
+    this%flux%ground_heat_total%restart_flag       = .true.
+    this%flux%runoff_baseflow%restart_flag         = .true.
+    this%flux%latent_heat_total%restart_flag       = .true.
+    this%flux%sensible_heat_total%restart_flag     = .true.
+    this%diag%evaporation_potential%restart_flag   = .true.
+    this%flux%runoff_surface%restart_flag          = .true.
+    this%flux%latent_heat_ground%restart_flag      = .true.
+    this%flux%latent_heat_canopy%restart_flag      = .true.
+    this%flux%snow_sublimation%restart_flag        = .true.
+    this%diag%soil_moisture_total%restart_flag     = .true.
+    this%flux%precip_adv_heat_total%restart_flag   = .true.
+    this%model%cosine_zenith%restart_flag          = .true.
+    this%model%snow_levels%restart_flag            = .true.
+    this%state%temperature_leaf%restart_flag       = .true.
+    this%state%temperature_ground%restart_flag     = .true.
+    this%state%canopy_ice%restart_flag             = .true.
+    this%state%canopy_liquid%restart_flag          = .true.
+    this%state%vapor_pres_canopy_air%restart_flag  = .true.
+    this%state%temperature_canopy_air%restart_flag = .true.
+    this%diag%canopy_wet_fraction%restart_flag     = .true.
+    this%state%snow_water_equiv_old%restart_flag   = .true.
+    this%diag%snow_albedo_old%restart_flag         = .true.
+    this%forcing%snowfall%restart_flag             = .true.
+    this%state%lake_water%restart_flag             = .true.
+    this%diag%depth_water_table%restart_flag       = .true.
+    this%state%aquifer_water%restart_flag          = .true.
+    this%state%saturated_water%restart_flag        = .true.
+    this%state%leaf_carbon%restart_flag            = .true.
+    this%state%root_carbon%restart_flag            = .true.
+    this%state%stem_carbon%restart_flag            = .true.
+    this%state%wood_carbon%restart_flag            = .true.
+    this%state%soil_carbon_stable%restart_flag     = .true.
+    this%state%soil_carbon_fast%restart_flag       = .true.
+    this%model%leaf_area_index%restart_flag        = .true.
+    this%model%stem_area_index%restart_flag        = .true.
+    this%state%snow_age%restart_flag               = .true.
+    this%state%soil_moisture_wtd%restart_flag      = .true.
+    this%flux%deep_recharge%restart_flag           = .true.
+    this%flux%recharge%restart_flag                = .true.
+    this%diag%temperature_2m%restart_flag          = .true.
+    this%diag%spec_humidity_2m%restart_flag        = .true.
+    this%state%eq_soil_water_vol%restart_flag      = .true.
+    this%state%temperature_snow%restart_flag       = .true.
+    this%model%interface_depth%restart_flag        = .true.
+    this%state%snow_level_ice%restart_flag         = .true.
+    this%state%snow_level_liquid%restart_flag      = .true.
+  
+  end subroutine InitRestart
 
   subroutine TransferNamelist(this, namelist)
     

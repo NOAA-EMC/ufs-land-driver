@@ -18,6 +18,8 @@ OBJS =	../driver/ufsLandDriver.o \
 	../driver/ufsLandInitialModule.o \
 	../driver/ufsLandIOModule.o \
 	../driver/ufsLandForcingModule.o \
+	../driver/ufsLandNetcdf.o \
+	../driver/ufsLandGenericIO.o \
 	../util/module_error_handling.o \
 	../util/module_time_utilities.o \
 	../util/module_interpolation_utilities.o \

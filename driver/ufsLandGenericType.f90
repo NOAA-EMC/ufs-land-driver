@@ -10,6 +10,7 @@ type :: int1d
   logical                           :: output_flag  = .false. ! 
   logical                           :: restart_flag = .false. ! 
   character*128                     :: name                   ! 
+  character*128                     :: long_name              ! 
   character*128                     :: units                  ! 
   
 end type int1d
@@ -20,6 +21,7 @@ type :: real1d
   logical                           :: output_flag  = .false. ! 
   logical                           :: restart_flag = .false. ! 
   character*128                     :: name                   ! 
+  character*128                     :: long_name              ! 
   character*128                     :: units                  ! 
   
 end type real1d
@@ -30,6 +32,7 @@ type :: int2d
   logical                           :: output_flag  = .false. ! 
   logical                           :: restart_flag = .false. ! 
   character*128                     :: name                   ! 
+  character*128                     :: long_name              ! 
   character*128                     :: units                  ! 
   
 end type int2d
@@ -40,6 +43,7 @@ type :: real2d
   logical                           :: output_flag  = .false. ! 
   logical                           :: restart_flag = .false. ! 
   character*128                     :: name                   ! 
+  character*128                     :: long_name              ! 
   character*128                     :: units                  ! 
   
 end type real2d
