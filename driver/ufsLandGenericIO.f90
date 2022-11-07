@@ -187,9 +187,33 @@ contains
 
 ! Begin noahmp%forcing variables
 
-  if((noahmp%forcing%air_pressure_forcing%restart_flag .and. io_type == restart) .or. &
-     (noahmp%forcing%air_pressure_forcing%output_flag  .and. io_type == output )) &
-    call Define1dReal(noahmp%forcing%air_pressure_forcing, ncid, realtype, dim_id_loc, dim_id_time)
+  if((noahmp%forcing%temperature_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%temperature_forcing%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%forcing%temperature_forcing, ncid, realtype, dim_id_loc, dim_id_time)
+
+  if((noahmp%forcing%specific_humidity_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%specific_humidity_forcing%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%forcing%specific_humidity_forcing, ncid, realtype, dim_id_loc, dim_id_time)
+
+  if((noahmp%forcing%surface_pressure_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%surface_pressure_forcing%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%forcing%surface_pressure_forcing, ncid, realtype, dim_id_loc, dim_id_time)
+
+  if((noahmp%forcing%wind_speed_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%wind_speed_forcing%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%forcing%wind_speed_forcing, ncid, realtype, dim_id_loc, dim_id_time)
+
+  if((noahmp%forcing%downward_longwave_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%downward_longwave_forcing%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%forcing%downward_longwave_forcing, ncid, realtype, dim_id_loc, dim_id_time)
+
+  if((noahmp%forcing%downward_shortwave_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%downward_shortwave_forcing%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%forcing%downward_shortwave_forcing, ncid, realtype, dim_id_loc, dim_id_time)
+
+  if((noahmp%forcing%precipitation_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%precipitation_forcing%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%forcing%precipitation_forcing, ncid, realtype, dim_id_loc, dim_id_time)
 
   if((noahmp%forcing%precip_convective%restart_flag .and. io_type == restart) .or. &
      (noahmp%forcing%precip_convective%output_flag  .and. io_type == output )) &
@@ -839,9 +863,39 @@ contains
 
 ! Begin noahmp%forcing variables
 
-  if((noahmp%forcing%air_pressure_forcing%restart_flag .and. io_type == restart) .or. &
-     (noahmp%forcing%air_pressure_forcing%output_flag  .and. io_type == output )) &
-    call Write1dReal(noahmp%forcing%air_pressure_forcing, ncid,   &
+  if((noahmp%forcing%temperature_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%temperature_forcing%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%forcing%temperature_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%forcing%specific_humidity_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%specific_humidity_forcing%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%forcing%specific_humidity_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%forcing%surface_pressure_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%surface_pressure_forcing%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%forcing%surface_pressure_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%forcing%wind_speed_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%wind_speed_forcing%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%forcing%wind_speed_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%forcing%downward_longwave_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%downward_longwave_forcing%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%forcing%downward_longwave_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%forcing%downward_shortwave_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%downward_shortwave_forcing%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%forcing%downward_shortwave_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%forcing%precipitation_forcing%restart_flag .and. io_type == restart) .or. &
+     (noahmp%forcing%precipitation_forcing%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%forcing%precipitation_forcing, ncid,   &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   if((noahmp%forcing%precip_convective%restart_flag .and. io_type == restart) .or. &
@@ -1577,8 +1631,32 @@ contains
 
 ! Begin noahmp%forcing variables
 
-  if(noahmp%forcing%air_pressure_forcing%restart_flag) &
-    call Read1dReal(noahmp%forcing%air_pressure_forcing, ncid,   &
+  if(noahmp%forcing%temperature_forcing%restart_flag) &
+    call Read1dReal(noahmp%forcing%temperature_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%forcing%specific_humidity_forcing%restart_flag) &
+    call Read1dReal(noahmp%forcing%specific_humidity_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%forcing%surface_pressure_forcing%restart_flag) &
+    call Read1dReal(noahmp%forcing%surface_pressure_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%forcing%wind_speed_forcing%restart_flag) &
+    call Read1dReal(noahmp%forcing%wind_speed_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%forcing%downward_longwave_forcing%restart_flag) &
+    call Read1dReal(noahmp%forcing%downward_longwave_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%forcing%downward_shortwave_forcing%restart_flag) &
+    call Read1dReal(noahmp%forcing%downward_shortwave_forcing, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%forcing%precipitation_forcing%restart_flag) &
+    call Read1dReal(noahmp%forcing%precipitation_forcing, ncid,   &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   if(noahmp%forcing%precip_convective%restart_flag) &

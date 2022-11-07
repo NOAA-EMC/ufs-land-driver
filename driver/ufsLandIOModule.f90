@@ -574,35 +574,6 @@ contains
       status = nf90_put_att(ncid, varid, "long_name", "time step")
       status = nf90_put_att(ncid, varid, "units", "seconds")
 
-    status = nf90_def_var(ncid, "pressure_surface", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
-      status = nf90_put_att(ncid, varid, "long_name", "surface pressure")
-      status = nf90_put_att(ncid, varid, "units", "Pa")
-
-    status = nf90_def_var(ncid, "temperature_forcing", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
-      status = nf90_put_att(ncid, varid, "long_name", "forcing-level temperature")
-      status = nf90_put_att(ncid, varid, "units", "K")
-
-    status = nf90_def_var(ncid, "spec_humidity_forcing", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
-      status = nf90_put_att(ncid, varid, "long_name", "forcing-level specific humidity")
-      status = nf90_put_att(ncid, varid, "units", "kg/kg")
-
-    status = nf90_def_var(ncid, "radiation_longwave_down", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
-      status = nf90_put_att(ncid, varid, "long_name", "forcing longwave downward flux")
-      status = nf90_put_att(ncid, varid, "units", "W/m2")
-
-    status = nf90_def_var(ncid, "radiation_shortwave_down", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
-      status = nf90_put_att(ncid, varid, "long_name", "forcing shortwave downward flux")
-      status = nf90_put_att(ncid, varid, "units", "W/m2")
-
-    status = nf90_def_var(ncid, "wind_speed", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
-      status = nf90_put_att(ncid, varid, "long_name", "wind speed")
-      status = nf90_put_att(ncid, varid, "units", "m/s")
- 
-    status = nf90_def_var(ncid, "precipitation_forcing", NF90_FLOAT, (/dim_id_loc,dim_id_time/), varid)
-      status = nf90_put_att(ncid, varid, "long_name", "total precipitation during time integration")
-      status = nf90_put_att(ncid, varid, "units", "mm")
-
-
     call DefineNoahMP(output, noahmp, ncid, &
                       dim_id_time, dim_id_loc, dim_id_soil, &
                       dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad)
@@ -625,34 +596,6 @@ contains
   status = nf90_inq_varid(ncid, "timestep", varid)
   status = nf90_put_var(ncid, varid , noahmp%static%timestep   )
 
-  status = nf90_inq_varid(ncid, "pressure_surface", varid)
-  status = nf90_put_var(ncid, varid , forcing%surface_pressure   , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
-
-  status = nf90_inq_varid(ncid, "temperature_forcing", varid)
-  status = nf90_put_var(ncid, varid , forcing%temperature        , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
-      
-  status = nf90_inq_varid(ncid, "spec_humidity_forcing", varid)
-  status = nf90_put_var(ncid, varid , forcing%specific_humidity  , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
-      
-  status = nf90_inq_varid(ncid, "wind_speed", varid)
-  status = nf90_put_var(ncid, varid , forcing%wind_speed         , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
-      
-  status = nf90_inq_varid(ncid, "precipitation_forcing", varid)
-  status = nf90_put_var(ncid, varid , forcing%precipitation      , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
-      
-  status = nf90_inq_varid(ncid, "radiation_longwave_down", varid)
-  status = nf90_put_var(ncid, varid , forcing%downward_longwave  , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
-      
-  status = nf90_inq_varid(ncid, "radiation_shortwave_down", varid)
-  status = nf90_put_var(ncid, varid , forcing%downward_shortwave , &
-      start = (/namelist%subset_start,this%output_counter/), count = (/namelist%subset_length, 1/))
-      
   call WriteNoahMP(output, namelist, noahmp, ncid)
 
   status = nf90_close(ncid)

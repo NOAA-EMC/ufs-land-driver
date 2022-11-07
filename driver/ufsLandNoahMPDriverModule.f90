@@ -293,6 +293,13 @@ time_loop : do timestep = 1, namelist%run_timesteps
      call noahmp%InitStates(namelist, now_time)
 
   call forcing%ReadForcing(namelist, static, now_time)
+   noahmp%forcing%surface_pressure_forcing%data   = forcing%surface_pressure
+   noahmp%forcing%temperature_forcing%data        = forcing%temperature
+   noahmp%forcing%specific_humidity_forcing%data  = forcing%specific_humidity
+   noahmp%forcing%downward_longwave_forcing%data  = forcing%downward_longwave
+   noahmp%forcing%downward_shortwave_forcing%data = forcing%downward_shortwave
+   noahmp%forcing%wind_speed_forcing%data         = forcing%wind_speed
+   noahmp%forcing%precipitation_forcing%data      = forcing%precipitation
   
   call interpolate_monthly(now_time, im, static%gvf_monthly, sigmaf)
   call interpolate_monthly(now_time, im, static%albedo_monthly, sfalb)
