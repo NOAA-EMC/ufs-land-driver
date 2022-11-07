@@ -86,14 +86,20 @@ end type noahmp_model_type
 
 type :: noahmp_forcing_type
 
-  type(real1d)  :: air_pressure_forcing     ! forcing air pressure [Pa]
-  type(real1d)  :: precip_convective        ! convective precipitation [mm/s]
-  type(real1d)  :: precip_non_convective    ! non-convective precipitation [mm/s]
-  type(real1d)  :: precip_snow              ! snow precipitation [mm/s]
-  type(real1d)  :: precip_graupel           ! graupel precipitation [mm/s]
-  type(real1d)  :: precip_hail              ! hail precipitation [mm/s]
-  type(real1d)  :: snowfall                 ! land model partitioned snowfall [mm/s]
-  type(real1d)  :: rainfall                 ! land model partitioned rainfall [mm/s]
+  type(real1d)  :: temperature_forcing        ! temperature at forcing level [K]
+  type(real1d)  :: specific_humidity_forcing  ! specific humidity at forcing level [mm/s]
+  type(real1d)  :: surface_pressure_forcing   ! surface pressure [Pa]
+  type(real1d)  :: wind_speed_forcing         ! wind speed at forcing level [m/s]
+  type(real1d)  :: downward_longwave_forcing  ! surface downward longwave forcing [W/m2]
+  type(real1d)  :: downward_shortwave_forcing ! surface downward shortwave forcing [W/m2]
+  type(real1d)  :: precipitation_forcing      ! precipitation forcing [mm/s]
+  type(real1d)  :: precip_convective          ! convective precipitation [mm/s]
+  type(real1d)  :: precip_non_convective      ! non-convective precipitation [mm/s]
+  type(real1d)  :: precip_snow                ! snow precipitation [mm/s]
+  type(real1d)  :: precip_graupel             ! graupel precipitation [mm/s]
+  type(real1d)  :: precip_hail                ! hail precipitation [mm/s]
+  type(real1d)  :: snowfall                   ! land model partitioned snowfall [mm/s]
+  type(real1d)  :: rainfall                   ! land model partitioned rainfall [mm/s]
 
 end type noahmp_forcing_type
 
@@ -511,11 +517,53 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%forcing variables
 
-    call InitReal1d(this%forcing%air_pressure_forcing       , &
+    call InitReal1d(this%forcing%temperature_forcing        , &
                     vector_length                           , &
-                    "air_pressure_forcing"                  , &
-                    "atmospheric pressure at forcing level" , &
+                    "temperature_forcing"                   , &
+                    "temperature at forcing level"          , &
+                    "K"                                     , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%specific_humidity_forcing  , &
+                    vector_length                           , &
+                    "specific_humidity_forcing"             , &
+                    "specific humidtiy at forcing level"    , &
+                    "kg/kg"                                 , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%surface_pressure_forcing   , &
+                    vector_length                           , &
+                    "surface_pressure_forcing"              , &
+                    "atmospheric pressure at surface"       , &
                     "Pa"                                    , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%wind_speed_forcing         , &
+                    vector_length                           , &
+                    "wind_speed_forcing"                    , &
+                    "wind speed at forcing level"           , &
+                    "m/s"                                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%downward_longwave_forcing  , &
+                    vector_length                           , &
+                    "downward_longwave_forcing"             , &
+                    "surface downward longwave forcing"     , &
+                    "W/m2"                                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%downward_shortwave_forcing , &
+                    vector_length                           , &
+                    "downward_shortwave_forcing"            , &
+                    "surface downward shortwave forcing"    , &
+                    "W/m2"                                  , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%forcing%precipitation_forcing      , &
+                    vector_length                           , &
+                    "precipitation_forcing"                 , &
+                    "precipitation forcing"                 , &
+                    "mm/s"                                  , &
                     namelist%output_names, namelist%restart_names)
 
     call InitReal1d(this%forcing%precip_convective          , &
