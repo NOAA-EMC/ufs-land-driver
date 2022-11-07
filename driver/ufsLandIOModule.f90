@@ -20,6 +20,7 @@ contains
 
   subroutine WriteOutputNoah(this, namelist, noah, forcing, now_time)
   
+  use mpi
   use netcdf
   use time_utilities
   use error_handling, only : handle_err
@@ -55,7 +56,8 @@ contains
 
     write(*,*) "Creating: "//trim(this%filename)
 
-    status = nf90_create(this%filename, NF90_NETCDF4, ncid)
+    status = nf90_create(this%filename, NF90_NETCDF4, ncid, comm = MPI_COMM_WORLD, &
+       info = MPI_INFO_NULL)
       if (status /= nf90_noerr) call handle_err(status)
 
 ! Define dimensions in the file.
@@ -285,7 +287,8 @@ contains
 
   end if
     
-  status = nf90_open(this%filename, NF90_WRITE, ncid)
+  status = nf90_open(this%filename, NF90_WRITE, ncid, comm = MPI_COMM_WORLD, &
+       info = MPI_INFO_NULL)
    if (status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "time", varid)
@@ -506,6 +509,7 @@ contains
   
   subroutine WriteOutputNoahMP(this, namelist, noahmp, forcing, now_time)
   
+  use mpi
   use netcdf
   use time_utilities
   use error_handling, only : handle_err
@@ -544,7 +548,8 @@ contains
 
     write(*,*) "Creating: "//trim(this%filename)
 
-    status = nf90_create(this%filename, NF90_NETCDF4, ncid)
+    status = nf90_create(this%filename, NF90_NETCDF4, ncid, comm = MPI_COMM_WORLD, &
+       info = MPI_INFO_NULL)
       if (status /= nf90_noerr) call handle_err(status)
 
 ! Define dimensions in the file.
@@ -585,13 +590,16 @@ contains
 
   end if
   
-  status = nf90_open(this%filename, NF90_WRITE, ncid)
+  status = nf90_open(this%filename, NF90_WRITE, ncid, comm = MPI_COMM_WORLD, &
+       info = MPI_INFO_NULL)
    if (status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "time", varid)
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
   status = nf90_put_var(ncid, varid , now_time , start = (/this%output_counter/))
   
   status = nf90_inq_varid(ncid, "timestep", varid)
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
   status = nf90_put_var(ncid, varid , noahmp%static%timestep   )
 
   call WriteNoahMP(output, namelist, noahmp, ncid, this%output_counter)

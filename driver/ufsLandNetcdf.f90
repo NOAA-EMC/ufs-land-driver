@@ -1,5 +1,6 @@
 module ufsLandNetcdf
 
+use mpi
 use netcdf
 
 contains
@@ -87,6 +88,9 @@ contains
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
+   if (status /= nf90_noerr) call handle_err(status,indata%name)
+
   status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
@@ -121,6 +125,9 @@ contains
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
+   if (status /= nf90_noerr) call handle_err(status,indata%name)
+
   status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
@@ -153,6 +160,9 @@ contains
   integer :: ncid, varid, status, start(2), count(2)
 
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
+   if (status /= nf90_noerr) call handle_err(status,indata%name)
+
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
   status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)

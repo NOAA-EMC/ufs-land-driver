@@ -19,6 +19,7 @@ contains
 
   subroutine WriteRestartNoahMP(this, namelist, noahmp, now_time)
   
+  use mpi
   use netcdf
   use time_utilities
   use error_handling, only : handle_err
@@ -53,7 +54,8 @@ contains
 
   write(*,*) "Creating: "//trim(this%filename)
 
-  status = nf90_create(this%filename, NF90_NETCDF4, ncid)
+  status = nf90_create(this%filename, NF90_NETCDF4, ncid, comm = MPI_COMM_WORLD, &
+     info = MPI_INFO_NULL)
     if (status /= nf90_noerr) call handle_err(status)
 
 ! Define dimensions in the file.
@@ -90,9 +92,11 @@ contains
 ! Start writing restart file
   
   status = nf90_inq_varid(ncid, "time", varid)
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
   status = nf90_put_var(ncid, varid , now_time             )
   
   status = nf90_inq_varid(ncid, "timestep", varid)
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
   status = nf90_put_var(ncid, varid , noahmp%static%timestep   )
   
   call WriteNoahMP(restart, namelist, noahmp, ncid, 1)

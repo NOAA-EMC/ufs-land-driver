@@ -24,6 +24,7 @@ OBJS =	../driver/ufsLandDriver.o \
 	../util/module_time_utilities.o \
 	../util/module_interpolation_utilities.o \
 	../util/module_cosine_zenith.o \
+	../mpi/mpi_land.o \
 	../mod/machine.o \
 	../mod/physcons.o \
 	../mod/funcphys.o \
@@ -43,7 +44,7 @@ all:	ufsLand.exe
 
 ufsLand.exe: $(OBJS)
 	$(COMPILERF90) -o $(@) $(F90FLAGS) $(FREESOURCE) \
-	-I../driver -I../mod -I../util $(NETCDFMOD) $(OBJS) $(NETCDFLIB)
+	-I../driver -I../mod -I../util -I../mpi $(NETCDFMOD) $(OBJS) $(NETCDFLIB)
 
 clean:
 	rm -f *.exe
