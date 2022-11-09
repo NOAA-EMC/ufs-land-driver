@@ -162,6 +162,7 @@ associate (                                                      &
    canopy     => noahmp%diag%canopy_water%data                  ,&
    trans      => noahmp%flux%transpiration_heat%data            ,&
    zorl       => noahmp%diag%z0_total%data                      ,&
+   ztmax      => noahmp%diag%z0h_total%data                     ,&
    ustar1     => noahmp%model%friction_velocity%data            ,&
    smc        => noahmp%state%soil_moisture_vol%data            ,&
    stc        => noahmp%state%temperature_soil%data             ,&
@@ -341,7 +342,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &
             cmm, chh, evbs, evcw, sbsno, pah, ecan, etran, edir, snowc,&
             stm, snohf,smcwlt2, smcref2, wet1, t2mmp, q2mp,zvfun,      &
-            errmsg, errflg)     
+            ztmax, errmsg, errflg)     
 
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
   hflx = hflx * rho * con_cp

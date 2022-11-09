@@ -249,6 +249,10 @@ contains
      (noahmp%diag%z0_total%output_flag  .and. io_type == output )) &
     call Define1dReal(noahmp%diag%z0_total, ncid, realtype, dim_id_loc, dim_id_time)
 
+  if((noahmp%diag%z0h_total%restart_flag .and. io_type == restart) .or. &
+     (noahmp%diag%z0h_total%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%diag%z0h_total, ncid, realtype, dim_id_loc, dim_id_time)
+
   if((noahmp%diag%albedo_total%restart_flag .and. io_type == restart) .or. &
      (noahmp%diag%albedo_total%output_flag  .and. io_type == output )) &
     call Define1dReal(noahmp%diag%albedo_total, ncid, realtype, dim_id_loc, dim_id_time)
@@ -938,6 +942,11 @@ contains
   if((noahmp%diag%z0_total%restart_flag .and. io_type == restart) .or. &
      (noahmp%diag%z0_total%output_flag  .and. io_type == output )) &
     call Write1dReal(noahmp%diag%z0_total, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%diag%z0h_total%restart_flag .and. io_type == restart) .or. &
+     (noahmp%diag%z0h_total%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%diag%z0h_total, ncid,   &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   if((noahmp%diag%albedo_total%restart_flag .and. io_type == restart) .or. &
@@ -1691,6 +1700,10 @@ contains
 
   if(noahmp%diag%z0_total%restart_flag) &
     call Read1dReal(noahmp%diag%z0_total, ncid,   &
+      start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%diag%z0h_total%restart_flag) &
+    call Read1dReal(noahmp%diag%z0h_total, ncid,   &
       start = (/namelist%subset_start,1/), count = (/namelist%subset_length, 1/))
 
   if(noahmp%diag%albedo_total%restart_flag) &
