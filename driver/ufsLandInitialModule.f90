@@ -201,6 +201,12 @@ contains
   noahmp%state%temperature_soil%data       = this%soil_temperature
   noahmp%state%soil_moisture_vol%data      = this%soil_moisture
   noahmp%state%soil_liquid_vol%data        = this%soil_liquid
+
+  noahmp%model%pbl_height%data               = 1000.0
+  noahmp%model%mo_length_inverse%data        = 1.0
+  noahmp%model%heat_flux_multiplier%data     = 0.0
+  noahmp%model%moisture_flux_multiplier%data = 0.0
+  noahmp%model%friction_velocity%data        = 0.1
   
   end subroutine TransferInitialNoahMP
 
