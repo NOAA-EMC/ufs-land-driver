@@ -4,6 +4,7 @@
   init_file        = "/Users/barlage/Downloads/ufs-land-testing/forcing/ufs-land_C96_init_fields_1hr.nc"
   forcing_dir      = "/Users/barlage/Downloads/ufs-land-testing/forcing/"
   
+  output_frequency_s = 3600
   separate_output = .true.
   output_dir       = "./"
 

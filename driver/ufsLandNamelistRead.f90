@@ -11,9 +11,10 @@ type, public :: namelist_type
   character*128  :: static_file
   character*128  :: init_file
   character*128  :: forcing_dir
-  character*128  :: output_dir
   
   logical        :: separate_output
+  integer        :: output_frequency_s
+  character*128  :: output_dir
   
   integer        :: timestep_seconds
 
@@ -26,6 +27,7 @@ type, public :: namelist_type
   character*19   :: simulation_end
   integer        :: run_timesteps
   integer        :: restart_timesteps
+  integer        :: output_timesteps
   
   integer        :: location_start
   integer        :: location_end
@@ -102,9 +104,10 @@ contains
     character*128  :: static_file = ""
     character*128  :: init_file = ""
     character*128  :: forcing_dir = ""
-    character*128  :: output_dir = ""
     
+    integer        :: output_frequency_s = 0
     logical        :: separate_output = .false.
+    character*128  :: output_dir = ""
   
     integer        :: timestep_seconds = -999
 
@@ -179,7 +182,8 @@ contains
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
 			    run_seconds, run_timesteps, separate_output, location_start, location_end, &
-			    restart_dir, restart_frequency_s, restart_simulation, restart_date
+			    restart_dir, restart_frequency_s, restart_simulation, restart_date, &
+                            output_frequency_s
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
     namelist / soil_setup / soil_level_thickness, soil_level_nodes
@@ -245,6 +249,7 @@ contains
     this%static_file          = static_file
     this%init_file            = init_file
     this%forcing_dir          = forcing_dir
+    this%output_frequency_s   = output_frequency_s
     this%output_dir           = output_dir
     this%separate_output      = separate_output
     this%timestep_seconds     = timestep_seconds
@@ -353,10 +358,20 @@ contains
       stop "no valid simulation length in namelist"
     end if
     
-    if(mod(restart_frequency_s,timestep_seconds) == 0) then
-      this%restart_timesteps = restart_frequency_s / timestep_seconds
-    else
-      stop "restart time not divisible by timestep"
+    if(restart_frequency_s > 0) then
+      if(mod(restart_frequency_s,timestep_seconds) == 0) then
+        this%restart_timesteps = restart_frequency_s / timestep_seconds
+      else
+        stop "restart time not divisible by timestep"
+      end if
+    end if
+
+    if(output_frequency_s > 0) then
+      if(mod(output_frequency_s,timestep_seconds) == 0) then
+        this%output_timesteps = output_frequency_s / timestep_seconds
+      else
+        stop "output time not divisible by timestep"
+      end if
     end if
 
     this%initial_time = huge(1.d0)
