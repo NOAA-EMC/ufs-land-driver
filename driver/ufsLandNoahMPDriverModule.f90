@@ -263,13 +263,6 @@ allocate(     fm101(im))
 allocate(      fh21(im))
 allocate(     zvfun(im))
 
-! initialize some coupling related variables
-pblh   = 1000.0  ! arbitrary at 1000m
-rmol1  = 1.0
-flhc1  = 0.0
-flqc1  = 0.0
-ustar1 = 0.1
-
 dry        = .true.
   where(static%vegetation_category == static%iswater) dry = .false.
 flag_iter  = .true.
