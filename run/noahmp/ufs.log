@@ -1,0 +1,396 @@
+ Starting first read: /cpc/nidis/ufsland/uldas/forcing/ll0p125_conus_1950-01-01.nc
+ Searching for forcing at time: 1950-01-01 01:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_01-00-00.nc
+ Searching for forcing at time: 1950-01-01 02:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_02-00-00.nc
+ Searching for forcing at time: 1950-01-01 03:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_03-00-00.nc
+ Searching for forcing at time: 1950-01-01 04:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_04-00-00.nc
+ Searching for forcing at time: 1950-01-01 05:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_05-00-00.nc
+ Searching for forcing at time: 1950-01-01 06:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_06-00-00.nc
+ Searching for forcing at time: 1950-01-01 07:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_07-00-00.nc
+ Searching for forcing at time: 1950-01-01 08:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_08-00-00.nc
+ Searching for forcing at time: 1950-01-01 09:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_09-00-00.nc
+ Searching for forcing at time: 1950-01-01 10:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_10-00-00.nc
+ Searching for forcing at time: 1950-01-01 11:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_11-00-00.nc
+ Searching for forcing at time: 1950-01-01 12:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_12-00-00.nc
+ Searching for forcing at time: 1950-01-01 13:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_13-00-00.nc
+ Searching for forcing at time: 1950-01-01 14:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_14-00-00.nc
+ Searching for forcing at time: 1950-01-01 15:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_15-00-00.nc
+ Searching for forcing at time: 1950-01-01 16:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_16-00-00.nc
+ Searching for forcing at time: 1950-01-01 17:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_17-00-00.nc
+ Searching for forcing at time: 1950-01-01 18:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_18-00-00.nc
+ Searching for forcing at time: 1950-01-01 19:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_19-00-00.nc
+ Searching for forcing at time: 1950-01-01 20:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_20-00-00.nc
+ Searching for forcing at time: 1950-01-01 21:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_21-00-00.nc
+ Searching for forcing at time: 1950-01-01 22:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_22-00-00.nc
+ Searching for forcing at time: 1950-01-01 23:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-01_23-00-00.nc
+ Searching for forcing at time: 1950-01-02 00:00:00
+ Resetting forcing counter to beginning of file
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_00-00-00.nc
+ Creating: /cpc/nidis/ufsland/uldas/restart/ufs_land_restart.1950-01-02_00-00-00.nc
+ Searching for forcing at time: 1950-01-02 01:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_01-00-00.nc
+ Searching for forcing at time: 1950-01-02 02:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_02-00-00.nc
+ Searching for forcing at time: 1950-01-02 03:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_03-00-00.nc
+ Searching for forcing at time: 1950-01-02 04:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_04-00-00.nc
+ Searching for forcing at time: 1950-01-02 05:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_05-00-00.nc
+ Searching for forcing at time: 1950-01-02 06:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_06-00-00.nc
+ Searching for forcing at time: 1950-01-02 07:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_07-00-00.nc
+ Searching for forcing at time: 1950-01-02 08:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_08-00-00.nc
+ Searching for forcing at time: 1950-01-02 09:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_09-00-00.nc
+ Searching for forcing at time: 1950-01-02 10:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_10-00-00.nc
+ Searching for forcing at time: 1950-01-02 11:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_11-00-00.nc
+ Searching for forcing at time: 1950-01-02 12:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_12-00-00.nc
+ Searching for forcing at time: 1950-01-02 13:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_13-00-00.nc
+ Searching for forcing at time: 1950-01-02 14:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_14-00-00.nc
+ Searching for forcing at time: 1950-01-02 15:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_15-00-00.nc
+ Searching for forcing at time: 1950-01-02 16:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_16-00-00.nc
+ Searching for forcing at time: 1950-01-02 17:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_17-00-00.nc
+ Searching for forcing at time: 1950-01-02 18:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_18-00-00.nc
+ Searching for forcing at time: 1950-01-02 19:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_19-00-00.nc
+ Searching for forcing at time: 1950-01-02 20:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_20-00-00.nc
+ Searching for forcing at time: 1950-01-02 21:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_21-00-00.nc
+ Searching for forcing at time: 1950-01-02 22:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_22-00-00.nc
+ Searching for forcing at time: 1950-01-02 23:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-02_23-00-00.nc
+ Searching for forcing at time: 1950-01-03 00:00:00
+ Resetting forcing counter to beginning of file
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_00-00-00.nc
+ Creating: /cpc/nidis/ufsland/uldas/restart/ufs_land_restart.1950-01-03_00-00-00.nc
+ Searching for forcing at time: 1950-01-03 01:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_01-00-00.nc
+ Searching for forcing at time: 1950-01-03 02:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_02-00-00.nc
+ Searching for forcing at time: 1950-01-03 03:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_03-00-00.nc
+ Searching for forcing at time: 1950-01-03 04:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_04-00-00.nc
+ Searching for forcing at time: 1950-01-03 05:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_05-00-00.nc
+ Searching for forcing at time: 1950-01-03 06:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_06-00-00.nc
+ Searching for forcing at time: 1950-01-03 07:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_07-00-00.nc
+ Searching for forcing at time: 1950-01-03 08:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_08-00-00.nc
+ Searching for forcing at time: 1950-01-03 09:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_09-00-00.nc
+ Searching for forcing at time: 1950-01-03 10:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_10-00-00.nc
+ Searching for forcing at time: 1950-01-03 11:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_11-00-00.nc
+ Searching for forcing at time: 1950-01-03 12:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_12-00-00.nc
+ Searching for forcing at time: 1950-01-03 13:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_13-00-00.nc
+ Searching for forcing at time: 1950-01-03 14:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_14-00-00.nc
+ Searching for forcing at time: 1950-01-03 15:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_15-00-00.nc
+ Searching for forcing at time: 1950-01-03 16:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_16-00-00.nc
+ Searching for forcing at time: 1950-01-03 17:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_17-00-00.nc
+ Searching for forcing at time: 1950-01-03 18:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_18-00-00.nc
+ Searching for forcing at time: 1950-01-03 19:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_19-00-00.nc
+ Searching for forcing at time: 1950-01-03 20:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_20-00-00.nc
+ Searching for forcing at time: 1950-01-03 21:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_21-00-00.nc
+ Searching for forcing at time: 1950-01-03 22:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_22-00-00.nc
+ Searching for forcing at time: 1950-01-03 23:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-03_23-00-00.nc
+ Searching for forcing at time: 1950-01-04 00:00:00
+ Resetting forcing counter to beginning of file
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_00-00-00.nc
+ Creating: /cpc/nidis/ufsland/uldas/restart/ufs_land_restart.1950-01-04_00-00-00.nc
+ Searching for forcing at time: 1950-01-04 01:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_01-00-00.nc
+ Searching for forcing at time: 1950-01-04 02:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_02-00-00.nc
+ Searching for forcing at time: 1950-01-04 03:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_03-00-00.nc
+ Searching for forcing at time: 1950-01-04 04:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_04-00-00.nc
+ Searching for forcing at time: 1950-01-04 05:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_05-00-00.nc
+ Searching for forcing at time: 1950-01-04 06:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_06-00-00.nc
+ Searching for forcing at time: 1950-01-04 07:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_07-00-00.nc
+ Searching for forcing at time: 1950-01-04 08:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_08-00-00.nc
+ Searching for forcing at time: 1950-01-04 09:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_09-00-00.nc
+ Searching for forcing at time: 1950-01-04 10:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_10-00-00.nc
+ Searching for forcing at time: 1950-01-04 11:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_11-00-00.nc
+ Searching for forcing at time: 1950-01-04 12:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_12-00-00.nc
+ Searching for forcing at time: 1950-01-04 13:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_13-00-00.nc
+ Searching for forcing at time: 1950-01-04 14:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_14-00-00.nc
+ Searching for forcing at time: 1950-01-04 15:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_15-00-00.nc
+ Searching for forcing at time: 1950-01-04 16:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_16-00-00.nc
+ Searching for forcing at time: 1950-01-04 17:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_17-00-00.nc
+ Searching for forcing at time: 1950-01-04 18:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_18-00-00.nc
+ Searching for forcing at time: 1950-01-04 19:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_19-00-00.nc
+ Searching for forcing at time: 1950-01-04 20:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_20-00-00.nc
+ Searching for forcing at time: 1950-01-04 21:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_21-00-00.nc
+ Searching for forcing at time: 1950-01-04 22:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_22-00-00.nc
+ Searching for forcing at time: 1950-01-04 23:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-04_23-00-00.nc
+ Searching for forcing at time: 1950-01-05 00:00:00
+ Resetting forcing counter to beginning of file
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_00-00-00.nc
+ Creating: /cpc/nidis/ufsland/uldas/restart/ufs_land_restart.1950-01-05_00-00-00.nc
+ Searching for forcing at time: 1950-01-05 01:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_01-00-00.nc
+ Searching for forcing at time: 1950-01-05 02:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_02-00-00.nc
+ Searching for forcing at time: 1950-01-05 03:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_03-00-00.nc
+ Searching for forcing at time: 1950-01-05 04:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_04-00-00.nc
+ Searching for forcing at time: 1950-01-05 05:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_05-00-00.nc
+ Searching for forcing at time: 1950-01-05 06:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_06-00-00.nc
+ Searching for forcing at time: 1950-01-05 07:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_07-00-00.nc
+ Searching for forcing at time: 1950-01-05 08:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_08-00-00.nc
+ Searching for forcing at time: 1950-01-05 09:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_09-00-00.nc
+ Searching for forcing at time: 1950-01-05 10:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_10-00-00.nc
+ Searching for forcing at time: 1950-01-05 11:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_11-00-00.nc
+ Searching for forcing at time: 1950-01-05 12:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_12-00-00.nc
+ Searching for forcing at time: 1950-01-05 13:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_13-00-00.nc
+ Searching for forcing at time: 1950-01-05 14:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_14-00-00.nc
+ Searching for forcing at time: 1950-01-05 15:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_15-00-00.nc
+ Searching for forcing at time: 1950-01-05 16:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_16-00-00.nc
+ Searching for forcing at time: 1950-01-05 17:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_17-00-00.nc
+ Searching for forcing at time: 1950-01-05 18:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_18-00-00.nc
+ Searching for forcing at time: 1950-01-05 19:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_19-00-00.nc
+ Searching for forcing at time: 1950-01-05 20:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_20-00-00.nc
+ Searching for forcing at time: 1950-01-05 21:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_21-00-00.nc
+ Searching for forcing at time: 1950-01-05 22:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_22-00-00.nc
+ Searching for forcing at time: 1950-01-05 23:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-05_23-00-00.nc
+ Searching for forcing at time: 1950-01-06 00:00:00
+ Resetting forcing counter to beginning of file
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_00-00-00.nc
+ Creating: /cpc/nidis/ufsland/uldas/restart/ufs_land_restart.1950-01-06_00-00-00.nc
+ Searching for forcing at time: 1950-01-06 01:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_01-00-00.nc
+ Searching for forcing at time: 1950-01-06 02:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_02-00-00.nc
+ Searching for forcing at time: 1950-01-06 03:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_03-00-00.nc
+ Searching for forcing at time: 1950-01-06 04:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_04-00-00.nc
+ Searching for forcing at time: 1950-01-06 05:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_05-00-00.nc
+ Searching for forcing at time: 1950-01-06 06:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_06-00-00.nc
+ Searching for forcing at time: 1950-01-06 07:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_07-00-00.nc
+ Searching for forcing at time: 1950-01-06 08:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_08-00-00.nc
+ Searching for forcing at time: 1950-01-06 09:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_09-00-00.nc
+ Searching for forcing at time: 1950-01-06 10:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_10-00-00.nc
+ Searching for forcing at time: 1950-01-06 11:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_11-00-00.nc
+ Searching for forcing at time: 1950-01-06 12:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_12-00-00.nc
+ Searching for forcing at time: 1950-01-06 13:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_13-00-00.nc
+ Searching for forcing at time: 1950-01-06 14:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_14-00-00.nc
+ Searching for forcing at time: 1950-01-06 15:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_15-00-00.nc
+ Searching for forcing at time: 1950-01-06 16:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_16-00-00.nc
+ Searching for forcing at time: 1950-01-06 17:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_17-00-00.nc
+ Searching for forcing at time: 1950-01-06 18:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_18-00-00.nc
+ Searching for forcing at time: 1950-01-06 19:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_19-00-00.nc
+ Searching for forcing at time: 1950-01-06 20:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_20-00-00.nc
+ Searching for forcing at time: 1950-01-06 21:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_21-00-00.nc
+ Searching for forcing at time: 1950-01-06 22:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_22-00-00.nc
+ Searching for forcing at time: 1950-01-06 23:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-06_23-00-00.nc
+ Searching for forcing at time: 1950-01-07 00:00:00
+ Resetting forcing counter to beginning of file
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_00-00-00.nc
+ Creating: /cpc/nidis/ufsland/uldas/restart/ufs_land_restart.1950-01-07_00-00-00.nc
+ Searching for forcing at time: 1950-01-07 01:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_01-00-00.nc
+ Searching for forcing at time: 1950-01-07 02:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_02-00-00.nc
+ Searching for forcing at time: 1950-01-07 03:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_03-00-00.nc
+ Searching for forcing at time: 1950-01-07 04:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_04-00-00.nc
+ Searching for forcing at time: 1950-01-07 05:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_05-00-00.nc
+ Searching for forcing at time: 1950-01-07 06:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_06-00-00.nc
+ Searching for forcing at time: 1950-01-07 07:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_07-00-00.nc
+ Searching for forcing at time: 1950-01-07 08:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_08-00-00.nc
+ Searching for forcing at time: 1950-01-07 09:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_09-00-00.nc
+ Searching for forcing at time: 1950-01-07 10:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_10-00-00.nc
+ Searching for forcing at time: 1950-01-07 11:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_11-00-00.nc
+ Searching for forcing at time: 1950-01-07 12:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_12-00-00.nc
+ Searching for forcing at time: 1950-01-07 13:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_13-00-00.nc
+ Searching for forcing at time: 1950-01-07 14:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_14-00-00.nc
+ Searching for forcing at time: 1950-01-07 15:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_15-00-00.nc
+ Searching for forcing at time: 1950-01-07 16:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_16-00-00.nc
+ Searching for forcing at time: 1950-01-07 17:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_17-00-00.nc
+ Searching for forcing at time: 1950-01-07 18:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_18-00-00.nc
+ Searching for forcing at time: 1950-01-07 19:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_19-00-00.nc
+ Searching for forcing at time: 1950-01-07 20:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_20-00-00.nc
+ Searching for forcing at time: 1950-01-07 21:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_21-00-00.nc
+ Searching for forcing at time: 1950-01-07 22:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_22-00-00.nc
+ Searching for forcing at time: 1950-01-07 23:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-07_23-00-00.nc
+ Searching for forcing at time: 1950-01-08 00:00:00
+ Resetting forcing counter to beginning of file
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_00-00-00.nc
+ Creating: /cpc/nidis/ufsland/uldas/restart/ufs_land_restart.1950-01-08_00-00-00.nc
+ Searching for forcing at time: 1950-01-08 01:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_01-00-00.nc
+ Searching for forcing at time: 1950-01-08 02:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_02-00-00.nc
+ Searching for forcing at time: 1950-01-08 03:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_03-00-00.nc
+ Searching for forcing at time: 1950-01-08 04:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_04-00-00.nc
+ Searching for forcing at time: 1950-01-08 05:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_05-00-00.nc
+ Searching for forcing at time: 1950-01-08 06:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_06-00-00.nc
+ Searching for forcing at time: 1950-01-08 07:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_07-00-00.nc
+ Searching for forcing at time: 1950-01-08 08:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_08-00-00.nc
+ Searching for forcing at time: 1950-01-08 09:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_09-00-00.nc
+ Searching for forcing at time: 1950-01-08 10:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_10-00-00.nc
+ Searching for forcing at time: 1950-01-08 11:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_11-00-00.nc
+ Searching for forcing at time: 1950-01-08 12:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_12-00-00.nc
+ Searching for forcing at time: 1950-01-08 13:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_13-00-00.nc
+ Searching for forcing at time: 1950-01-08 14:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_14-00-00.nc
+ Searching for forcing at time: 1950-01-08 15:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_15-00-00.nc
+ Searching for forcing at time: 1950-01-08 16:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_16-00-00.nc
+ Searching for forcing at time: 1950-01-08 17:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_17-00-00.nc
+ Searching for forcing at time: 1950-01-08 18:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_18-00-00.nc
+ Searching for forcing at time: 1950-01-08 19:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_19-00-00.nc
+ Searching for forcing at time: 1950-01-08 20:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_20-00-00.nc
+ Searching for forcing at time: 1950-01-08 21:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_21-00-00.nc
+ Searching for forcing at time: 1950-01-08 22:00:00
+ Creating: /dev/shm/lixu/noahmp/ufs_land_output.1950-01-08_22-00-00.nc
+ Searching for forcing at time: 1950-01-08 23:00:00
