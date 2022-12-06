@@ -162,69 +162,75 @@ where(interp_var < 0.0 .or. cosz <= 0.0) interp_var = 0.0
 
 end subroutine interpolate_gswp3_zenith
 
-subroutine interpolate_gswp3_zenith1(now_time, last_time, next_time, vector_length, &
+! add for gefsv12 backward average 3hr
+subroutine interpolate_backward_zenith(now_time, next_time, vector_length, &
                                     latitude, longitude, timestep,      &
-                                    last_var, next_var, interp_var)
+                                    next_var, interp_var)
 
 use cosine_zenith
 
 implicit none
 
-double precision                  :: now_time, last_time, next_time
-integer                           :: vector_length, timestep, num_timestep
-real, dimension(vector_length)    :: latitude, longitude, last_var,next_var, interp_var
+double precision                  :: now_time, next_time
+integer                           :: vector_length, timestep
+real, dimension(vector_length)    :: latitude, longitude, next_var, interp_var
 
-double precision                  :: calc_time, tdiff
-real, dimension(vector_length)    :: cosz_last, cosz_now, cosz_next
+double precision                  :: calc_time
+real, dimension(vector_length)    :: cosz1, cosz2, cosz3, coszavg, cosz
 
 real                              :: julian
 real, parameter                   :: critical_energy = 50.0
 real, parameter                   :: critical_cosz   = 0.0001
 
-!  print*,'in SUB2, now_time,last_time:',now_time,last_time
-  if(now_time < last_time) &
-     stop "in SUB2: problem with time in interpolate_zenith_angle"
+  if(now_time > next_time) &
+     stop "problem with time in interpolate_zenith_angle"
 
-! Hailan Wang 6/17/2022
-! num_timestep: check temporal resolution of atmospheric forcing (e.g., 3-hourly, 6-hourly)
-! tdiff: time difference between now_time and last_time / timestep 
-  num_timestep = ( next_time - last_time ) / timestep
-  tdiff = ( now_time - last_time ) / timestep
+! calculate zenith angle between the model timesteps for this forcing average
 
-! calculate zenith angle at now_time (0.5 hour forward)
+  calc_time = next_time - 0.5*timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz1, julian)
 
-  calc_time = last_time + 0.5*timestep
-  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz_last, julian)
+  calc_time = next_time - 0.5*timestep - timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz2, julian)
 
-  calc_time = last_time + (0.5 + tdiff ) *timestep
-  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz_now, julian)
+  calc_time = next_time - 0.5*timestep - 2*timestep
+  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz3, julian)
 
-  calc_time = last_time + (0.5 + num_timestep) *timestep 
-  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz_next, julian)
-
-  where(cosz_last <= critical_cosz) cosz_last = 0.0
-  where(cosz_now  <= critical_cosz) cosz_now = 0.0
-  where(cosz_next <= critical_cosz) cosz_next = 0.0
+  where(cosz1 <= critical_cosz) cosz1 = 0.0
+  where(cosz2 <= critical_cosz) cosz2 = 0.0
+  where(cosz3 <= critical_cosz) cosz3 = 0.0
+  
+  coszavg = (cosz1 + cosz2 + cosz3) / 3.0
   
   interp_var = 0.0
 
-! for interpolation, only use max(last_var, next_var), scaled by cosz/cosz_last(or next)
-!
-  where(last_var>next_var.and.last_var>0) interp_var=cosz_now/cosz_last*last_var
-  where(last_var<next_var.and.next_var>0) interp_var=cosz_now/cosz_next*next_var
+! find which time to interpolate
 
-!  print*,'------interpolate_gswp3_zenith------'
-!  print*,'now_time,last_time,now-last'
-!  print*,now_time/3600,last_time/3600,(now_time-last_time)/3600
-!  print*,'cosz_last,cosz_now,cosz_next,last_var,next_var,interp_var'
-!  print*,cosz_last(1700),cosz_now(1700),cosz_next(1700),last_var(1700),&
-!	next_var(1700),interp_var(1700)
+  if(now_time == next_time) then
+    cosz = cosz1
+  elseif(now_time == next_time - real(timestep)) then
+    cosz = cosz2
+  elseif(now_time == next_time - real(2*timestep)) then
+    cosz = cosz3
+  else
+    stop "problem interpolating in gswp3_zenith"
+  end if
+
+  where(coszavg > 0.0) interp_var = cosz/coszavg*next_var
+
+!  print*,'------interpolate_backward_zenith------'
+!  print*,'now_time,next_time,now-last'
+!  print*,now_time/3600,next_time/3600,(now_time-next_time)/3600
+!  print*,'cosz1,cosz2,cosz3,coszavg,cosz,next_var,interp_var'
+!  print*,cosz1(1700),cosz2(1700),cosz3(1700),coszavg(1700),&
+!	cosz(1700),next_var(1700),interp_var(1700)
 
 ! final data check
 
-where(interp_var < 0.0 .or. cosz_now <= 0.0) interp_var = 0.0
+where(interp_var < 0.0 .or. cosz <= 0.0) interp_var = 0.0
 
-end subroutine interpolate_gswp3_zenith1
+
+end subroutine interpolate_backward_zenith
 
 end module interpolation_utilities
 

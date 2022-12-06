@@ -41,7 +41,7 @@ contains
   if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
      namelist%separate_output) then
   
-    call date_from_since(reference_date, now_time, nowdate)
+    call date_from_since(namelist%reference_date, now_time, nowdate)
     read(nowdate( 1: 4),'(i4.4)') yyyy
     read(nowdate( 6: 7),'(i2.2)') mm
     read(nowdate( 9:10),'(i2.2)') dd
@@ -72,7 +72,7 @@ contains
 
     status = nf90_def_var(ncid, "time", NF90_DOUBLE, dim_id_time, varid)
       status = nf90_put_att(ncid, varid, "long_name", "time")
-      status = nf90_put_att(ncid, varid, "units", "seconds since "//reference_date)
+      status = nf90_put_att(ncid, varid, "units", "seconds since "//namelist%reference_date)
 
     status = nf90_def_var(ncid, "delt", NF90_FLOAT, (/dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "time step")
@@ -528,7 +528,7 @@ contains
   if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
      namelist%separate_output ) then
   
-    call date_from_since(reference_date, now_time, nowdate)
+    call date_from_since(namelist%reference_date, now_time, nowdate)
     read(nowdate( 1: 4),'(i4.4)') yyyy
     read(nowdate( 6: 7),'(i2.2)') mm
     read(nowdate( 9:10),'(i2.2)') dd
@@ -563,7 +563,7 @@ contains
 
     status = nf90_def_var(ncid, "time", NF90_DOUBLE, dim_id_time, varid)
       status = nf90_put_att(ncid, varid, "long_name", "time")
-      status = nf90_put_att(ncid, varid, "units", "seconds since "//reference_date)
+      status = nf90_put_att(ncid, varid, "units", "seconds since "//namelist%reference_date)
 
     status = nf90_def_var(ncid, "timestep", NF90_FLOAT, (/dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "time step")

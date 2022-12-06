@@ -10,7 +10,7 @@
 
   restart_frequency_s = 86400
   restart_simulation  = .True.
-  restart_date        = "2022-07-03 23:00:00"
+  restart_date        = "2022-10-03 23:00:00"
   restart_dir         = "/cpc/drought/pdf/noah/noah3439/restart/"
 
   timestep_seconds = 3600

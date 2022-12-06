@@ -161,7 +161,7 @@ contains
   use netcdf
   use error_handling, only : handle_err
   use time_utilities
-  use interpolation_utilities, only : interpolate_linear, interpolate_gswp3_zenith
+  use interpolation_utilities, only : interpolate_linear, interpolate_gswp3_zenith, interpolate_backward_zenith
   use ufsLandStaticModule, only : static_type
   
   class(forcing_type)  :: this
@@ -176,8 +176,11 @@ contains
   integer :: times_in_file
   double precision  :: file_next_time
   
-  call date_from_since("1970-01-01 00:00:00", now_time, now_date)
-  call date_from_since("1970-01-01 00:00:00", next_time, next_date)
+
+ 
+  call date_from_since(namelist%reference_date, now_time, now_date)
+  call date_from_since(namelist%reference_date, next_time, next_date)
+  
   
   write(*,*) "Searching for forcing at time: ",now_date
   
@@ -307,6 +310,15 @@ contains
 			      namelist%timestep_seconds,                              &
                               next_downward_shortwave,                                &
                               this%downward_shortwave)
+
+    elseif(trim(namelist%forcing_interp_solar) == "backward_average") then
+
+      call interpolate_backward_zenith(now_time, next_time, namelist%subset_length,      &
+                              static%latitude, static%longitude,                      &
+			      namelist%timestep_seconds,                              &
+                              next_downward_shortwave,                                &
+                              this%downward_shortwave)
+
     end if
     
     last_time               = next_time
@@ -353,6 +365,16 @@ contains
 			      namelist%timestep_seconds,                              &
                               last_downward_shortwave,                                &
                               this%downward_shortwave)
+
+    elseif(trim(namelist%forcing_interp_solar) == "backward_zenith") then
+
+      call interpolate_backward_zenith(now_time, next_time, namelist%subset_length,      &
+                              static%latitude, static%longitude,                      &
+			      namelist%timestep_seconds,                              &
+                              next_downward_shortwave,                                &
+                              this%downward_shortwave)
+
+
     end if
 
     this%precipitation = next_precipitation

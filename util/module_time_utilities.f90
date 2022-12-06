@@ -25,6 +25,8 @@ integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 
   limit = huge(1)
   if(sec_since > limit .or. sec_since < 0) stop "not capable of dealing with sec_since"
 
+  !print*,since_date
+
   read(since_date( 1: 4),  '(i4)') since_yyyy
   read(since_date( 6: 7),  '(i2)') since_mm
   read(since_date( 9:10),  '(i2)') since_dd

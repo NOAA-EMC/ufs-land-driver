@@ -606,7 +606,7 @@ contains
   real                 :: masslai, masssai, snow_depth_meters
   integer              :: ilevel, iloc, isnow
 
-  call date_from_since("1970-01-01 00:00:00", now_time, current_date)
+  call date_from_since(namelist%reference_date, now_time, current_date)
   read(current_date( 6: 7),  '(i2)') current_mm
   
   do iloc = 1, this%static%vector_length
