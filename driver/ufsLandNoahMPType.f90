@@ -106,6 +106,7 @@ end type noahmp_forcing_type
 type :: noahmp_diag_type
 
   type(real1d)  :: z0_total               ! weighted z0 sent to coupled model [m]
+  type(real1d)  :: z0h_total              ! weighted z0h sent to coupled model [m]
   type(real1d)  :: albedo_total           ! total surface albedo [-]
   type(real2d)  :: albedo_direct          ! direct vis/nir albedo [-]
   type(real2d)  :: albedo_diffuse         ! diffuse vis/nir albedo [-]
@@ -622,6 +623,13 @@ contains
                     vector_length                                         , &
                     "z0_total"                                            , &
                     "grid composite surface roughness sent to atmosphere" , &
+                    "m"                                                   , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%diag%z0h_total                                   , &
+                    vector_length                                         , &
+                    "z0h_total"                                           , &
+                    "grid composite surface thermal roughness sent to atmosphere" , &
                     "m"                                                   , &
                     namelist%output_names, namelist%restart_names)
 
