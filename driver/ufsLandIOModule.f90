@@ -596,7 +596,7 @@ contains
   status = nf90_inq_varid(ncid, "timestep", varid)
   status = nf90_put_var(ncid, varid , noahmp%static%timestep   )
 
-  call WriteNoahMP(output, namelist, noahmp, ncid)
+  call WriteNoahMP(output, namelist, noahmp, ncid, this%output_counter)
 
   status = nf90_close(ncid)
 
