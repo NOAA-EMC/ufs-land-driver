@@ -219,6 +219,7 @@ type :: noahmp_flux_type
   type(real1d)  :: net_eco_exchange        ! net ecosystem exchange [g/m2/s CO2]
   type(real1d)  :: global_prim_prod        ! global primary production [g/m2/s C]
   type(real1d)  :: net_prim_prod           ! net primary productivity [g/m2/s C]
+  type(real1d)  :: canopy_heat_storage     ! heat transfered to the canopy mass [W/m2]
 
 end type noahmp_flux_type
 
@@ -1364,6 +1365,13 @@ contains
                     "net_prim_prod"            , &
                     "net primary productivity" , &
                     "g/m2/s C"                 , &
+                    namelist%output_names, namelist%restart_names)
+
+    call InitReal1d(this%flux%canopy_heat_storage     , &
+                    vector_length                     , &
+                    "canopy_heat_storage"             , &
+                    "heat transferred to canopy mass" , &
+                    "W/m2"                            , &
                     namelist%output_names, namelist%restart_names)
 
 ! Set the default restart flags

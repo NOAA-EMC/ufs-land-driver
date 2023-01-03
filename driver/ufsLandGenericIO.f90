@@ -665,6 +665,10 @@ contains
      (noahmp%flux%net_prim_prod%output_flag  .and. io_type == output )) &
     call Define1dReal(noahmp%flux%net_prim_prod, ncid, realtype, dim_id_loc, dim_id_time)
 
+  if((noahmp%flux%canopy_heat_storage%restart_flag .and. io_type == restart) .or. &
+     (noahmp%flux%canopy_heat_storage%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%flux%canopy_heat_storage, ncid, realtype, dim_id_loc, dim_id_time)
+
   end subroutine DefineNoahMP
 
   subroutine WriteNoahMP(io_type, namelist, noahmp, ncid, output_counter)
@@ -1479,6 +1483,11 @@ contains
     call Write1dReal(noahmp%flux%net_prim_prod, ncid,   &
       start = (/local_start,output_counter/), count = (/namelist%subset_length, 1/))
 
+  if((noahmp%flux%canopy_heat_storage%restart_flag .and. io_type == restart) .or. &
+     (noahmp%flux%canopy_heat_storage%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%flux%canopy_heat_storage, ncid,   &
+      start = (/local_start,output_counter/), count = (/namelist%subset_length, 1/))
+
   end subroutine WriteNoahMP
 
   subroutine ReadNoahMP(namelist, noahmp, ncid)
@@ -2135,6 +2144,10 @@ contains
 
   if(noahmp%flux%net_prim_prod%restart_flag) &
     call Read1dReal(noahmp%flux%net_prim_prod, ncid,   &
+      start = (/local_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%flux%canopy_heat_storage%restart_flag) &
+    call Read1dReal(noahmp%flux%canopy_heat_storage, ncid,   &
       start = (/local_start,1/), count = (/namelist%subset_length, 1/))
 
   end subroutine ReadNoahMP
