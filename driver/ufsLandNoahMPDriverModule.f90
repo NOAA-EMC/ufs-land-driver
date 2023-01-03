@@ -350,15 +350,43 @@ time_loop : do timestep = 1, namelist%run_timesteps
   
   where(dswsfc>0.0 .and. sfalb<0.0) dswsfc = 0.0
 
-  if((namelist%output_frequency_s > 0 .and. mod(timestep,namelist%output_timesteps) == 0) .or. &
-     (namelist%output_frequency_s == -1 .and. now_date(12:19) ==    "00:00:00")           .or. &
-     (namelist%output_frequency_s == -2 .and. now_date( 9:19) == "01 00:00:00") )              &
-      call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+  output_cases : select case(namelist%output_frequency_s)
+  
+    case( 1 : )  ! output based on number of timesteps
 
-  if((namelist%restart_frequency_s > 0 .and. mod(timestep,namelist%restart_timesteps) == 0) .or. &
-     (namelist%restart_frequency_s == -1 .and. now_date(12:19) ==    "00:00:00")            .or. &
-     (namelist%restart_frequency_s == -2 .and. now_date( 9:19) == "01 00:00:00") )               &
-      call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+      if(mod(timestep,namelist%output_timesteps) == 0) &
+        call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+
+    case( -1 )  ! output daily at 00Z
+
+      if(now_date(12:19) == "00:00:00") &
+        call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+      
+    case( -2 )  ! output monthly at 00Z on 1st of month
+
+      if(now_date( 9:19) == "01 00:00:00") &
+        call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+      
+  end select output_cases
+
+  restart_cases : select case(namelist%restart_frequency_s)
+  
+    case( 1 : )  ! restart based on number of timesteps
+
+      if(mod(timestep,namelist%restart_timesteps) == 0) &
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+
+    case( -1 )  ! restart daily at 00Z
+
+      if(now_date(12:19) == "00:00:00") &
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+
+    case( -2 )  ! restart monthly at 00Z on 1st of month
+
+      if(now_date( 9:19) == "01 00:00:00") &
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+
+  end select restart_cases
 
   if(errflg /= 0) then
     write(*,*) "noahmpdrv_run reporting an error"
