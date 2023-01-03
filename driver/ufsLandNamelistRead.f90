@@ -15,6 +15,7 @@ type, public :: namelist_type
   logical        :: separate_output
   integer        :: output_frequency_s
   character*128  :: output_dir
+  logical        :: output_initial
   
   integer        :: timestep_seconds
 
@@ -108,6 +109,7 @@ contains
     integer        :: output_frequency_s = 0
     logical        :: separate_output = .false.
     character*128  :: output_dir = ""
+    logical        :: output_initial = .false.
   
     integer        :: timestep_seconds = -999
 
@@ -183,7 +185,7 @@ contains
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
 			    run_seconds, run_timesteps, separate_output, location_start, location_end, &
 			    restart_dir, restart_frequency_s, restart_simulation, restart_date, &
-                            output_frequency_s
+                            output_frequency_s, output_initial
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
     namelist / soil_setup / soil_level_thickness, soil_level_nodes
@@ -252,6 +254,7 @@ contains
     this%output_frequency_s   = output_frequency_s
     this%output_dir           = output_dir
     this%separate_output      = separate_output
+    this%output_initial       = output_initial
     this%timestep_seconds     = timestep_seconds
     this%restart_frequency_s  = restart_frequency_s
     this%restart_simulation   = restart_simulation

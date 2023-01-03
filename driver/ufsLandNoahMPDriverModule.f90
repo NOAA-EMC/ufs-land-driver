@@ -283,8 +283,12 @@ time_loop : do timestep = 1, namelist%run_timesteps
   iyrlen = 365
   if(mod(now_yyyy,4) == 0) iyrlen = 366
   
-  if(.not.namelist%restart_simulation .and. timestep == 1) &
-     call noahmp%InitStates(namelist, now_time)
+  if(timestep == 1) then
+    if(.not.namelist%restart_simulation) call noahmp%InitStates(namelist, now_time)
+
+    if(namelist%output_initial) call output%WriteOutputNoahMP(namelist, noahmp, forcing, &
+                                           now_time - timestep * namelist%timestep_seconds)
+  end if
 
   call forcing%ReadForcing(namelist, static, now_time)
    noahmp%forcing%surface_pressure_forcing%data   = forcing%surface_pressure
