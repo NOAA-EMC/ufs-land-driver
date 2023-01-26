@@ -278,7 +278,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   now_time = namelist%initial_time + timestep * namelist%timestep_seconds
 
-  call date_from_since("1970-01-01 00:00:00", now_time, now_date)
+  call date_from_since(namelist%reference_date, now_time, now_date)
   read(now_date(1:4),'(i4)') now_yyyy
   iyrlen = 365
   if(mod(now_yyyy,4) == 0) iyrlen = 366
@@ -299,10 +299,10 @@ time_loop : do timestep = 1, namelist%run_timesteps
    noahmp%forcing%wind_speed_forcing%data         = forcing%wind_speed
    noahmp%forcing%precipitation_forcing%data      = forcing%precipitation
   
-  call interpolate_monthly(now_time, im, static%gvf_monthly, sigmaf)
-  call interpolate_monthly(now_time, im, static%albedo_monthly, sfalb)
+  call interpolate_monthly(namelist%reference_date, now_time, im, static%gvf_monthly, sigmaf)
+  call interpolate_monthly(namelist%reference_date, now_time, im, static%albedo_monthly, sfalb)
   
-  call calc_cosine_zenith(now_time, im, static%latitude, static%longitude, xcoszin, julian)
+  call calc_cosine_zenith(namelist%reference_date, now_time, im, static%latitude, static%longitude, xcoszin, julian)
   
   u1       = wind
   v1       = 0.0_kind_phys

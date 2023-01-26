@@ -209,8 +209,8 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   call forcing%ReadForcing(namelist, static, now_time)
 
-  call interpolate_monthly(now_time, im, static%gvf_monthly, sigmaf)
-  call interpolate_monthly(now_time, im, static%albedo_monthly, sfalb)
+  call interpolate_monthly(namelist%reference_date, now_time, im, static%gvf_monthly, sigmaf)
+  call interpolate_monthly(namelist%reference_date, now_time, im, static%albedo_monthly, sfalb)
   
   albdvis_lnd = sfalb
   albdnir_lnd = sfalb
