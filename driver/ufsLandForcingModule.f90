@@ -264,8 +264,8 @@ contains
   integer :: iloc, latloc, lonloc, vector_shift
   double precision  :: file_next_time
   
-  call date_from_since("1970-01-01 00:00:00", now_time, now_date)
-  call date_from_since("1970-01-01 00:00:00", next_time, next_date)
+  call date_from_since(namelist%reference_date, now_time, now_date)
+  call date_from_since(namelist%reference_date, next_time, next_date)
   
   write(*,*) "Searching for forcing at time: ",now_date
   
@@ -531,7 +531,8 @@ contains
     if(namelist%forcing_time_solar == "instantaneous") then
       this%downward_shortwave = next_downward_shortwave
     elseif(namelist%forcing_time_solar == "period_average") then
-      call interpolate_zenith(now_time, next_time, namelist%subset_length,             &
+      call interpolate_zenith(namelist%reference_date,now_time, next_time,      &
+                              namelist%subset_length,                           &
                               static%latitude, static%longitude,                &
 			      namelist%timestep_seconds,                        &
                               next_downward_shortwave,                          &
@@ -582,7 +583,8 @@ contains
 
     elseif(trim(namelist%forcing_interp_solar) == "zenith") then
 
-      call interpolate_zenith(now_time, last_time, namelist%subset_length,      &
+      call interpolate_zenith(namelist%reference_date,now_time, last_time,      &
+                              namelist%subset_length,                           &
                               static%latitude, static%longitude,                &
 			      namelist%timestep_seconds,                        &
                               last_downward_shortwave,                          &

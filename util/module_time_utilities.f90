@@ -10,18 +10,24 @@ subroutine date_from_since(since_date, sec_since, current_date)
 implicit none
 character*19 :: since_date, current_date  ! format: yyyy-mm-dd hh:nn:ss
 double precision      :: sec_since
-integer      :: count_sec, count_sav
+integer*8    :: count_sec, count_sav, limit
 integer      :: since_yyyy, since_mm, since_dd, since_hh, since_nn, since_ss
 integer      :: current_yyyy, current_mm, current_dd, current_hh, current_nn, current_ss
 logical      :: leap_year = .false.
 integer      :: num_leap = 0
-integer      :: iyyyy, imm, limit
+integer      :: iyyyy, imm
 integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /)
 
   current_date = "xxxx-xx-xx xx:xx:xx"
 
-  limit = huge(1)
-  if(sec_since > limit .or. sec_since < 0) stop "not capable of dealing with sec_since"
+  limit = huge(count_sec)
+
+  if(sec_since > limit .or. sec_since < 0) then
+    print*, "sec_since: ", sec_since
+    print*, "sec_since not allowed to be negative or > integer*8"
+    print*, "choose a different reference date in namelist"
+    stop
+  end if 
 
   read(since_date( 1: 4),  '(i4)') since_yyyy
   read(since_date( 6: 7),  '(i2)') since_mm
@@ -66,7 +72,7 @@ integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 
   
 ! find the month
 
-  current_mm = 0!since_mm
+  current_mm = 0 ! since_mm
 
   leap_year = .false.
   if(mod(current_yyyy,4) == 0) leap_year = .true.
@@ -85,7 +91,7 @@ integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 
   
 ! find the day
 
-  current_dd = 0!since_dd
+  current_dd = 0 ! since_dd
 
   do while (count_sec <= sec_since)
     current_dd = current_dd + 1
@@ -97,7 +103,7 @@ integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 
   
 ! find the hour
 
-  current_hh = -1!since_hh
+  current_hh = -1 ! since_hh
 
   do while (count_sec <= sec_since)
     current_hh = current_hh + 1
@@ -109,7 +115,7 @@ integer, dimension(12), parameter :: days_in_mm = (/31, 28, 31, 30, 31, 30, 31, 
   
 ! find the minute
 
-  current_nn = -1!since_nn
+  current_nn = -1 ! since_nn
 
   do while (count_sec <= sec_since)
     current_nn = current_nn + 1

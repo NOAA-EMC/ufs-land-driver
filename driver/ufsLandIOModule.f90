@@ -33,7 +33,6 @@ contains
   type (forcing_type)  :: forcing
   double precision     :: now_time
   character*19     :: nowdate    ! current date
-  character*19     :: reference_date = "1970-01-01 00:00:00"
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_date
@@ -41,7 +40,7 @@ contains
   if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
      namelist%separate_output) then
   
-    call date_from_since(reference_date, now_time, nowdate)
+    call date_from_since(namelist%reference_date, now_time, nowdate)
     read(nowdate( 1: 4),'(i4.4)') yyyy
     read(nowdate( 6: 7),'(i2.2)') mm
     read(nowdate( 9:10),'(i2.2)') dd
@@ -72,7 +71,7 @@ contains
 
     status = nf90_def_var(ncid, "time", NF90_DOUBLE, dim_id_time, varid)
       status = nf90_put_att(ncid, varid, "long_name", "time")
-      status = nf90_put_att(ncid, varid, "units", "seconds since "//reference_date)
+      status = nf90_put_att(ncid, varid, "units", "seconds since "//namelist%reference_date)
 
     status = nf90_def_var(ncid, "delt", NF90_FLOAT, (/dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "time step")
@@ -521,7 +520,6 @@ contains
   type (forcing_type)  :: forcing
   double precision     :: now_time
   character*19     :: nowdate    ! current date
-  character*19     :: reference_date = "1970-01-01 00:00:00"
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad
@@ -531,7 +529,7 @@ contains
   if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
      namelist%separate_output ) then
   
-    call date_from_since(reference_date, now_time, nowdate)
+    call date_from_since(namelist%reference_date, now_time, nowdate)
     read(nowdate( 1: 4),'(i4.4)') yyyy
     read(nowdate( 6: 7),'(i2.2)') mm
     read(nowdate( 9:10),'(i2.2)') dd
@@ -568,7 +566,7 @@ contains
 
     status = nf90_def_var(ncid, "time", NF90_DOUBLE, dim_id_time, varid)
       status = nf90_put_att(ncid, varid, "long_name", "time")
-      status = nf90_put_att(ncid, varid, "units", "seconds since "//reference_date)
+      status = nf90_put_att(ncid, varid, "units", "seconds since "//namelist%reference_date)
 
     status = nf90_def_var(ncid, "timestep", NF90_FLOAT, (/dim_id_time/), varid)
       status = nf90_put_att(ncid, varid, "long_name", "time step")

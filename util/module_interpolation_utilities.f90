@@ -2,7 +2,7 @@ module interpolation_utilities
 
 contains
 
-subroutine interpolate_monthly(now_time, vector_length, monthly_var, interp_var)
+subroutine interpolate_monthly(reference_date, now_time, vector_length, monthly_var, interp_var)
 
 use time_utilities
 
@@ -14,6 +14,7 @@ real, dimension(vector_length,12) :: monthly_var
 real, dimension(vector_length)    :: interp_var
 
 character*19        :: before_date, after_date, current_date  ! format: yyyy-mm-dd hh:nn:ss
+character*19        :: reference_date
 double precision    :: before_time, after_time
 real                :: before_weight, after_weight
 integer             :: before_mm, after_mm, iloop
@@ -21,7 +22,7 @@ integer             :: current_yyyy, current_mm, current_dd
 
 ! get the current date string assuming reference_date
 
-call date_from_since("1970-01-01 00:00:00", now_time, current_date)
+call date_from_since(reference_date, now_time, current_date)
 
 ! assume the monthly data are valid on the 15th
 
@@ -50,8 +51,8 @@ end if
 
 ! get the time the month before and after assuming reference date
 
-call calc_sec_since("1970-01-01 00:00:00",before_date,0,before_time)
-call calc_sec_since("1970-01-01 00:00:00", after_date,0, after_time)
+call calc_sec_since(reference_date,before_date,0,before_time)
+call calc_sec_since(reference_date, after_date,0, after_time)
 
 if(before_time > now_time .or. after_time < now_time) &
    stop "problem with time in interpolate_monthly"
@@ -92,7 +93,7 @@ if(last_time > now_time .or. next_time < now_time) &
 
 end subroutine interpolate_linear
 
-subroutine interpolate_zenith(now_time, last_time, vector_length, &
+subroutine interpolate_zenith(reference_date, now_time, last_time, vector_length, &
                               latitude, longitude, timestep,      &
                               last_var, interp_var)
 
@@ -105,6 +106,7 @@ use cosine_zenith
 
 implicit none
 
+character*19                      :: reference_date
 double precision                  :: now_time, last_time
 integer                           :: vector_length, timestep
 real, dimension(vector_length)    :: latitude, longitude, last_var, interp_var
@@ -122,13 +124,13 @@ real, parameter                   :: critical_cosz   = 0.0001
 ! calculate zenith angle between the model timesteps for this forcing average
 
   calc_time = last_time + 0.5*timestep
-  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz1, julian)
+  call calc_cosine_zenith(reference_date, calc_time, vector_length, latitude, longitude, cosz1, julian)
 
   calc_time = last_time + 0.5*timestep + timestep
-  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz2, julian)
+  call calc_cosine_zenith(reference_date, calc_time, vector_length, latitude, longitude, cosz2, julian)
 
   calc_time = last_time + 0.5*timestep + 2*timestep
-  call calc_cosine_zenith(calc_time, vector_length, latitude, longitude, cosz3, julian)
+  call calc_cosine_zenith(reference_date, calc_time, vector_length, latitude, longitude, cosz3, julian)
 
   where(cosz1 <= critical_cosz) cosz1 = 0.0
   where(cosz2 <= critical_cosz) cosz2 = 0.0

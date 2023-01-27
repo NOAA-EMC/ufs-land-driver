@@ -2,7 +2,7 @@ module cosine_zenith
 
 contains
 
-subroutine calc_cosine_zenith(now_time, im, latitude, longitude, cosz, julian)
+subroutine calc_cosine_zenith(reference_date, now_time, im, latitude, longitude, cosz, julian)
 
 use time_utilities
 
@@ -16,11 +16,12 @@ real                :: julian
 real                :: obecl, sinob, sxlong, arg, tloctim, hrang, declin
 integer             :: ihour, iminute, isecond, iloc
 character*19        :: now_date  ! format: yyyy-mm-dd hh:nn:ss
+character*19        :: reference_date
 
 real, parameter :: degrad = 3.14159265/180.
 real, parameter :: dpd    = 360./365.
 
-call date_from_since("1970-01-01 00:00:00", now_time, now_date)
+call date_from_since(reference_date, now_time, now_date)
 
 call calc_sec_since(now_date(1:4)//"-01-01 00:00:00", now_date, 0, sec_since)
 

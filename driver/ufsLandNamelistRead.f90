@@ -26,6 +26,7 @@ type, public :: namelist_type
   
   character*19   :: simulation_start
   character*19   :: simulation_end
+  character*19   :: reference_date
   integer        :: run_timesteps
   integer        :: restart_timesteps
   integer        :: output_timesteps
@@ -120,6 +121,7 @@ contains
   
     character*19   :: simulation_start = ""
     character*19   :: simulation_end = ""
+    character*19   :: reference_date = "1970-01-01 00:00:00"
 
     integer        :: run_days = -999
     integer        :: run_hours = -999
@@ -185,7 +187,7 @@ contains
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
 			    run_seconds, run_timesteps, separate_output, location_start, location_end, &
 			    restart_dir, restart_frequency_s, restart_simulation, restart_date, &
-                            output_frequency_s, output_initial
+                            output_frequency_s, output_initial, reference_date
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
     namelist / soil_setup / soil_level_thickness, soil_level_nodes
@@ -268,6 +270,7 @@ contains
     this%subset_length        = this%location_length
     this%simulation_start     = simulation_start
     this%simulation_end       = simulation_end
+    this%reference_date       = reference_date
     this%run_days             = run_days
     this%run_hours            = run_hours
     this%run_minutes          = run_minutes
@@ -294,7 +297,7 @@ contains
     
     this%output_names  = output_names
     this%restart_names = restart_names
-    
+
     if(this%location_start <= 0 .or. this%location_end <= 0) then
       write(*,*) "location_start = ", location_start
       write(*,*) "location_end = ", location_end
@@ -342,8 +345,8 @@ contains
     end if
     
     if(restart_simulation) then
-      call calc_sec_since("1970-01-01 00:00:00",restart_date,0,run_time)
-      call date_from_since("1970-01-01 00:00:00", run_time+timestep_seconds, simulation_start)
+      call calc_sec_since(reference_date,restart_date,0,run_time)
+      call date_from_since(reference_date, run_time+timestep_seconds, simulation_start)
       this%simulation_start = simulation_start
     end if
     
