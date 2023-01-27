@@ -58,7 +58,7 @@ type :: noahmp_model_type
   type(real1d)          :: forcing_height           ! forcing height [m]
   type(real1d)          :: vegetation_fraction      ! vegetation fraction [0.0-1.0]
   type(real1d)          :: max_vegetation_frac      ! annual maximum vegetation fraction [0.0-1.0]
-  type(real1d)          :: snow_levels              ! active snow levels [-]
+  type(real1d)          :: active_snow_levels       ! active snow levels [-]
   type(real2d)          :: interface_depth          ! layer-bottom depth from snow surf [m]
   type(real2d)          :: snow_soil_thickness      ! thickness of each snow/soil level [m]
   type(real1d)          :: leaf_area_index          ! leaf area index [-]
@@ -353,11 +353,11 @@ contains
                     "fraction"                                  , &
                     namelist%output_names, namelist%restart_names)
 
-    call InitReal1d(this%model%snow_levels , &
-                    vector_length          , &
-                    "snow_levels"          , &
-                    "active snow levels"   , &
-                    "-"                    , &
+    call InitReal1d(this%model%active_snow_levels , &
+                    vector_length                 , &
+                    "active_snow_levels"          , &
+                    "active snow levels"          , &
+                    "-"                           , &
                     namelist%output_names, namelist%restart_names)
 
     call InitReal2d(this%model%interface_depth                , &
@@ -1506,7 +1506,7 @@ contains
     this%diag%soil_moisture_total%restart_flag     = .true.
     this%flux%precip_adv_heat_total%restart_flag   = .true.
     this%model%cosine_zenith%restart_flag          = .true.
-    this%model%snow_levels%restart_flag            = .true.
+    this%model%active_snow_levels%restart_flag     = .true.
     this%state%temperature_leaf%restart_flag       = .true.
     this%state%temperature_ground%restart_flag     = .true.
     this%state%canopy_ice%restart_flag             = .true.
@@ -1676,26 +1676,26 @@ contains
 
     this%model%snow_soil_thickness%data = 0.0
     if (snow_depth_meters < 0.025 ) then
-      this%model%snow_levels%data(iloc)              = 0.0
+      this%model%active_snow_levels%data(iloc)       = 0.0
       this%model%snow_soil_thickness%data(iloc,-2:0) = 0.0
     elseif (snow_depth_meters >= 0.025 .and. snow_depth_meters <= 0.05 ) then
-      this%model%snow_levels%data(iloc)              = -1.0
+      this%model%active_snow_levels%data(iloc)       = -1.0
       this%model%snow_soil_thickness%data(iloc,0)    = snow_depth_meters
     elseif (snow_depth_meters > 0.05 .and. snow_depth_meters <= 0.10 ) then
-      this%model%snow_levels%data(iloc)              = -2.0
+      this%model%active_snow_levels%data(iloc)       = -2.0
       this%model%snow_soil_thickness%data(iloc,-1)   = 0.5*snow_depth_meters
       this%model%snow_soil_thickness%data(iloc,0)    = 0.5*snow_depth_meters
     elseif (snow_depth_meters > 0.10 .and. snow_depth_meters <= 0.25 ) then
-      this%model%snow_levels%data(iloc)                   = -2.0
+      this%model%active_snow_levels%data(iloc)       = -2.0
       this%model%snow_soil_thickness%data(iloc,-1)   = 0.05
       this%model%snow_soil_thickness%data(iloc,0)    = snow_depth_meters - 0.05
     elseif (snow_depth_meters > 0.25 .and. snow_depth_meters <= 0.45 ) then
-      this%model%snow_levels%data(iloc)                   = -3.0
+      this%model%active_snow_levels%data(iloc)       = -3.0
       this%model%snow_soil_thickness%data(iloc,-2)   = 0.05
       this%model%snow_soil_thickness%data(iloc,-1)   = 0.5*(snow_depth_meters-0.05)
       this%model%snow_soil_thickness%data(iloc,0)    = 0.5*(snow_depth_meters-0.05)
     elseif (snow_depth_meters > 0.45) then 
-      this%model%snow_levels%data(iloc)                   = -3.0
+      this%model%active_snow_levels%data(iloc)       = -3.0
       this%model%snow_soil_thickness%data(iloc,-2)   = 0.05
       this%model%snow_soil_thickness%data(iloc,-1)   = 0.20
       this%model%snow_soil_thickness%data(iloc,0)    = snow_depth_meters - 0.05 - 0.20
@@ -1711,7 +1711,7 @@ contains
     this%state%snow_level_liquid%data(iloc,-2:0) = 0.0
     this%model%interface_depth%data  (iloc,-2:namelist%num_soil_levels) = 0.0
 
-    isnow = nint(this%model%snow_levels%data(iloc)) + 1    ! snow_levels <=0.0, interface_depth >= 0.0
+    isnow = nint(this%model%active_snow_levels%data(iloc)) + 1    ! active_snow_levels <=0.0, interface_depth >= 0.0
 
     do ilevel = isnow , 0
       this%state%temperature_snow%data (iloc,ilevel) = this%state%temperature_ground%data(iloc)

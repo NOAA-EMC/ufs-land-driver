@@ -93,9 +93,9 @@ contains
      (noahmp%model%max_vegetation_frac%output_flag  .and. io_type == output )) &
     call Define1dReal(noahmp%model%max_vegetation_frac, ncid, realtype, dim_id_loc, dim_id_time)
 
-  if((noahmp%model%snow_levels%restart_flag .and. io_type == restart) .or. &
-     (noahmp%model%snow_levels%output_flag  .and. io_type == output )) &
-    call Define1dReal(noahmp%model%snow_levels, ncid, realtype, dim_id_loc, dim_id_time)
+  if((noahmp%model%active_snow_levels%restart_flag .and. io_type == restart) .or. &
+     (noahmp%model%active_snow_levels%output_flag  .and. io_type == output )) &
+    call Define1dReal(noahmp%model%active_snow_levels, ncid, realtype, dim_id_loc, dim_id_time)
 
   if((noahmp%model%interface_depth%restart_flag .and. io_type == restart) .or. &
      (noahmp%model%interface_depth%output_flag  .and. io_type == output )) &
@@ -756,9 +756,9 @@ contains
     call Write1dReal(noahmp%model%max_vegetation_frac, ncid,   &
       start = (/local_start,output_counter/), count = (/namelist%subset_length, 1/))
 
-  if((noahmp%model%snow_levels%restart_flag .and. io_type == restart) .or. &
-     (noahmp%model%snow_levels%output_flag  .and. io_type == output )) &
-    call Write1dReal(noahmp%model%snow_levels, ncid,   &
+  if((noahmp%model%active_snow_levels%restart_flag .and. io_type == restart) .or. &
+     (noahmp%model%active_snow_levels%output_flag  .and. io_type == output )) &
+    call Write1dReal(noahmp%model%active_snow_levels, ncid,   &
       start = (/local_start,output_counter/), count = (/namelist%subset_length, 1/))
 
   if((noahmp%model%interface_depth%restart_flag .and. io_type == restart) .or. &
@@ -1560,8 +1560,8 @@ contains
     call Read1dReal(noahmp%model%max_vegetation_frac, ncid,   &
       start = (/local_start,1/), count = (/namelist%subset_length, 1/))
 
-  if(noahmp%model%snow_levels%restart_flag) &
-    call Read1dReal(noahmp%model%snow_levels, ncid,   &
+  if(noahmp%model%active_snow_levels%restart_flag) &
+    call Read1dReal(noahmp%model%active_snow_levels, ncid,   &
       start = (/local_start,1/), count = (/namelist%subset_length, 1/))
 
   if(noahmp%model%interface_depth%restart_flag) &
