@@ -192,7 +192,7 @@ associate (                                                      &
    snow_mp    => noahmp%forcing%precip_snow%data                ,&
    graupel_mp => noahmp%forcing%precip_graupel%data             ,&
    ice_mp     => noahmp%forcing%precip_hail%data                ,&
-   snowxy     => noahmp%model%snow_levels%data                  ,&
+   snowxy     => noahmp%model%active_snow_levels%data           ,&
    tvxy       => noahmp%state%temperature_leaf%data             ,&
    tgxy       => noahmp%state%temperature_ground%data           ,&
    canicexy   => noahmp%state%canopy_ice%data                   ,&
