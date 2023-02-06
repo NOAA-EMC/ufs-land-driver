@@ -1,6 +1,6 @@
 
 #===============================================================================
-#  Baseline configuration for NOAA Hera
+#  Baseline configuration for NOAA Hera serial build
 #===============================================================================
 
  COMPILERF90    =       ifort

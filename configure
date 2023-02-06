@@ -6,10 +6,14 @@
   }else {
      print "Please select from following predefined environments: \n\n";
 
-     print "   1. NOAA Hera \n";
-     print "   2. MSU/NOAA Orion \n";
-     print "   3. NCAR Cheyenne \n";
-     print "   4. gfortran compiler serial \n";
+     print "   1. NOAA Hera serial \n";
+     print "   2. NOAA Hera parallel \n";
+     print "   3. MSU/NOAA Orion serial \n";
+     print "   4. MSU/NOAA Orion parallel \n";
+     print "   5. NCAR Cheyenne serial \n";
+     print "   6. NCAR Cheyenne parallel \n";
+     print "   7. gfortran compiler serial \n";
+     print "   8. gfortran compiler parallel \n";
      print "   0. exit only \n";
 
      printf "\nEnter selection : " ;
@@ -19,14 +23,14 @@
   }
 
   if ($response == 1) {
-              # NOAA Hera
+              # NOAA Hera serial
               system "cp config/user_build_config.hera.serial user_build_config"; 
               print "=====================================================================\n"; 
               print "================== hera configure environment set ===================\n"; 
               print "=====================================================================\n"; 
               print "NEED TO LOAD MODULES: \n"; 
               print " \n"; 
-              print "module load intel/2020 netcdf/4.7.0 \n"; 
+              print "module load intel/2022.2.0 netcdf/4.7.0 \n"; 
               print " \n"; 
               print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
               print "=====================================================================\n"; 
@@ -34,6 +38,23 @@
             }
 
   elsif ($response == 2) {
+              # NOAA Hera parallel
+              system "cp config/user_build_config.hera.parallel user_build_config"; 
+              print "=====================================================================\n"; 
+              print "================== hera configure environment set ===================\n"; 
+              print "=====================================================================\n"; 
+              print "NEED TO LOAD MODULES: \n"; 
+              print " \n"; 
+              print "module load intel/2022.2.0 impi/2022.2.0 netcdf-hdf5parallel/4.7.4 \n"; 
+              print " \n"; 
+              print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
+              print " \n"; 
+              print "Make certain you are on a parallel branch \n"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+            }
+
+  elsif ($response == 3) {
               # MSU/NOAA Orion
               system "cp config/user_build_config.orion.serial user_build_config"; 
               print "=====================================================================\n"; 
@@ -48,7 +69,7 @@
               print "=====================================================================\n"; 
             }
 
-  elsif ($response == 3) {
+  elsif ($response == 5) {
               # NCAR Cheyenne
               system "cp config/user_build_config.cheyenne.serial user_build_config"; 
               print "=====================================================================\n"; 
@@ -60,12 +81,24 @@
               print "=====================================================================\n"; 
             }
 
-  elsif ($response == 4) {
+  elsif ($response == 7) {
               # generic gfortran settings
               system "cp config/user_build_config.gfortran.serial user_build_config"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
               print "Generic gfortran user_build_config created. \nYou will likely have to modify for your system.\n"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+            }
+
+  elsif ($response == 8) {
+              # generic gfortran settings
+              system "cp config/user_build_config.gfortran.parallel user_build_config"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+              print "Generic gfortran user_build_config created. \nYou will likely have to modify for your system.\n"; 
+              print " \n"; 
+              print "Make certain you are on a parallel branch \n"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
             }
