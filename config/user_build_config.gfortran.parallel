@@ -1,0 +1,12 @@
+
+#===============================================================================
+#  Placeholder options for generic gfortran parallel build
+#===============================================================================
+
+ COMPILERF90    =       mpif90
+ FREESOURCE     =       #-ffree-form  -ffree-line-length-none
+ F90FLAGS       =       -fdefault-real-8 -fdefault-double-8
+ NETCDFMOD      =       -I/opt/local/include
+ NETCDFLIB      =       -L/opt/local/lib -lnetcdf -lnetcdff
+ PHYSDIR        =       ../ccpp-physics/physics
+
