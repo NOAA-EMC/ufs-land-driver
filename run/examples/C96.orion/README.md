@@ -4,10 +4,6 @@
 
 `mkdir output`
 
-note: it seems that the default permissions for an orion directory will not allow writing from a submitted script so you may need to add group write permission:
-
-`chmod g+w output`
-
 2) Submit script to run the model
 
 `sbatch spinup_era5_C96_debug.sh`
