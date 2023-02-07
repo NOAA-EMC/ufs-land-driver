@@ -11,7 +11,6 @@
      print "   3. MSU/NOAA Orion serial \n";
      print "   4. MSU/NOAA Orion parallel \n";
      print "   5. NCAR Cheyenne serial \n";
-     print "   6. NCAR Cheyenne parallel \n";
      print "   7. gfortran compiler serial \n";
      print "   8. gfortran compiler parallel \n";
      print "   0. exit only \n";
@@ -63,6 +62,21 @@
               print "NEED TO LOAD MODULES: \n"; 
               print " \n"; 
               print "module load intel/2022.1.2 netcdf/4.7.4 \n"; 
+              print " \n"; 
+              print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
+              print "=====================================================================\n"; 
+              print "=====================================================================\n"; 
+            }
+
+  elsif ($response == 4) {
+              # MSU/NOAA Orion parallel
+              system "cp config/user_build_config.orion.parallel user_build_config"; 
+              print "=====================================================================\n"; 
+              print "================= orion configure environment set ===================\n"; 
+              print "=====================================================================\n"; 
+              print "NEED TO LOAD MODULES: \n"; 
+              print " \n"; 
+              print "module load intel/2022.1.2 impi/2022.1.2 netcdf/4.7.4 \n"; 
               print " \n"; 
               print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
               print "=====================================================================\n"; 
