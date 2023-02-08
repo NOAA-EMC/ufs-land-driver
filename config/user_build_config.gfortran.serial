@@ -1,9 +1,9 @@
 
 #===============================================================================
-#  Placeholder options for gfortran
+#  Placeholder options for generic gfortran serial build
 #===============================================================================
 
- COMPILERF90    =       /opt/local/bin/gfortran-mp-10
+ COMPILERF90    =       gfortran-mp-12
  FREESOURCE     =       #-ffree-form  -ffree-line-length-none
  F90FLAGS       =       -fdefault-real-8 -fdefault-double-8
  NETCDFMOD      =       -I/opt/local/include

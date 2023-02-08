@@ -1,12 +1,12 @@
 
 #===============================================================================
-#  Baseline configuration for NOAA Hera serial build
+#  Placeholder options for generic gfortran parallel build
 #===============================================================================
 
- COMPILERF90    =       ifort
+ COMPILERF90    =       mpif90
  FREESOURCE     =       #-ffree-form  -ffree-line-length-none
- F90FLAGS       =       -r8 -init=huge
- NETCDFMOD      =       -I${NETCDF}/include
- NETCDFLIB      =       -L${NETCDF}/lib -lnetcdf -lnetcdff
+ F90FLAGS       =       -fdefault-real-8 -fdefault-double-8
+ NETCDFMOD      =       -I/opt/local/include
+ NETCDFLIB      =       -L/opt/local/lib -lnetcdf -lnetcdff
  PHYSDIR        =       ../ccpp-physics/physics
 

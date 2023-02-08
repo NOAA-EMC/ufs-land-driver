@@ -1,9 +1,9 @@
 
 #===============================================================================
-#  Baseline configuration for NOAA Hera serial build
+#  Baseline configuration for MSU Orion parallel
 #===============================================================================
 
- COMPILERF90    =       ifort
+ COMPILERF90    =       mpiifort
  FREESOURCE     =       #-ffree-form  -ffree-line-length-none
  F90FLAGS       =       -r8 -init=huge
  NETCDFMOD      =       -I${NETCDF}/include
