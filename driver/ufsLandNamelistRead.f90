@@ -6,10 +6,10 @@ private
 
 type, public :: namelist_type
 
-  character*128  :: static_file
-  character*128  :: init_file
-  character*128  :: forcing_dir
-  character*128  :: output_dir
+  character*256  :: static_file
+  character*256  :: init_file
+  character*256  :: forcing_dir
+  character*256  :: output_dir
   
   logical        :: separate_output
   
@@ -18,7 +18,7 @@ type, public :: namelist_type
   integer        :: restart_frequency_s
   logical        :: restart_simulation
   character*19   :: restart_date
-  character*128  :: restart_dir
+  character*256  :: restart_dir
   
   character*19   :: simulation_start
   character*19   :: simulation_end
@@ -66,17 +66,17 @@ type, public :: namelist_type
   integer        ::  glacier_option
   
   integer        ::  forcing_timestep_seconds
-  character*128  ::  forcing_type
-  character*128  ::  forcing_filename
-  character*128  ::  forcing_interp_solar
-  character*128  ::  forcing_time_solar
-  character*128  ::  forcing_name_precipitation
-  character*128  ::  forcing_name_sw_radiation
-  character*128  ::  forcing_name_lw_radiation
-  character*128  ::  forcing_name_pressure
-  character*128  ::  forcing_name_specific_humidity
-  character*128  ::  forcing_name_wind_speed
-  character*128  ::  forcing_name_temperature
+  character*256  ::  forcing_type
+  character*256  ::  forcing_filename
+  character*256  ::  forcing_interp_solar
+  character*256  ::  forcing_time_solar
+  character*256  ::  forcing_name_precipitation
+  character*256  ::  forcing_name_sw_radiation
+  character*256  ::  forcing_name_lw_radiation
+  character*256  ::  forcing_name_pressure
+  character*256  ::  forcing_name_specific_humidity
+  character*256  ::  forcing_name_wind_speed
+  character*256  ::  forcing_name_temperature
   
   contains
 
@@ -92,10 +92,10 @@ contains
   
     class(namelist_type) :: this
     
-    character*128  :: static_file = ""
-    character*128  :: init_file = ""
-    character*128  :: forcing_dir = ""
-    character*128  :: output_dir = ""
+    character*256  :: static_file = ""
+    character*256  :: init_file = ""
+    character*256  :: forcing_dir = ""
+    character*256  :: output_dir = ""
     
     logical        :: separate_output = .false.
   
@@ -104,7 +104,7 @@ contains
     integer        :: restart_frequency_s = 0
     logical        :: restart_simulation = .false.
     character*19   :: restart_date = ""
-    character*128  :: restart_dir = ""
+    character*256  :: restart_dir = ""
   
     character*19   :: simulation_start = ""
     character*19   :: simulation_end = ""
@@ -150,17 +150,17 @@ contains
     integer        ::  glacier_option                    = -999
 
     integer        ::  forcing_timestep_seconds = -999
-    character*128  ::  forcing_type = ""
-    character*128  ::  forcing_filename = ""
-    character*128  ::  forcing_interp_solar = ""
-    character*128  ::  forcing_time_solar = ""
-    character*128  ::  forcing_name_precipitation = ""
-    character*128  ::  forcing_name_temperature = ""
-    character*128  ::  forcing_name_specific_humidity = ""
-    character*128  ::  forcing_name_wind_speed = ""
-    character*128  ::  forcing_name_pressure = ""
-    character*128  ::  forcing_name_sw_radiation = ""
-    character*128  ::  forcing_name_lw_radiation = ""
+    character*256  ::  forcing_type = ""
+    character*256  ::  forcing_filename = ""
+    character*256  ::  forcing_interp_solar = ""
+    character*256  ::  forcing_time_solar = ""
+    character*256  ::  forcing_name_precipitation = ""
+    character*256  ::  forcing_name_temperature = ""
+    character*256  ::  forcing_name_specific_humidity = ""
+    character*256  ::  forcing_name_wind_speed = ""
+    character*256  ::  forcing_name_pressure = ""
+    character*256  ::  forcing_name_sw_radiation = ""
+    character*256  ::  forcing_name_lw_radiation = ""
 
     integer, parameter :: NOAHMP_LAND_SURFACE_MODEL = 2
   

@@ -59,7 +59,7 @@ contains
   class(forcing_type)  :: this
   type(namelist_type)  :: namelist
   
-  character*128        :: forcing_filename
+  character*256        :: forcing_filename
   
   double precision     :: read_time
   
@@ -163,7 +163,7 @@ contains
   type (static_type)   :: static
   double precision     :: now_time
   
-  character*128        :: forcing_filename
+  character*256        :: forcing_filename
   character*19         :: now_date  ! format: yyyy-mm-dd hh:nn:ss
   
   integer :: ncid, dimid, varid, status
