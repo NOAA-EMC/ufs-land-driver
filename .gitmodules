@@ -1,3 +1,4 @@
 [submodule "ccpp-physics"]
 	path = ccpp-physics
 	url = https://github.com/NCAR/ccpp-physics
+	branch = 6d4acb149ec5a54051359659a2be7dcebbb4976a
