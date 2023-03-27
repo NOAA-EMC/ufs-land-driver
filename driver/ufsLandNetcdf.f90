@@ -2,6 +2,8 @@ module ufsLandNetcdf
 
 use netcdf
 
+  integer, parameter, private :: output = 1, restart = 2
+
 contains
 
   subroutine Define1dReal(indata,ncid,vartype,dim_id1,dim_id2)
@@ -75,11 +77,12 @@ contains
 
   end subroutine Read1dReal
   
-  subroutine Write1dReal(indata,ncid,start,count)
+  subroutine Write1dReal(io_type,indata,ncid,start,count)
   
   use ufsLandGenericType, only : real1d
   use error_handling, only : handle_err
 
+  integer :: io_type
   type(real1d) :: indata
 
   integer :: ncid, varid, status, start(2), count(2)
@@ -87,8 +90,14 @@ contains
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
-  status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
-   if (status /= nf90_noerr) call handle_err(status,indata%name)
+  write_cases : select case(io_type)
+  
+    case( output, restart )  ! write %data
+
+      status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,indata%name)
+
+  end select write_cases
 
   end subroutine Write1dReal
   
@@ -109,11 +118,12 @@ contains
 
   end subroutine Read2dReal
   
-  subroutine Write2dReal(indata,ncid,start,count)
+  subroutine Write2dReal(io_type,indata,ncid,start,count)
   
   use ufsLandGenericType, only : real2d
   use error_handling, only : handle_err
 
+  integer :: io_type
   type(real2d) :: indata
 
   integer :: ncid, varid, status, start(3), count(3)
@@ -121,8 +131,14 @@ contains
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
-  status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
-   if (status /= nf90_noerr) call handle_err(status,indata%name)
+  write_cases : select case(io_type)
+  
+    case( output, restart )  ! write %data
+
+      status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,indata%name)
+
+  end select write_cases
 
   end subroutine Write2dReal
   
@@ -143,11 +159,12 @@ contains
 
   end subroutine Read1dInt
   
-  subroutine Write1dInt(indata,ncid,start,count)
+  subroutine Write1dInt(io_type,indata,ncid,start,count)
   
   use ufsLandGenericType, only : int1d
   use error_handling, only : handle_err
 
+  integer :: io_type
   type(int1d) :: indata
 
   integer :: ncid, varid, status, start(2), count(2)
@@ -155,8 +172,14 @@ contains
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
-  status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
-   if (status /= nf90_noerr) call handle_err(status,indata%name)
+  write_cases : select case(io_type)
+  
+    case( output, restart )  ! write %data
+
+      status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,indata%name)
+
+  end select write_cases
 
   end subroutine Write1dInt
   
