@@ -259,1120 +259,1740 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%static variables
 
-    call InitInt1d (this%static%vegetation_category , &
-                    vector_length                   , &
-                    "vegetation_category"           , &
-                    "categorical vegetation type"   , &
-                    ""                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitInt1d (this%static%vegetation_category                                              , &
+                    vector_length                                                                , &
+                    "vegetation_category"                                                        , &
+                    "categorical vegetation type"                                                , &
+                    ""                                                                           , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitInt1d (this%static%soil_category , &
-                    vector_length             , &
-                    "soil_category"           , &
-                    "categorical soil type"   , &
-                    ""                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitInt1d (this%static%soil_category                                                    , &
+                    vector_length                                                                , &
+                    "soil_category"                                                              , &
+                    "categorical soil type"                                                      , &
+                    ""                                                                           , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitInt1d (this%static%slope_category , &
-                    vector_length              , &
-                    "slope_category"           , &
-                    "categorical slope type"   , &
-                    ""                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitInt1d (this%static%slope_category                                                   , &
+                    vector_length                                                                , &
+                    "slope_category"                                                             , &
+                    "categorical slope type"                                                     , &
+                    ""                                                                           , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%static%soil_interface_depth , &
-                    vector_length                    , &
-                    "soil_interface_depth"           , &
-                    "depths of soil interface"       , &
-                    "m"                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%static%soil_interface_depth                                             , &
+                    vector_length                                                                , &
+                    "soil_interface_depth"                                                       , &
+                    "depths of soil interface"                                                   , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitInt1d (this%static%ice_flag , &
-                    vector_length        , &
-                    "ice_flag"           , &
-                    "ice flag: 1->ice"   , &
-                    ""                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitInt1d (this%static%ice_flag                                                         , &
+                    vector_length                                                                , &
+                    "ice_flag"                                                                   , &
+                    "ice flag: 1->ice"                                                           , &
+                    ""                                                                           , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitInt1d (this%static%surface_type              , &
-                    vector_length                         , &
-                    "surface_type"                        , &
-                    "surface type flag: 1->soil; 2->lake" , &
-                    ""                                    , &
-                    namelist%output_names, namelist%restart_names)
+    call InitInt1d (this%static%surface_type                                                     , &
+                    vector_length                                                                , &
+                    "surface_type"                                                               , &
+                    "surface type flag: 1->soil; 2->lake"                                        , &
+                    ""                                                                           , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitInt1d (this%static%crop_type   , &
-                    vector_length           , &
-                    "crop_type"             , &
-                    "categorical crop type" , &
-                    ""                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitInt1d (this%static%crop_type                                                        , &
+                    vector_length                                                                , &
+                    "crop_type"                                                                  , &
+                    "categorical crop type"                                                      , &
+                    ""                                                                           , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%static%temperature_soil_bot           , &
-                    vector_length                              , &
-                    "temperature_soil_bot"                     , &
-                    "deep soil temperature boundary condition" , &
-                    "K"                                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%static%temperature_soil_bot                                             , &
+                    vector_length                                                                , &
+                    "temperature_soil_bot"                                                       , &
+                    "deep soil temperature boundary condition"                                   , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%model variables
 
-    call InitReal1d(this%model%latitude  , &
-                    vector_length        , &
-                    "latitude"           , &
-                    "grid cell latitude" , &
-                    "degrees_north"      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%latitude                                                          , &
+                    vector_length                                                                , &
+                    "latitude"                                                                   , &
+                    "grid cell latitude"                                                         , &
+                    "degrees_north"                                                              , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%cosine_zenith       , &
-                    vector_length                  , &
-                    "cosine_zenith"                , &
-                    "cosine of solar zenith angle" , &
-                    "-"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%cosine_zenith                                                     , &
+                    vector_length                                                                , &
+                    "cosine_zenith"                                                              , &
+                    "cosine of solar zenith angle"                                               , &
+                    "-"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%forcing_height , &
-                    vector_length             , &
-                    "forcing_height"          , &
-                    "height of forcing"       , &
-                    "m"                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%forcing_height                                                    , &
+                    vector_length                                                                , &
+                    "forcing_height"                                                             , &
+                    "height of forcing"                                                          , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%vegetation_fraction      , &
-                    vector_length                       , &
-                    "vegetation_fraction"               , &
-                    "vegetation areal coverage on grid" , &
-                    "fraction"                          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%vegetation_fraction                                               , &
+                    vector_length                                                                , &
+                    "vegetation_fraction"                                                        , &
+                    "vegetation areal coverage on grid"                                          , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%max_vegetation_frac              , &
-                    vector_length                               , &
-                    "max_vegetation_frac"                       , &
-                    "maximum vegetation areal coverage on grid" , &
-                    "fraction"                                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%max_vegetation_frac                                               , &
+                    vector_length                                                                , &
+                    "max_vegetation_frac"                                                        , &
+                    "maximum vegetation areal coverage on grid"                                  , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%active_snow_levels , &
-                    vector_length                 , &
-                    "active_snow_levels"          , &
-                    "active snow levels"          , &
-                    "-"                           , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%active_snow_levels                                                , &
+                    vector_length                                                                , &
+                    "active_snow_levels"                                                         , &
+                    "active snow levels"                                                         , &
+                    "-"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%model%interface_depth                , &
-                    vector_length                             , &
-                    snow_index, soil_levels                   , &
-                    "interface_depth"                         , &
-                    "depth to layer bottom from snow surface" , &
-                    "m"                                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%model%interface_depth                                                   , &
+                    vector_length                                                                , &
+                    snow_index, soil_levels                                                      , &
+                    "interface_depth"                                                            , &
+                    "depth to layer bottom from snow surface"                                    , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%model%snow_soil_thickness , &
-                    vector_length                  , &
-                    snow_index, soil_levels        , &
-                    "snow_soil_thickness"          , &
-                    "thickness of snow/soil level" , &
-                    "m"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%model%snow_soil_thickness                                               , &
+                    vector_length                                                                , &
+                    snow_index, soil_levels                                                      , &
+                    "snow_soil_thickness"                                                        , &
+                    "thickness of snow/soil level"                                               , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%leaf_area_index , &
-                    vector_length              , &
-                    "leaf_area_index"          , &
-                    "leaf area per grid area"  , &
-                    "-"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%leaf_area_index                                                   , &
+                    vector_length                                                                , &
+                    "leaf_area_index"                                                            , &
+                    "leaf area per grid area"                                                    , &
+                    "-"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%stem_area_index , &
-                    vector_length              , &
-                    "stem_area_index"          , &
-                    "stem area per grid area"  , &
-                    "-"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%stem_area_index                                                   , &
+                    vector_length                                                                , &
+                    "stem_area_index"                                                            , &
+                    "stem area per grid area"                                                    , &
+                    "-"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%growing_deg_days       , &
-                    vector_length                     , &
-                    "growing_deg_days"                , &
-                    "accumulated growing degree days" , &
-                    "K"                               , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%growing_deg_days                                                  , &
+                    vector_length                                                                , &
+                    "growing_deg_days"                                                           , &
+                    "accumulated growing degree days"                                            , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitInt1d (this%model%plant_growth_stage , &
-                    vector_length                 , &
-                    "plant_growth_stage"          , &
-                    "plant growth stage"          , &
-                    "-"                           , &
-                    namelist%output_names, namelist%restart_names)
+    call InitInt1d (this%model%plant_growth_stage                                                , &
+                    vector_length                                                                , &
+                    "plant_growth_stage"                                                         , &
+                    "plant growth stage"                                                         , &
+                    "-"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%cm_noahmp                  , &
-                    vector_length                         , &
-                    "cm_noahmp"                           , &
-                    "surface exchange coeff for momentum" , &
-                    "m/s"                                 , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%cm_noahmp                                                         , &
+                    vector_length                                                                , &
+                    "cm_noahmp"                                                                  , &
+                    "surface exchange coeff for momentum"                                        , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%ch_noahmp                     , &
-                    vector_length                            , &
-                    "ch_noahmp"                              , &
-                    "surface exchange coeff heat & moisture" , &
-                    "m/s"                                    , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%ch_noahmp                                                         , &
+                    vector_length                                                                , &
+                    "ch_noahmp"                                                                  , &
+                    "surface exchange coeff heat & moisture"                                     , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%ch_vegetated                                          , &
-                    vector_length                                                    , &
-                    "ch_vegetated"                                                   , &
-                    "surface exchange coeff heat & moisture over vegetated fraction" , &
-                    "m/s"                                                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%ch_vegetated                                                      , &
+                    vector_length                                                                , &
+                    "ch_vegetated"                                                               , &
+                    "surface exchange coeff heat & moisture over vegetated fraction"             , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%ch_bare_ground                                   , &
-                    vector_length                                               , &
-                    "ch_bare_ground"                                            , &
-                    "surface exchange coeff heat & moisture over bare fraction" , &
-                    "m/s"                                                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%ch_bare_ground                                                    , &
+                    vector_length                                                                , &
+                    "ch_bare_ground"                                                             , &
+                    "surface exchange coeff heat & moisture over bare fraction"                  , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%ch_leaf                                       , &
-                    vector_length                                            , &
-                    "ch_leaf"                                                , &
-                    "surface exchange coeff heat & moisture at leaf surface" , &
-                    "m/s"                                                    , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%ch_leaf                                                           , &
+                    vector_length                                                                , &
+                    "ch_leaf"                                                                    , &
+                    "surface exchange coeff heat & moisture at leaf surface"                     , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%ch_below_canopy                            , &
-                    vector_length                                         , &
-                    "ch_below_canopy"                                     , &
-                    "surface exchange coeff heat & moisture below canopy" , &
-                    "m/s"                                                 , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%ch_below_canopy                                                   , &
+                    vector_length                                                                , &
+                    "ch_below_canopy"                                                            , &
+                    "surface exchange coeff heat & moisture below canopy"                        , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%ch_vegetated_2m                                          , &
-                    vector_length                                                       , &
-                    "ch_vegetated_2m"                                                   , &
-                    "2m surface exchange coeff heat & moisture over vegetated fraction" , &
-                    "m/s"                                                               , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%ch_vegetated_2m                                                   , &
+                    vector_length                                                                , &
+                    "ch_vegetated_2m"                                                            , &
+                    "2m surface exchange coeff heat & moisture over vegetated fraction"          , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%ch_bare_ground_2m                                   , &
-                    vector_length                                                  , &
-                    "ch_bare_ground_2m"                                            , &
-                    "2m surface exchange coeff heat & moisture over bare fraction" , &
-                    "m/s"                                                          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%ch_bare_ground_2m                                                 , &
+                    vector_length                                                                , &
+                    "ch_bare_ground_2m"                                                          , &
+                    "2m surface exchange coeff heat & moisture over bare fraction"               , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%friction_velocity , &
-                    vector_length                , &
-                    "friction_velocity"          , &
-                    "friction velocity"          , &
-                    "m/s"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%friction_velocity                                                 , &
+                    vector_length                                                                , &
+                    "friction_velocity"                                                          , &
+                    "friction velocity"                                                          , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%rs_sunlit              , &
-                    vector_length                     , &
-                    "rs_sunlit"                       , &
-                    "sunlit leaf stomatal resistance" , &
-                    "s/m"                             , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%rs_sunlit                                                         , &
+                    vector_length                                                                , &
+                    "rs_sunlit"                                                                  , &
+                    "sunlit leaf stomatal resistance"                                            , &
+                    "s/m"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
  
-    call InitReal1d(this%model%rs_shaded              , &
-                    vector_length                     , &
-                    "rs_shaded"                       , &
-                    "shaded leaf stomatal resistance" , &
-                    "s/m"                             , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%rs_shaded                                                         , &
+                    vector_length                                                                , &
+                    "rs_shaded"                                                                  , &
+                    "shaded leaf stomatal resistance"                                            , &
+                    "s/m"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%leaf_air_resistance   , &
-                    vector_length                    , &
-                    "leaf_air_resistance"            , &
-                    "leaf boundary layer resistance" , &
-                    "s/m"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%leaf_air_resistance                                               , &
+                    vector_length                                                                , &
+                    "leaf_air_resistance"                                                        , &
+                    "leaf boundary layer resistance"                                             , &
+                    "s/m"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%pbl_height                , &
-                    vector_length                        , &
-                    "pbl_height"                         , &
-                    "height of planetary boundary layer" , &
-                    "m"                                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%pbl_height                                                        , &
+                    vector_length                                                                , &
+                    "pbl_height"                                                                 , &
+                    "height of planetary boundary layer"                                         , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%mo_length_inverse , &
-                    vector_length                , &
-                    "mo_length_inverse"          , &
-                    "reciprocal of M-O length"   , &
-                    "1/m"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%mo_length_inverse                                                 , &
+                    vector_length                                                                , &
+                    "mo_length_inverse"                                                          , &
+                    "reciprocal of M-O length"                                                   , &
+                    "1/m"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%heat_flux_multiplier , &
-                    vector_length                   , &
-                    "heat_flux_multiplier"          , &
-                    "heat flux multiplier"          , &
-                    "W/m^2/K"                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%heat_flux_multiplier                                              , &
+                    vector_length                                                                , &
+                    "heat_flux_multiplier"                                                       , &
+                    "heat flux multiplier"                                                       , &
+                    "W/m^2/K"                                                                    , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%model%moisture_flux_multiplier , &
-                    vector_length                       , &
-                    "moisture_flux_multiplier"          , &
-                    "moisture flux multiplier"          , &
-                    "kg/m^2/s"                          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%model%moisture_flux_multiplier                                          , &
+                    vector_length                                                                , &
+                    "moisture_flux_multiplier"                                                   , &
+                    "moisture flux multiplier"                                                   , &
+                    "kg/m^2/s"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%forcing variables
 
-    call InitReal1d(this%forcing%temperature_forcing        , &
-                    vector_length                           , &
-                    "temperature_forcing"                   , &
-                    "temperature at forcing level"          , &
-                    "K"                                     , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%temperature_forcing                                             , &
+                    vector_length                                                                , &
+                    "temperature_forcing"                                                        , &
+                    "temperature at forcing level"                                               , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%specific_humidity_forcing  , &
-                    vector_length                           , &
-                    "specific_humidity_forcing"             , &
-                    "specific humidtiy at forcing level"    , &
-                    "kg/kg"                                 , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%specific_humidity_forcing                                       , &
+                    vector_length                                                                , &
+                    "specific_humidity_forcing"                                                  , &
+                    "specific humidtiy at forcing level"                                         , &
+                    "kg/kg"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%surface_pressure_forcing   , &
-                    vector_length                           , &
-                    "surface_pressure_forcing"              , &
-                    "atmospheric pressure at surface"       , &
-                    "Pa"                                    , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%surface_pressure_forcing                                        , &
+                    vector_length                                                                , &
+                    "surface_pressure_forcing"                                                   , &
+                    "atmospheric pressure at surface"                                            , &
+                    "Pa"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%wind_speed_forcing         , &
-                    vector_length                           , &
-                    "wind_speed_forcing"                    , &
-                    "wind speed at forcing level"           , &
-                    "m/s"                                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%wind_speed_forcing                                              , &
+                    vector_length                                                                , &
+                    "wind_speed_forcing"                                                         , &
+                    "wind speed at forcing level"                                                , &
+                    "m/s"                                                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%downward_longwave_forcing  , &
-                    vector_length                           , &
-                    "downward_longwave_forcing"             , &
-                    "surface downward longwave forcing"     , &
-                    "W/m2"                                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%downward_longwave_forcing                                       , &
+                    vector_length                                                                , &
+                    "downward_longwave_forcing"                                                  , &
+                    "surface downward longwave forcing"                                          , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%downward_shortwave_forcing , &
-                    vector_length                           , &
-                    "downward_shortwave_forcing"            , &
-                    "surface downward shortwave forcing"    , &
-                    "W/m2"                                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%downward_shortwave_forcing                                      , &
+                    vector_length                                                                , &
+                    "downward_shortwave_forcing"                                                 , &
+                    "surface downward shortwave forcing"                                         , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%precipitation_forcing      , &
-                    vector_length                           , &
-                    "precipitation_forcing"                 , &
-                    "precipitation forcing"                 , &
-                    "mm/s"                                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%precipitation_forcing                                           , &
+                    vector_length                                                                , &
+                    "precipitation_forcing"                                                      , &
+                    "precipitation forcing"                                                      , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%precip_convective          , &
-                    vector_length                           , &
-                    "precip_convective"                     , &
-                    "convective component of precipitation" , &
-                    "mm/s"                                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%precip_convective                                               , &
+                    vector_length                                                                , &
+                    "precip_convective"                                                          , &
+                    "convective component of precipitation"                                      , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%precip_non_convective          , &
-                    vector_length                               , &
-                    "precip_non_convective"                     , &
-                    "non-convective component of precipitation" , &
-                    "mm/s"                                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%precip_non_convective                                           , &
+                    vector_length                                                                , &
+                    "precip_non_convective"                                                      , &
+                    "non-convective component of precipitation"                                  , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%precip_snow , &
-                    vector_length            , &
-                    "precip_snow"            , &
-                    "snow precipitation"     , &
-                    "mm/s"                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%precip_snow                                                     , &
+                    vector_length                                                                , &
+                    "precip_snow"                                                                , &
+                    "snow precipitation"                                                         , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%precip_graupel , &
-                    vector_length               , &
-                    "precip_graupel"            , &
-                    "graupel precipitation"     , &
-                    "mm/s"                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%precip_graupel                                                  , &
+                    vector_length                                                                , &
+                    "precip_graupel"                                                             , &
+                    "graupel precipitation"                                                      , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%precip_hail , &
-                    vector_length            , &
-                    "precip_hail"            , &
-                    "hail precipitation"     , &
-                    "mm/s"                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%precip_hail                                                     , &
+                    vector_length                                                                , &
+                    "precip_hail"                                                                , &
+                    "hail precipitation"                                                         , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%snowfall             , &
-                    vector_length                     , &
-                    "snowfall"                        , &
-                    "land model partitioned snowfall" , &
-                    "mm/s"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%snowfall                                                        , &
+                    vector_length                                                                , &
+                    "snowfall"                                                                   , &
+                    "land model partitioned snowfall"                                            , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%forcing%rainfall             , &
-                    vector_length                     , &
-                    "rainfall"                        , &
-                    "land model partitioned rainfall" , &
-                    "mm/s"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%forcing%rainfall                                                        , &
+                    vector_length                                                                , &
+                    "rainfall"                                                                   , &
+                    "land model partitioned rainfall"                                            , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%diag variables
 
-    call InitReal1d(this%diag%z0_total                                    , &
-                    vector_length                                         , &
-                    "z0_total"                                            , &
-                    "grid composite surface roughness sent to atmosphere" , &
-                    "m"                                                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%z0_total                                                           , &
+                    vector_length                                                                , &
+                    "z0_total"                                                                   , &
+                    "grid composite surface roughness sent to atmosphere"                        , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%z0h_total                                   , &
-                    vector_length                                         , &
-                    "z0h_total"                                           , &
-                    "grid composite surface thermal roughness sent to atmosphere" , &
-                    "m"                                                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%z0h_total                                                          , &
+                    vector_length                                                                , &
+                    "z0h_total"                                                                  , &
+                    "grid composite surface thermal roughness sent to atmosphere"                , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%albedo_total  , &
-                    vector_length           , &
-                    "albedo_total"          , &
-                    "grid composite albedo" , &
-                    "fraction"              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%albedo_total                                                       , &
+                    vector_length                                                                , &
+                    "albedo_total"                                                               , &
+                    "grid composite albedo"                                                      , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%diag%albedo_direct                 , &
-                    vector_length                           , &
-                    1, 2                                    , &
-                    "albedo_direct"                         , &
-                    "surface albedo - direct vis(1)/nir(2)" , &
-                    "fraction"                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%diag%albedo_direct                                                      , &
+                    vector_length                                                                , &
+                    1, 2                                                                         , &
+                    "albedo_direct"                                                              , &
+                    "surface albedo - direct vis(1)/nir(2)"                                      , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%diag%albedo_diffuse                 , &
-                    vector_length                            , &
-                    1, 2                                     , &
-                    "albedo_diffuse"                         , &
-                    "surface albedo - diffuse vis(1)/nir(2)" , &
-                    "fraction"                               , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%diag%albedo_diffuse                                                     , &
+                    vector_length                                                                , &
+                    1, 2                                                                         , &
+                    "albedo_diffuse"                                                             , &
+                    "surface albedo - diffuse vis(1)/nir(2)"                                     , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%diag%albedo_direct_snow         , &
-                    vector_length                        , &
-                    1, 2                                 , &
-                    "albedo_direct_snow"                 , &
-                    "snow albedo - direct vis(1)/nir(2)" , &
-                    "fraction"                           , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%diag%albedo_direct_snow                                                 , &
+                    vector_length                                                                , &
+                    1, 2                                                                         , &
+                    "albedo_direct_snow"                                                         , &
+                    "snow albedo - direct vis(1)/nir(2)"                                         , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%diag%albedo_diffuse_snow         , &
-                    vector_length                         , &
-                    1, 2                                  , &
-                    "albedo_diffuse_snow"                 , &
-                    "snow albedo - diffuse vis(1)/nir(2)" , &
-                    "fraction"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%diag%albedo_diffuse_snow                                                , &
+                    vector_length                                                                , &
+                    1, 2                                                                         , &
+                    "albedo_diffuse_snow"                                                        , &
+                    "snow albedo - diffuse vis(1)/nir(2)"                                        , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%emissivity_total          , &
-                    vector_length                       , &
-                    "emissivity_total"                  , &
-                    "grid composite surface emissivity" , &
-                    "-"                                 , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%emissivity_total                                                   , &
+                    vector_length                                                                , &
+                    "emissivity_total"                                                           , &
+                    "grid composite surface emissivity"                                          , &
+                    "-"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%canopy_gap_fraction , &
-                    vector_length                 , &
-                    "canopy_gap_fraction"         , &
-                    "between-canopy gap fraction" , &
-                    "fraction"                    , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%canopy_gap_fraction                                                , &
+                    vector_length                                                                , &
+                    "canopy_gap_fraction"                                                        , &
+                    "between-canopy gap fraction"                                                , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%incanopy_gap_fraction , &
-                    vector_length                   , &
-                    "incanopy_gap_fraction"         , &
-                    "within-canopy gap fraction"    , &
-                    "fraction"                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%incanopy_gap_fraction                                              , &
+                    vector_length                                                                , &
+                    "incanopy_gap_fraction"                                                      , &
+                    "within-canopy gap fraction"                                                 , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%precip_frozen_frac    , &
-                    vector_length                   , &
-                    "precip_frozen_frac"            , &
-                    "precipitation frozen fraction" , &
-                    "fraction"                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%precip_frozen_frac                                                 , &
+                    vector_length                                                                , &
+                    "precip_frozen_frac"                                                         , &
+                    "precipitation frozen fraction"                                              , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%snow_cover_fraction , &
-                    vector_length                 , &
-                    "snow_cover_fraction"         , &
-                    "snow cover fraction"         , &
-                    "fraction"                    , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%snow_cover_fraction                                                , &
+                    vector_length                                                                , &
+                    "snow_cover_fraction"                                                        , &
+                    "snow cover fraction"                                                        , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%canopy_wet_fraction         , &
-                    vector_length                         , &
-                    "canopy_wet_fraction"                 , &
-                    "wetted or snowed fraction of canopy" , &
-                    "fraction"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%canopy_wet_fraction                                                , &
+                    vector_length                                                                , &
+                    "canopy_wet_fraction"                                                        , &
+                    "wetted or snowed fraction of canopy"                                        , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%canopy_water    , &
-                    vector_length             , &
-                    "canopy_water"            , &
-                    "canopy moisture content" , &
-                    "m"                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%canopy_water                                                       , &
+                    vector_length                                                                , &
+                    "canopy_water"                                                               , &
+                    "canopy moisture content"                                                    , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%depth_water_table , &
-                    vector_length               , &
-                    "depth_water_table"         , &
-                    "depth to water table"      , &
-                    "m"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%depth_water_table                                                  , &
+                    vector_length                                                                , &
+                    "depth_water_table"                                                          , &
+                    "depth to water table"                                                       , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%lai_sunlit     , &
-                    vector_length            , &
-                    "lai_sunlit"             , &
-                    "sunlit leaf area index" , &
-                    "m2/m2"                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%lai_sunlit                                                         , &
+                    vector_length                                                                , &
+                    "lai_sunlit"                                                                 , &
+                    "sunlit leaf area index"                                                     , &
+                    "m2/m2"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%lai_shaded     , &
-                    vector_length            , &
-                    "lai_shaded"             , &
-                    "shaded leaf area index" , &
-                    "m2/m2"                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%lai_shaded                                                         , &
+                    vector_length                                                                , &
+                    "lai_shaded"                                                                 , &
+                    "shaded leaf area index"                                                     , &
+                    "m2/m2"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%diag%snow_ice_frac_old          , &
-                    vector_length                        , &
-                    snow_index, 0                        , &
-                    "snow_ice_frac_old"                  , &
-                    "snow ice fraction at last timestep" , &
-                    "fraction"                           , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%diag%snow_ice_frac_old                                                  , &
+                    vector_length                                                                , &
+                    snow_index, 0                                                                , &
+                    "snow_ice_frac_old"                                                          , &
+                    "snow ice fraction at last timestep"                                         , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%snow_albedo_old       , &
-                    vector_length                   , &
-                    "snow_albedo_old"               , &
-                    "snow albedo at last time step" , &
-                    "fraction"                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%snow_albedo_old                                                    , &
+                    vector_length                                                                , &
+                    "snow_albedo_old"                                                            , &
+                    "snow albedo at last time step"                                              , &
+                    "fraction"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%evaporation_potential , &
-                    vector_length                   , &
-                    "evaporation_potential"         , &
-                    "potential evaporation"         , &
-                    "mm/s"                          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%evaporation_potential                                              , &
+                    vector_length                                                                , &
+                    "evaporation_potential"                                                      , &
+                    "potential evaporation"                                                      , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%soil_moisture_total       , &
-                    vector_length                       , &
-                    "soil_moisture_total"               , &
-                    "total soil moisture in all levels" , &
-                    "mm"                                , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%soil_moisture_total                                                , &
+                    vector_length                                                                , &
+                    "soil_moisture_total"                                                        , &
+                    "total soil moisture in all levels"                                          , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%temperature_veg_2m                   , &
-                    vector_length                                  , &
-                    "temperature_veg_2m"                           , &
-                    "2-m air temperature over vegetation fraction" , &
-                    "K"                                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%temperature_veg_2m                                                 , &
+                    vector_length                                                                , &
+                    "temperature_veg_2m"                                                         , &
+                    "2-m air temperature over vegetation fraction"                               , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%temperature_bare_2m                   , &
-                    vector_length                                   , &
-                    "temperature_bare_2m"                           , &
-                    "2-m air temperature over bare ground fraction" , &
-                    "K"                                             , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%temperature_bare_2m                                                , &
+                    vector_length                                                                , &
+                    "temperature_bare_2m"                                                        , &
+                    "2-m air temperature over bare ground fraction"                              , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%temperature_2m        , &
-                    vector_length                   , &
-                    "temperature_2m"                , &
-                    "composite 2-m air temperature" , &
-                    "K"                             , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%temperature_2m                                                     , &
+                    vector_length                                                                , &
+                    "temperature_2m"                                                             , &
+                    "composite 2-m air temperature"                                              , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%spec_humidity_veg_2m                       , &
-                    vector_length                                        , &
-                    "spec_humidity_veg_2m"                               , &
-                    "2-m air specific humidity over vegetation fraction" , &
-                    "kg/kg"                                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%spec_humidity_veg_2m                                               , &
+                    vector_length                                                                , &
+                    "spec_humidity_veg_2m"                                                       , &
+                    "2-m air specific humidity over vegetation fraction"                         , &
+                    "kg/kg"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%spec_humidity_bare_2m                      , &
-                    vector_length                                        , &
-                    "spec_humidity_bare_2m"                              , &
-                    "2-m air specific humidity over vegetation fraction" , &
-                    "kg/kg"                                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%spec_humidity_bare_2m                                              , &
+                    vector_length                                                                , &
+                    "spec_humidity_bare_2m"                                                      , &
+                    "2-m air specific humidity over vegetation fraction"                         , &
+                    "kg/kg"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%spec_humidity_2m           , &
-                    vector_length                        , &
-                    "spec_humidity_2m"                   , &
-                    "composite 2-m air specfic humidity" , &
-                    "kg/kg"                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%spec_humidity_2m                                                   , &
+                    vector_length                                                                , &
+                    "spec_humidity_2m"                                                           , &
+                    "composite 2-m air specfic humidity"                                         , &
+                    "kg/kg"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%diag%spec_humidity_surface       , &
-                    vector_length                         , &
-                    "spec_humidity_surface"               , &
-                    "kg/kg"                               , &
-                    "diagnostic specific humidity at sfc" , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%diag%spec_humidity_surface                                              , &
+                    vector_length                                                                , &
+                    "spec_humidity_surface"                                                      , &
+                    "kg/kg"                                                                      , &
+                    "diagnostic specific humidity at sfc"                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%state variables
 
-    call InitReal2d(this%state%temperature_soil , &
-                    vector_length               , &
-                    1, soil_levels              , &
-                    "temperature_soil"          , &
-                    "soil level temperature"    , &
-                    "K"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%state%temperature_soil                                                  , &
+                    vector_length                                                                , &
+                    1, soil_levels                                                               , &
+                    "temperature_soil"                                                           , &
+                    "soil level temperature"                                                     , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%state%temperature_snow , &
-                    vector_length               , &
-                    snow_index, 0               , &
-                    "temperature_snow"          , &
-                    "snow level temperature"    , &
-                    "K"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%state%temperature_snow                                                  , &
+                    vector_length                                                                , &
+                    snow_index, 0                                                                , &
+                    "temperature_snow"                                                           , &
+                    "snow level temperature"                                                     , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%temperature_canopy_air , &
-                    vector_length                     , &
-                    "temperature_canopy_air"          , &
-                    "canopy air space temperature"    , &
-                    "K"                               , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%temperature_canopy_air                                            , &
+                    vector_length                                                                , &
+                    "temperature_canopy_air"                                                     , &
+                    "canopy air space temperature"                                               , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%temperature_radiative          , &
-                    vector_length                             , &
-                    "temperature_radiative"                   , &
-                    "composite surface radiative temperature" , &
-                    "K"                                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%temperature_radiative                                             , &
+                    vector_length                                                                , &
+                    "temperature_radiative"                                                      , &
+                    "composite surface radiative temperature"                                    , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%temperature_leaf , &
-                    vector_length               , &
-                    "temperature_leaf"          , &
-                    "leaf surface temperature"  , &
-                    "K"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%temperature_leaf                                                  , &
+                    vector_length                                                                , &
+                    "temperature_leaf"                                                           , &
+                    "leaf surface temperature"                                                   , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%temperature_ground          , &
-                    vector_length                          , &
-                    "temperature_ground"                   , &
-                    "composite ground surface temperature" , &
-                    "K"                                    , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%temperature_ground                                                , &
+                    vector_length                                                                , &
+                    "temperature_ground"                                                         , &
+                    "composite ground surface temperature"                                       , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%temperature_bare_grd   , &
-                    vector_length                     , &
-                    "temperature_bare_grd"            , &
-                    "bare ground surface temperature" , &
-                    "K"                               , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%temperature_bare_grd                                              , &
+                    vector_length                                                                , &
+                    "temperature_bare_grd"                                                       , &
+                    "bare ground surface temperature"                                            , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%temperature_veg_grd            , &
-                    vector_length                             , &
-                    "temperature_veg_grd"                     , &
-                    "below-canopy ground surface temperature" , &
-                    "K"                                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%temperature_veg_grd                                               , &
+                    vector_length                                                                , &
+                    "temperature_veg_grd"                                                        , &
+                    "below-canopy ground surface temperature"                                    , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%vapor_pres_canopy_air , &
-                    vector_length                    , &
-                    "vapor_pres_canopy_air"          , &
-                    "canopy air vapor pressure"      , &
-                    "Pa"                             , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%vapor_pres_canopy_air                                             , &
+                    vector_length                                                                , &
+                    "vapor_pres_canopy_air"                                                      , &
+                    "canopy air vapor pressure"                                                  , &
+                    "Pa"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%state%soil_liquid_vol                , &
-                    vector_length                             , &
-                    1, soil_levels                            , &
-                    "soil_liquid_vol"                         , &
-                    "volumetric liquid content in soil level" , &
-                    "m3/m3"                                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%state%soil_liquid_vol                                                   , &
+                    vector_length                                                                , &
+                    1, soil_levels                                                               , &
+                    "soil_liquid_vol"                                                            , &
+                    "volumetric liquid content in soil level"                                    , &
+                    "m3/m3"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%state%soil_moisture_vol                , &
-                    vector_length                               , &
-                    1, soil_levels                              , &
-                    "soil_moisture_vol"                         , &
-                    "volumetric moisture content in soil level" , &
-                    "m3/m3"                                     , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%state%soil_moisture_vol                                                 , &
+                    vector_length                                                                , &
+                    1, soil_levels                                                               , &
+                    "soil_moisture_vol"                                                          , &
+                    "volumetric moisture content in soil level"                                  , &
+                    "m3/m3"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%snow_water_equiv , &
-                    vector_length               , &
-                    "snow_water_equiv"          , &
-                    "snow water equivalent"     , &
-                    "mm"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%snow_water_equiv                                                  , &
+                    vector_length                                                                , &
+                    "snow_water_equiv"                                                           , &
+                    "snow water equivalent"                                                      , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%state%snow_level_ice , &
-                    vector_length             , &
-                    snow_index, 0             , &
-                    "snow_level_ice"          , &
-                    "snow level ice content"  , &
-                    "mm"                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%state%snow_level_ice                                                    , &
+                    vector_length                                                                , &
+                    snow_index, 0                                                                , &
+                    "snow_level_ice"                                                             , &
+                    "snow level ice content"                                                     , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%state%snow_level_liquid , &
-                    vector_length                , &
-                    snow_index, 0                , &
-                    "snow_level_liquid"          , &
-                    "snow level liquid content"  , &
-                    "mm"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%state%snow_level_liquid                                                 , &
+                    vector_length                                                                , &
+                    snow_index, 0                                                                , &
+                    "snow_level_liquid"                                                          , &
+                    "snow level liquid content"                                                  , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%canopy_liquid    , &
-                    vector_length               , &
-                    "canopy_liquid"             , &
-                    "canopy-intercepted liquid" , &
-                    "mm"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%canopy_liquid                                                     , &
+                    vector_length                                                                , &
+                    "canopy_liquid"                                                              , &
+                    "canopy-intercepted liquid"                                                  , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%canopy_ice    , &
-                    vector_length            , &
-                    "canopy_ice"             , &
-                    "canopy-intercepted ice" , &
-                    "mm"                     , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%canopy_ice                                                        , &
+                    vector_length                                                                , &
+                    "canopy_ice"                                                                 , &
+                    "canopy-intercepted ice"                                                     , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%aquifer_water   , &
-                    vector_length              , &
-                    "aquifer_water"            , &
-                    "water storage in aquifer" , &
-                    "mm"                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%aquifer_water                                                     , &
+                    vector_length                                                                , &
+                    "aquifer_water"                                                              , &
+                    "water storage in aquifer"                                                   , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%saturated_water        , &
-                    vector_length                     , &
-                    "saturated_water"                 , &
-                    "water in aquifer+saturated soil" , &
-                    "mm"                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%saturated_water                                                   , &
+                    vector_length                                                                , &
+                    "saturated_water"                                                            , &
+                    "water in aquifer+saturated soil"                                            , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%lake_water , &
-                    vector_length         , &
-                    "lake_water"          , &
-                    "lake water storage"  , &
-                    "mm"                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%lake_water                                                        , &
+                    vector_length                                                                , &
+                    "lake_water"                                                                 , &
+                    "lake water storage"                                                         , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%soil_moisture_wtd                                    , &
-                    vector_length                                                   , &
-                    "soil_moisture_wtd"                                             , &
-                    "soil water content between bottom of the soil and water table" , &
-                    "m3/m3"                                                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%soil_moisture_wtd                                                 , &
+                    vector_length                                                                , &
+                    "soil_moisture_wtd"                                                          , &
+                    "soil water content between bottom of the soil and water table"              , &
+                    "m3/m3"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal2d(this%state%eq_soil_water_vol     , &
-                    vector_length                    , &
-                    1, soil_levels                   , &
-                    "eq_soil_water_vol"              , &
-                    "equilibrium soil water content" , &
-                    "m3/m3"                          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal2d(this%state%eq_soil_water_vol                                                 , &
+                    vector_length                                                                , &
+                    1, soil_levels                                                               , &
+                    "eq_soil_water_vol"                                                          , &
+                    "equilibrium soil water content"                                             , &
+                    "m3/m3"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%leaf_carbon , &
-                    vector_length          , &
-                    "leaf_carbon"          , &
-                    "leaf carbon mass"     , &
-                    "g/m2"                 , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%leaf_carbon                                                       , &
+                    vector_length                                                                , &
+                    "leaf_carbon"                                                                , &
+                    "leaf carbon mass"                                                           , &
+                    "g/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%root_carbon   , &
-                    vector_length            , &
-                    "root_carbon"            , &
-                    "fine roots carbon mass" , &
-                    "g/m2"                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%root_carbon                                                       , &
+                    vector_length                                                                , &
+                    "root_carbon"                                                                , &
+                    "fine roots carbon mass"                                                     , &
+                    "g/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%stem_carbon , &
-                    vector_length          , &
-                    "stem_carbon"          , &
-                    "stem carbon mass"     , &
-                    "g/m2"                 , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%stem_carbon                                                       , &
+                    vector_length                                                                , &
+                    "stem_carbon"                                                                , &
+                    "stem carbon mass"                                                           , &
+                    "g/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%wood_carbon                 , &
-                    vector_length                          , &
-                    "wood_carbon"                          , &
-                    "wood (incl. woody roots) carbon mass" , &
-                    "g/m2"                                 , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%wood_carbon                                                       , &
+                    vector_length                                                                , &
+                    "wood_carbon"                                                                , &
+                    "wood (incl. woody roots) carbon mass"                                       , &
+                    "g/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%soil_carbon_stable , &
-                    vector_length                 , &
-                    "soil_carbon_stable"          , &
-                    "stable soil carbon mass"     , &
-                    "g/m2"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%soil_carbon_stable                                                , &
+                    vector_length                                                                , &
+                    "soil_carbon_stable"                                                         , &
+                    "stable soil carbon mass"                                                    , &
+                    "g/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%soil_carbon_fast    , &
-                    vector_length                  , &
-                    "soil_carbon_fast"             , &
-                    "short-lived soil carbon mass" , &
-                    "g/m2"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%soil_carbon_fast                                                  , &
+                    vector_length                                                                , &
+                    "soil_carbon_fast"                                                           , &
+                    "short-lived soil carbon mass"                                               , &
+                    "g/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%grain_carbon , &
-                    vector_length           , &
-                    "grain_carbon"          , &
-                    "grain carbon mass"     , &
-                    "g/m2"                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%grain_carbon                                                      , &
+                    vector_length                                                                , &
+                    "grain_carbon"                                                               , &
+                    "grain carbon mass"                                                          , &
+                    "g/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%foliage_nitrogen , &
-                    vector_length               , &
-                    "foliage_nitrogen"          , &
-                    "foliage nitrogen"          , &
-                    "percent"                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%foliage_nitrogen                                                  , &
+                    vector_length                                                                , &
+                    "foliage_nitrogen"                                                           , &
+                    "foliage nitrogen"                                                           , &
+                    "percent"                                                                    , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%snow_water_equiv_old           , &
-                    vector_length                             , &
-                    "snow_water_equiv_old"                    , &
-                    "snow water equivalent at last time step" , &
-                    "mm"                                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%snow_water_equiv_old                                              , &
+                    vector_length                                                                , &
+                    "snow_water_equiv_old"                                                       , &
+                    "snow water equivalent at last time step"                                    , &
+                    "mm"                                                                         , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%snow_depth , &
-                    vector_length         , &
-                    "snow_depth"          , &
-                    "snow depth"          , &
-                    "m"                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%snow_depth                                                        , &
+                    vector_length                                                                , &
+                    "snow_depth"                                                                 , &
+                    "snow depth"                                                                 , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%state%snow_age        , &
-                    vector_length              , &
-                    "snow_age"                 , &
-                    "non-dimensional snow age" , &
-                    "-"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%state%snow_age                                                          , &
+                    vector_length                                                                , &
+                    "snow_age"                                                                   , &
+                    "non-dimensional snow age"                                                   , &
+                    "-"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
                     
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%flux variables
 
-    call InitReal1d(this%flux%sw_absorbed_total      , &
-                    vector_length                    , &
-                    "sw_absorbed_total"              , &
-                    "total absorbed solar radiation" , &
-                    "W/m2"                           , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%sw_absorbed_total                                                  , &
+                    vector_length                                                                , &
+                    "sw_absorbed_total"                                                          , &
+                    "total absorbed solar radiation"                                             , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%sw_reflected_total      , &
-                    vector_length                     , &
-                    "sw_reflected_total"              , &
-                    "total reflected solar radiation" , &
-                    "W/m2"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%sw_reflected_total                                                 , &
+                    vector_length                                                                , &
+                    "sw_reflected_total"                                                         , &
+                    "total reflected solar radiation"                                            , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%lw_absorbed_total    , &
-                    vector_length                  , &
-                    "lw_absorbed_total"            , &
-                    "total net longwave radiation" , &
-                    "W/m2"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%lw_absorbed_total                                                  , &
+                    vector_length                                                                , &
+                    "lw_absorbed_total"                                                          , &
+                    "total net longwave radiation"                                               , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%sensible_heat_total  , &
-                    vector_length                  , &
-                    "sensible_heat_total"          , &
-                    "composite sensible heat flux" , &
-                    "W/m2"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%sensible_heat_total                                                , &
+                    vector_length                                                                , &
+                    "sensible_heat_total"                                                        , &
+                    "composite sensible heat flux"                                               , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%transpiration_heat    , &
-                    vector_length                   , &
-                    "transpiration_heat"            , &
-                    "plant transpiration heat flux" , &
-                    "W/m2"                          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%transpiration_heat                                                 , &
+                    vector_length                                                                , &
+                    "transpiration_heat"                                                         , &
+                    "plant transpiration heat flux"                                              , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%latent_heat_canopy   , &
-                    vector_length                  , &
-                    "latent_heat_canopy"           , &
-                    "canopy evaporation heat flux" , &
-                    "W/m2"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%latent_heat_canopy                                                 , &
+                    vector_length                                                                , &
+                    "latent_heat_canopy"                                                         , &
+                    "canopy evaporation heat flux"                                               , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%latent_heat_ground   , &
-                    vector_length                  , &
-                    "latent_heat_ground"           , &
-                    "direct soil latent heat flux" , &
-                    "W/m2"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%latent_heat_ground                                                 , &
+                    vector_length                                                                , &
+                    "latent_heat_ground"                                                         , &
+                    "direct soil latent heat flux"                                               , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%latent_heat_total   , &
-                    vector_length                 , &
-                    "latent_heat_total"           , &
-                    "total grid latent heat flux" , &
-                    "W/m2"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%latent_heat_total                                                  , &
+                    vector_length                                                                , &
+                    "latent_heat_total"                                                          , &
+                    "total grid latent heat flux"                                                , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%ground_heat_total    , &
-                    vector_length                  , &
-                    "ground_heat_total"            , &
-                    "total heat flux into surface" , &
-                    "W/m2"                         , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%ground_heat_total                                                  , &
+                    vector_length                                                                , &
+                    "ground_heat_total"                                                          , &
+                    "total heat flux into surface"                                               , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%precip_adv_heat_total         , &
-                    vector_length                           , &
-                    "precip_adv_heat_total"                 , &
-                    "composite precipitation advected heat" , &
-                    "W/m2"                                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%precip_adv_heat_total                                              , &
+                    vector_length                                                                , &
+                    "precip_adv_heat_total"                                                      , &
+                    "composite precipitation advected heat"                                      , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%sw_absorbed_veg                , &
-                    vector_length                            , &
-                    "sw_absorbed_veg"                        , &
-                    "solar radiation absorbed by vegetation" , &
-                    "W/m2"                                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%sw_absorbed_veg                                                    , &
+                    vector_length                                                                , &
+                    "sw_absorbed_veg"                                                            , &
+                    "solar radiation absorbed by vegetation"                                     , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%sw_absorbed_ground         , &
-                    vector_length                        , &
-                    "sw_absorbed_ground"                 , &
-                    "solar radiation absorbed by ground" , &
-                    "W/m2"                               , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%sw_absorbed_ground                                                 , &
+                    vector_length                                                                , &
+                    "sw_absorbed_ground"                                                         , &
+                    "solar radiation absorbed by ground"                                         , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%lw_absorbed_grd_veg                     , &
-                    vector_length                                     , &
-                    "lw_absorbed_grd_veg"                             , &
-                    "below-canopy ground absorbed longwave radiation" , &
-                    "W/m2"                                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%lw_absorbed_grd_veg                                                , &
+                    vector_length                                                                , &
+                    "lw_absorbed_grd_veg"                                                        , &
+                    "below-canopy ground absorbed longwave radiation"                            , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%lw_absorbed_leaf         , &
-                    vector_length                      , &
-                    "lw_absorbed_leaf"                 , &
-                    "leaf absorbed longwave radiation" , &
-                    "W/m2"                             , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%lw_absorbed_leaf                                                   , &
+                    vector_length                                                                , &
+                    "lw_absorbed_leaf"                                                           , &
+                    "leaf absorbed longwave radiation"                                           , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%lw_absorbed_grd_bare       , &
-                    vector_length                        , &
-                    "lw_absorbed_grd_bare"               , &
-                    "bare ground net longwave radiation" , &
-                    "W/m2"                               , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%lw_absorbed_grd_bare                                               , &
+                    vector_length                                                                , &
+                    "lw_absorbed_grd_bare"                                                       , &
+                    "bare ground net longwave radiation"                                         , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%sensible_heat_grd_veg          , &
-                    vector_length                            , &
-                    "sensible_heat_grd_veg"                  , &
-                    "below-canopy ground sensible heat flux" , &
-                    "W/m2"                                   , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%sensible_heat_grd_veg                                              , &
+                    vector_length                                                                , &
+                    "sensible_heat_grd_veg"                                                      , &
+                    "below-canopy ground sensible heat flux"                                     , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%sensible_heat_leaf        , &
-                    vector_length                       , &
-                    "sensible_heat_leaf"                , &
-                    "leaf-to-canopy sensible heat flux" , &
-                    "W/m2"                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%sensible_heat_leaf                                                 , &
+                    vector_length                                                                , &
+                    "sensible_heat_leaf"                                                         , &
+                    "leaf-to-canopy sensible heat flux"                                          , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%sensible_heat_grd_bar  , &
-                    vector_length                    , &
-                    "sensible_heat_grd_bar"          , &
-                    "bare ground sensible heat flux" , &
-                    "W/m2"                           , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%sensible_heat_grd_bar                                              , &
+                    vector_length                                                                , &
+                    "sensible_heat_grd_bar"                                                      , &
+                    "bare ground sensible heat flux"                                             , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%latent_heat_trans , &
-                    vector_length               , &
-                    "latent_heat_trans"         , &
-                    "transpiration heat flux"   , &
-                    "W/m2"                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%latent_heat_trans                                                  , &
+                    vector_length                                                                , &
+                    "latent_heat_trans"                                                          , &
+                    "transpiration heat flux"                                                    , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%latent_heat_leaf   , &
-                    vector_length                , &
-                    "latent_heat_leaf"           , &
-                    "leaf evaporation heat flux" , &
-                    "W/m2"                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%latent_heat_leaf                                                   , &
+                    vector_length                                                                , &
+                    "latent_heat_leaf"                                                           , &
+                    "leaf evaporation heat flux"                                                 , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%latent_heat_grd_veg               , &
-                    vector_length                               , &
-                    "latent_heat_grd_veg"                       , &
-                    "below-canopy ground evaporation heat flux" , &
-                    "W/m2"                                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%latent_heat_grd_veg                                                , &
+                    vector_length                                                                , &
+                    "latent_heat_grd_veg"                                                        , &
+                    "below-canopy ground evaporation heat flux"                                  , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%latent_heat_grd_bare      , &
-                    vector_length                       , &
-                    "latent_heat_grd_bare"              , &
-                    "bare ground evaporation heat flux" , &
-                    "W/m2"                              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%latent_heat_grd_bare                                               , &
+                    vector_length                                                                , &
+                    "latent_heat_grd_bare"                                                       , &
+                    "bare ground evaporation heat flux"                                          , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%snow_sublimation , &
-                    vector_length              , &
-                    "snow_sublimation"         , &
-                    "snow sublimation"         , &
-                    "mm/s"                     , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%snow_sublimation                                                   , &
+                    vector_length                                                                , &
+                    "snow_sublimation"                                                           , &
+                    "snow sublimation"                                                           , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%ground_heat_veg       , &
-                    vector_length                   , &
-                    "ground_heat_veg"               , &
-                    "below-canopy ground heat flux" , &
-                    "W/m2"                          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%ground_heat_veg                                                    , &
+                    vector_length                                                                , &
+                    "ground_heat_veg"                                                            , &
+                    "below-canopy ground heat flux"                                              , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%ground_heat_bare , &
-                    vector_length              , &
-                    "ground_heat_bare"         , &
-                    "bare ground heat flux"    , &
-                    "W/m2"                     , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%ground_heat_bare                                                   , &
+                    vector_length                                                                , &
+                    "ground_heat_bare"                                                           , &
+                    "bare ground heat flux"                                                      , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                     namelist%restart_names)
 
-    call InitReal1d(this%flux%precip_adv_heat_veg              , &
-                    vector_length                              , &
-                    "precip_adv_heat_veg"                      , &
-                    "precipitation advected heat - vegetation" , &
-                    "W/m2"                                     , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%precip_adv_heat_veg                                                , &
+                    vector_length                                                                , &
+                    "precip_adv_heat_veg"                                                        , &
+                    "precipitation advected heat - vegetation"                                   , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%precip_adv_heat_grd_v              , &
-                    vector_length                                , &
-                    "precip_adv_heat_grd_v"                      , &
-                    "precipitation advected heat - below-canopy" , &
-                    "W/m2"                                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%precip_adv_heat_grd_v                                              , &
+                    vector_length                                                                , &
+                    "precip_adv_heat_grd_v"                                                      , &
+                    "precipitation advected heat - below-canopy"                                 , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%precip_adv_heat_grd_b             , &
-                    vector_length                               , &
-                    "precip_adv_heat_grd_b"                     , &
-                    "precipitation advected heat - bare ground" , &
-                    "W/m2"                                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%precip_adv_heat_grd_b                                              , &
+                    vector_length                                                                , &
+                    "precip_adv_heat_grd_b"                                                      , &
+                    "precipitation advected heat - bare ground"                                  , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%transpiration    , &
-                    vector_length              , &
-                    "transpiration"            , &
-                    "transpiration water flux" , &
-                    "mm/s"                     , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%transpiration                                                      , &
+                    vector_length                                                                , &
+                    "transpiration"                                                              , &
+                    "transpiration water flux"                                                   , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%evaporation_canopy    , &
-                    vector_length                   , &
-                    "evaporation_canopy"            , &
-                    "canopy evaporation water flux" , &
-                    "mm/s"                          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%evaporation_canopy                                                 , &
+                    vector_length                                                                , &
+                    "evaporation_canopy"                                                         , &
+                    "canopy evaporation water flux"                                              , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%evaporation_soil            , &
-                    vector_length                         , &
-                    "evaporation_soil"                    , &
-                    "soil surface evaporation water flux" , &
-                    "mm/s"                                , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%evaporation_soil                                                   , &
+                    vector_length                                                                , &
+                    "evaporation_soil"                                                           , &
+                    "soil surface evaporation water flux"                                        , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%runoff_surface    , &
-                    vector_length               , &
-                    "runoff_surface"            , &
-                    "surface runoff water flux" , &
-                    "mm/s"                      , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%runoff_surface                                                     , &
+                    vector_length                                                                , &
+                    "runoff_surface"                                                             , &
+                    "surface runoff water flux"                                                  , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%runoff_baseflow    , &
-                    vector_length                , &
-                    "runoff_baseflow"            , &
-                    "drainage runoff water flux" , &
-                    "mm/s"                       , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%runoff_baseflow                                                    , &
+                    vector_length                                                                , &
+                    "runoff_baseflow"                                                            , &
+                    "drainage runoff water flux"                                                 , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%snowmelt_out        , &
-                    vector_length                 , &
-                    "snowmelt_out"                , &
-                    "snowmelt out bottom of pack" , &
-                    "mm/s"                        , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%snowmelt_out                                                       , &
+                    vector_length                                                                , &
+                    "snowmelt_out"                                                               , &
+                    "snowmelt out bottom of pack"                                                , &
+                    "mm/s"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%snowmelt_shallow , &
-                    vector_length              , &
-                    "snowmelt_shallow"         , &
-                    "shallow snow melt"        , &
-                    "mm/timestep"              , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%snowmelt_shallow                                                   , &
+                    vector_length                                                                , &
+                    "snowmelt_shallow"                                                           , &
+                    "shallow snow melt"                                                          , &
+                    "mm/timestep"                                                                , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%snowmelt_shallow_1   , &
-                    vector_length                  , &
-                    "snowmelt_shallow_1"           , &
-                    "additional shallow snow melt" , &
-                    "mm/timestep"                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%snowmelt_shallow_1                                                 , &
+                    vector_length                                                                , &
+                    "snowmelt_shallow_1"                                                         , &
+                    "additional shallow snow melt"                                               , &
+                    "mm/timestep"                                                                , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%snowmelt_shallow_2   , &
-                    vector_length                  , &
-                    "snowmelt_shallow_2"           , &
-                    "additional shallow snow melt" , &
-                    "mm/timestep"                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%snowmelt_shallow_2                                                 , &
+                    vector_length                                                                , &
+                    "snowmelt_shallow_2"                                                         , &
+                    "additional shallow snow melt"                                               , &
+                    "mm/timestep"                                                                , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%deep_recharge                         , &
-                    vector_length                                   , &
-                    "deep_recharge"                                 , &
-                    "recharge to the water table when deep"         , &
-                    "m"                                             , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%deep_recharge                                                      , &
+                    vector_length                                                                , &
+                    "deep_recharge"                                                              , &
+                    "recharge to the water table when deep"                                      , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%recharge                                 , &
-                    vector_length                                      , &
-                    "recharge"                                         , &
-                    "recharge to the water table when shallow"         , &
-                    "m"                                                , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%recharge                                                           , &
+                    vector_length                                                                , &
+                    "recharge"                                                                   , &
+                    "recharge to the water table when shallow"                                   , &
+                    "m"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%par_absorbed                     , &
-                    vector_length                              , &
-                    "par_absorbed"                             , &
-                    "absorbed photosynthesis active radiation" , &
-                    "W/m2"                                     , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%par_absorbed                                                       , &
+                    vector_length                                                                , &
+                    "par_absorbed"                                                               , &
+                    "absorbed photosynthesis active radiation"                                   , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%photosynthesis , &
-                    vector_length            , &
-                    "photosynthesis"         , &
-                    "total photosynthesis"   , &
-                    "umol CO2/m2/s"          , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%photosynthesis                                                     , &
+                    vector_length                                                                , &
+                    "photosynthesis"                                                             , &
+                    "total photosynthesis"                                                       , &
+                    "umol CO2/m2/s"                                                              , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%net_eco_exchange , &
-                    vector_length              , &
-                    "net_eco_exchange"         , &
-                    "net ecosystem exchange"   , &
-                    "g/m2/s CO2"               , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%net_eco_exchange                                                   , &
+                    vector_length                                                                , &
+                    "net_eco_exchange"                                                           , &
+                    "net ecosystem exchange"                                                     , &
+                    "g/m2/s CO2"                                                                 , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%global_prim_prod  , &
-                    vector_length               , &
-                    "global_prim_prod"          , &
-                    "global primary production" , &
-                    "g/m2/s C"                  , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%global_prim_prod                                                   , &
+                    vector_length                                                                , &
+                    "global_prim_prod"                                                           , &
+                    "global primary production"                                                  , &
+                    "g/m2/s C"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%net_prim_prod    , &
-                    vector_length              , &
-                    "net_prim_prod"            , &
-                    "net primary productivity" , &
-                    "g/m2/s C"                 , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%net_prim_prod                                                      , &
+                    vector_length                                                                , &
+                    "net_prim_prod"                                                              , &
+                    "net primary productivity"                                                   , &
+                    "g/m2/s C"                                                                   , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
-    call InitReal1d(this%flux%canopy_heat_storage     , &
-                    vector_length                     , &
-                    "canopy_heat_storage"             , &
-                    "heat transferred to canopy mass" , &
-                    "W/m2"                            , &
-                    namelist%output_names, namelist%restart_names)
+    call InitReal1d(this%flux%canopy_heat_storage                                                , &
+                    vector_length                                                                , &
+                    "canopy_heat_storage"                                                        , &
+                    "heat transferred to canopy mass"                                            , &
+                    "W/m2"                                                                       , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
 
 ! Set the default restart flags
 
@@ -1381,7 +2001,8 @@ contains
   end subroutine Init
   
   subroutine InitInt1d(indata, vector_length, in_name, in_longname, &
-                       in_units, output_names, restart_names)
+                       in_units, output_names, daily_mean_names, &
+                       monthly_mean_names, solar_noon_names, restart_names)
   
     type(int1d) :: indata
     integer :: vector_length, iname, numnames
@@ -1389,6 +2010,9 @@ contains
     character(len=*)   :: in_longname
     character(len=*)   :: in_units
     character(len=128) :: output_names(200)
+    character(len=128) :: daily_mean_names(200)
+    character(len=128) :: monthly_mean_names(200)
+    character(len=128) :: solar_noon_names(200)
     character(len=128) :: restart_names(200)
     
     allocate(indata%data (vector_length))
@@ -1402,6 +2026,33 @@ contains
       if(indata%name == output_names(iname)) indata%output_flag = .true.
     end do
 
+    numnames = count(daily_mean_names /= "")
+    do iname = 1, numnames
+      if(indata%name == daily_mean_names(iname)) then
+        indata%daily_mean_flag = .true.
+        allocate(indata%daily_mean(vector_length))
+        indata%daily_mean = 0
+      end if
+    end do
+
+    numnames = count(monthly_mean_names /= "")
+    do iname = 1, numnames
+      if(indata%name == monthly_mean_names(iname)) then
+        indata%monthly_mean_flag = .true.
+        allocate(indata%monthly_mean(vector_length))
+        indata%monthly_mean = 0
+      end if
+    end do
+
+    numnames = count(solar_noon_names /= "")
+    do iname = 1, numnames
+      if(indata%name == solar_noon_names(iname)) then
+        indata%solar_noon_flag = .true.
+        allocate(indata%solar_noon(vector_length))
+        indata%solar_noon = 0
+      end if
+    end do
+
     numnames = count(restart_names /= "")
     do iname = 1, numnames
       if(indata%name == restart_names(iname)) indata%restart_flag = .true.
@@ -1410,7 +2061,8 @@ contains
   end subroutine InitInt1d
 
   subroutine InitReal1d(indata, vector_length, in_name, in_longname, &
-                        in_units, output_names, restart_names)
+                        in_units, output_names, daily_mean_names, &
+                        monthly_mean_names, solar_noon_names, restart_names)
   
     type(real1d) :: indata
     integer :: vector_length, iname, numnames
@@ -1418,6 +2070,9 @@ contains
     character(len=*)   :: in_longname
     character(len=*)   :: in_units
     character(len=128) :: output_names(200)
+    character(len=128) :: daily_mean_names(200)
+    character(len=128) :: monthly_mean_names(200)
+    character(len=128) :: solar_noon_names(200)
     character(len=128) :: restart_names(200)
     
     allocate(indata%data (vector_length))
@@ -1431,6 +2086,33 @@ contains
       if(indata%name == output_names(iname)) indata%output_flag = .true.
     end do
 
+    numnames = count(daily_mean_names /= "")
+    do iname = 1, numnames
+      if(indata%name == daily_mean_names(iname)) then
+        indata%daily_mean_flag = .true.
+        allocate(indata%daily_mean(vector_length))
+        indata%daily_mean = 0
+      end if
+    end do
+
+    numnames = count(monthly_mean_names /= "")
+    do iname = 1, numnames
+      if(indata%name == monthly_mean_names(iname)) then
+        indata%monthly_mean_flag = .true.
+        allocate(indata%monthly_mean(vector_length))
+        indata%monthly_mean = 0
+      end if
+    end do
+
+    numnames = count(solar_noon_names /= "")
+    do iname = 1, numnames
+      if(indata%name == solar_noon_names(iname)) then
+        indata%solar_noon_flag = .true.
+        allocate(indata%solar_noon(vector_length))
+        indata%solar_noon = 0
+      end if
+    end do
+
     numnames = count(restart_names /= "")
     do iname = 1, numnames
       if(indata%name == restart_names(iname)) indata%restart_flag = .true.
@@ -1439,7 +2121,8 @@ contains
   end subroutine InitReal1d
 
   subroutine InitReal2d(indata, vector_length, ztop, zbot, in_name, in_longname,&
-                        in_units, output_names, restart_names)
+                        in_units, output_names, daily_mean_names, &
+                        monthly_mean_names, solar_noon_names, restart_names)
   
     type(real2d) :: indata
     integer :: vector_length, ztop, zbot, iname, numnames
@@ -1447,6 +2130,9 @@ contains
     character(len=*)   :: in_longname
     character(len=*)   :: in_units
     character(len=128) :: output_names(200)
+    character(len=128) :: daily_mean_names(200)
+    character(len=128) :: monthly_mean_names(200)
+    character(len=128) :: solar_noon_names(200)
     character(len=128) :: restart_names(200)
     
     allocate(indata%data (vector_length, ztop:zbot))
@@ -1458,6 +2144,33 @@ contains
     numnames = count(output_names /= "")
     do iname = 1, numnames
       if(indata%name == output_names(iname)) indata%output_flag = .true.
+    end do
+
+    numnames = count(daily_mean_names /= "")
+    do iname = 1, numnames
+      if(indata%name == daily_mean_names(iname)) then
+        indata%daily_mean_flag = .true.
+        allocate(indata%daily_mean(vector_length, ztop:zbot))
+        indata%daily_mean = 0
+      end if
+    end do
+
+    numnames = count(monthly_mean_names /= "")
+    do iname = 1, numnames
+      if(indata%name == monthly_mean_names(iname)) then
+        indata%monthly_mean_flag = .true.
+        allocate(indata%monthly_mean(vector_length, ztop:zbot))
+        indata%monthly_mean = 0
+      end if
+    end do
+
+    numnames = count(solar_noon_names /= "")
+    do iname = 1, numnames
+      if(indata%name == solar_noon_names(iname)) then
+        indata%solar_noon_flag = .true.
+        allocate(indata%solar_noon(vector_length, ztop:zbot))
+        indata%solar_noon = 0
+      end if
     end do
 
     numnames = count(restart_names /= "")
