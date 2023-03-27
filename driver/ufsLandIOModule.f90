@@ -504,20 +504,18 @@ contains
   
   end subroutine WriteOutputNoah
   
-  subroutine WriteOutputNoahMP(this, namelist, noahmp, forcing, now_time)
+  subroutine WriteOutputNoahMP(this, namelist, noahmp, now_time)
   
   use netcdf
   use time_utilities
   use error_handling, only : handle_err
   use NamelistRead
   use ufsLandNoahMPType
-  use ufsLandForcingModule
   use ufsLandGenericIO
 
   class(output_type)   :: this  
   type(namelist_type)  :: namelist
   type(noahmp_type)    :: noahmp
-  type (forcing_type)  :: forcing
   double precision     :: now_time
   character*19     :: nowdate    ! current date
   integer          :: yyyy,mm,dd,hh,nn,ss

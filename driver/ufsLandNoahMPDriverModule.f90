@@ -287,8 +287,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
     if(.not.namelist%restart_simulation) call noahmp%InitStates(namelist, now_time)
 
     if(namelist%output_initial .and. namelist%output_names_count > 0) &
-      call output%WriteOutputNoahMP(namelist, noahmp, forcing, &
-                                    now_time - timestep * namelist%timestep_seconds)
+      call output%WriteOutputNoahMP(namelist, noahmp, now_time - timestep * namelist%timestep_seconds)
   end if
 
   call forcing%ReadForcing(namelist, static, now_time)
@@ -362,17 +361,17 @@ time_loop : do timestep = 1, namelist%run_timesteps
       case( 1 : )  ! output based on number of timesteps
 
         if(mod(timestep,namelist%output_timesteps) == 0) &
-          call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time)
 
       case( -1 )  ! output daily at 00Z
 
         if(now_date(12:19) == "00:00:00") &
-          call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time)
       
       case( -2 )  ! output monthly at 00Z on 1st of month
 
         if(now_date( 9:19) == "01 00:00:00") &
-          call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time)
       
   end select output_cases
 
