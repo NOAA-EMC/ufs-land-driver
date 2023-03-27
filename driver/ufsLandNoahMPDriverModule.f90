@@ -286,8 +286,9 @@ time_loop : do timestep = 1, namelist%run_timesteps
   if(timestep == 1) then
     if(.not.namelist%restart_simulation) call noahmp%InitStates(namelist, now_time)
 
-    if(namelist%output_initial) call output%WriteOutputNoahMP(namelist, noahmp, forcing, &
-                                           now_time - timestep * namelist%timestep_seconds)
+    if(namelist%output_initial .and. namelist%output_names_count > 0) &
+      call output%WriteOutputNoahMP(namelist, noahmp, forcing, &
+                                    now_time - timestep * namelist%timestep_seconds)
   end if
 
   call forcing%ReadForcing(namelist, static, now_time)
@@ -354,24 +355,28 @@ time_loop : do timestep = 1, namelist%run_timesteps
   
   where(dswsfc>0.0 .and. sfalb<0.0) dswsfc = 0.0
 
-  output_cases : select case(namelist%output_frequency_s)
+  if(namelist%output_names_count > 0) then
+
+    output_cases : select case(namelist%output_frequency_s)
   
-    case( 1 : )  ! output based on number of timesteps
+      case( 1 : )  ! output based on number of timesteps
 
-      if(mod(timestep,namelist%output_timesteps) == 0) &
-        call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+        if(mod(timestep,namelist%output_timesteps) == 0) &
+          call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
 
-    case( -1 )  ! output daily at 00Z
+      case( -1 )  ! output daily at 00Z
 
-      if(now_date(12:19) == "00:00:00") &
-        call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+        if(now_date(12:19) == "00:00:00") &
+          call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
       
-    case( -2 )  ! output monthly at 00Z on 1st of month
+      case( -2 )  ! output monthly at 00Z on 1st of month
 
-      if(now_date( 9:19) == "01 00:00:00") &
-        call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
+        if(now_date( 9:19) == "01 00:00:00") &
+          call output%WriteOutputNoahMP(namelist, noahmp, forcing, now_time)
       
   end select output_cases
+
+  end if ! namelist%output_names_count > 0
 
   restart_cases : select case(namelist%restart_frequency_s)
   
