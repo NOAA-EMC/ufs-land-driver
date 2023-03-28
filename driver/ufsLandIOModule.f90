@@ -9,7 +9,7 @@ module ufsLandIOModule
     character*256    :: filename
     character*256    :: filename_daily_mean
     integer          :: output_counter
-    integer          :: daily_mean_count
+    integer          :: daily_mean_count = 0
 
   contains
 
@@ -619,7 +619,7 @@ contains
   type(noahmp_type)    :: noahmp
   double precision     :: now_time
   character*19     :: nowdate    ! current date
-  logical          :: end_of_day = .false.
+  logical          :: end_of_day
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad
@@ -634,6 +634,7 @@ contains
   read(nowdate(15:16),'(i2.2)') nn
   read(nowdate(18:19),'(i2.2)') ss
 
+  end_of_day = .false.
   if(hh == 0 .and. nn == 0 .and. ss == 0) end_of_day = .true.
 
   this%daily_mean_count = this%daily_mean_count + 1
@@ -694,6 +695,8 @@ contains
       call WriteNoahMP(daily_mean, namelist, noahmp, ncid, 1)
 
       status = nf90_close(ncid)
+
+      this%daily_mean_count = 0
 
     end if ! end_of_day
 
