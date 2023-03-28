@@ -2,7 +2,8 @@ module ufsLandNetcdf
 
 use netcdf
 
-  integer, parameter, private :: output = 1, restart = 2
+  integer, parameter, private :: output = 1, restart = 2, daily_mean = 3, monthly_mean = 4,  &
+                                 solar_noon = 5
 
 contains
 
@@ -95,7 +96,22 @@ contains
     case( output, restart )  ! write %data
 
       status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
-        if (status /= nf90_noerr) call handle_err(status,indata%name)
+        if (status /= nf90_noerr) call handle_err(status,"output/restart write:"//indata%name)
+
+    case( daily_mean )  ! write %daily_mean
+
+      status = nf90_put_var(ncid, varid, indata%daily_mean,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"daily_mean write:"//indata%name)
+
+    case( monthly_mean )  ! write %monthly_mean
+
+      status = nf90_put_var(ncid, varid, indata%monthly_mean,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"monthly_mean write:"//indata%name)
+
+    case( solar_noon )  ! write %solar_noon
+
+      status = nf90_put_var(ncid, varid, indata%solar_noon,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"solar_noon write:"//indata%name)
 
   end select write_cases
 
@@ -136,7 +152,22 @@ contains
     case( output, restart )  ! write %data
 
       status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
-        if (status /= nf90_noerr) call handle_err(status,indata%name)
+        if (status /= nf90_noerr) call handle_err(status,"output/restart write:"//indata%name)
+
+    case( daily_mean )  ! write %daily_mean
+
+      status = nf90_put_var(ncid, varid, indata%daily_mean,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"daily_mean write:"//indata%name)
+
+    case( monthly_mean )  ! write %monthly_mean
+
+      status = nf90_put_var(ncid, varid, indata%monthly_mean,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"monthly_mean write:"//indata%name)
+
+    case( solar_noon )  ! write %solar_noon
+
+      status = nf90_put_var(ncid, varid, indata%solar_noon,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"solar_noon write:"//indata%name)
 
   end select write_cases
 
@@ -177,7 +208,22 @@ contains
     case( output, restart )  ! write %data
 
       status = nf90_put_var(ncid, varid, indata%data,start = start, count = count)
-        if (status /= nf90_noerr) call handle_err(status,indata%name)
+        if (status /= nf90_noerr) call handle_err(status,"output/restart write:"//indata%name)
+
+    case( daily_mean )  ! write %daily_mean
+
+      status = nf90_put_var(ncid, varid, indata%daily_mean,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"daily_mean write:"//indata%name)
+
+    case( monthly_mean )  ! write %monthly_mean
+
+      status = nf90_put_var(ncid, varid, indata%monthly_mean,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"monthly_mean write:"//indata%name)
+
+    case( solar_noon )  ! write %solar_noon
+
+      status = nf90_put_var(ncid, varid, indata%solar_noon,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"solar_noon write:"//indata%name)
 
   end select write_cases
 
