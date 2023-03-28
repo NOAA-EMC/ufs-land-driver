@@ -373,8 +373,14 @@ time_loop : do timestep = 1, namelist%run_timesteps
         if(now_date( 9:19) == "01 00:00:00") &
           call output%WriteOutputNoahMP(namelist, noahmp, now_time)
       
-  end select output_cases
+    end select output_cases
 
+  end if ! namelist%output_names_count > 0
+
+  if(namelist%daily_mean_names_count > 0) then
+
+    call output%WriteDailyMeanNoahMP(namelist, noahmp, now_time)
+      
   end if ! namelist%output_names_count > 0
 
   restart_cases : select case(namelist%restart_frequency_s)
