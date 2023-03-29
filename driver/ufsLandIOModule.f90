@@ -615,7 +615,7 @@ contains
   use NamelistRead
   use ufsLandNoahMPType
   use ufsLandGenericIO
-  use ufsLandSpecialOutput, only : DailyMeanNoahMP
+  use ufsLandMeanOutput, only : DailyMeanNoahMP
 
   class(output_type)   :: this  
   type(namelist_type)  :: namelist
@@ -720,7 +720,7 @@ contains
   use NamelistRead
   use ufsLandNoahMPType
   use ufsLandGenericIO
-  use ufsLandSpecialOutput, only : MonthlyMeanNoahMP
+  use ufsLandMeanOutput, only : MonthlyMeanNoahMP
 
   class(output_type)   :: this  
   type(namelist_type)  :: namelist

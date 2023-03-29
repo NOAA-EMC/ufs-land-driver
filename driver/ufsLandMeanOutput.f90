@@ -1,4 +1,4 @@
-module ufsLandSpecialOutput
+module ufsLandMeanOutput
 
   implicit none
   save
@@ -475,4 +475,4 @@ contains
 
   end subroutine MonthlyMeanNoahMP
 
-end module ufsLandSpecialOutput
+end module ufsLandMeanOutput
