@@ -54,7 +54,7 @@ ufsLandNoahRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o
 ufsLandIOModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ufsLandGenericIO.o \
                         ../util/module_error_handling.o ../util/module_time_utilities.o ufsLandSpecialOutput.o
 ufsLandGenericIO.o:	ufsLandNamelistRead.o ufsLandNoahMPType.o ufsLandNetcdf.o
-ufsLandSpecialOutput.o:	ufsLandNoahMPType.o
+ufsLandSpecialOutput.o:	ufsLandNoahMPType.o ufsLandGenericType.o
 ufsLandNoahType.o:	ufsLandNamelistRead.o 
 ufsLandNoahMPType.o:	ufsLandGenericType.o ufsLandNamelistRead.o ../mod/noahmp_tables.o
 ufsLandNetcdf.o:	ufsLandGenericType.o 
