@@ -2,19 +2,23 @@ module ufsLandSpecialOutput
 
   implicit none
   save
-  private
   
-  integer, parameter :: output = 1, restart = 2, daily_mean = 3, monthly_mean = 4,  &
-                        solar_noon = 5
-  
-contains   
+  integer, parameter, private :: output = 1, restart = 2, daily_mean = 3, monthly_mean = 4,  &
+                                 solar_noon = 5
 
   interface accumulate
+
+    procedure accumulate_int1d
+    procedure accumulate_real1d
+    procedure accumulate_real2d
+
+  end interface accumulate
+
+contains   
 
   subroutine accumulate_int1d(indata, end_of_period, period_mean_count, mean_type)
 
     use ufsLandGenericType, only : int1d
-
     type(int1d) :: indata
     logical     :: end_of_period
     integer     :: period_mean_count
@@ -25,17 +29,17 @@ contains
     case( daily_mean )
 
       if(indata%daily_mean_flag) then
-        if(period_mean_count == 1) then indata%daily_mean = 0
+        if(period_mean_count == 1) indata%daily_mean = 0
         indata%daily_mean = indata%daily_mean + indata%data
-        if(end_of_period) indata%daily_mean = nint(indata%daily_mean / period_mean_count)
+        if(end_of_period) indata%daily_mean = nint(1.0 * indata%daily_mean / period_mean_count)
       end if
     
     case( monthly_mean )
 
       if(indata%monthly_mean_flag) then
-        if(period_mean_count == 1) then indata%monthly_mean = 0
+        if(period_mean_count == 1) indata%monthly_mean = 0
         indata%monthly_mean = indata%monthly_mean + indata%data
-        if(end_of_period) indata%monthly_mean = nint(indata%monthly_mean / period_mean_count)
+        if(end_of_period) indata%monthly_mean = nint(1.0 * indata%monthly_mean / period_mean_count)
       end if
     
     end select time_period
@@ -45,7 +49,6 @@ contains
   subroutine accumulate_real1d(indata, end_of_period, period_mean_count, mean_type)
 
     use ufsLandGenericType, only : real1d
-
     type(real1d) :: indata
     logical      :: end_of_period
     integer      :: period_mean_count
@@ -56,7 +59,7 @@ contains
     case( daily_mean )
 
       if(indata%daily_mean_flag) then
-        if(period_mean_count == 1) then indata%daily_mean = 0.0
+        if(period_mean_count == 1) indata%daily_mean = 0.0
         indata%daily_mean = indata%daily_mean + indata%data
         if(end_of_period) indata%daily_mean = indata%daily_mean / period_mean_count
       end if
@@ -64,7 +67,7 @@ contains
     case( monthly_mean )
 
       if(indata%monthly_mean_flag) then
-        if(period_mean_count == 1) then indata%monthly_mean = 0.0
+        if(period_mean_count == 1) indata%monthly_mean = 0.0
         indata%monthly_mean = indata%monthly_mean + indata%data
         if(end_of_period) indata%monthly_mean = indata%monthly_mean / period_mean_count
       end if
@@ -75,8 +78,7 @@ contains
 
   subroutine accumulate_real2d(indata, end_of_period, period_mean_count, mean_type)
 
-    use ufsLandGenericType, only : int1d
-
+    use ufsLandGenericType, only : real2d
     type(real2d) :: indata
     logical      :: end_of_period
     integer      :: period_mean_count
@@ -87,7 +89,7 @@ contains
     case( daily_mean )
 
       if(indata%daily_mean_flag) then
-        if(period_mean_count == 1) then indata%daily_mean = 0.0
+        if(period_mean_count == 1) indata%daily_mean = 0.0
         indata%daily_mean = indata%daily_mean + indata%data
         if(end_of_period) indata%daily_mean = indata%daily_mean / period_mean_count
       end if
@@ -95,17 +97,14 @@ contains
     case( monthly_mean )
 
       if(indata%monthly_mean_flag) then
-        if(period_mean_count == 1) then indata%monthly_mean = 0.0
+        if(period_mean_count == 1) indata%monthly_mean = 0.0
         indata%monthly_mean = indata%monthly_mean + indata%data
         if(end_of_period) indata%monthly_mean = indata%monthly_mean / period_mean_count
       end if
     
     end select time_period
 
-
   end subroutine accumulate_real2d
-
-  end interface accumulate
 
   subroutine DailyMeanNoahMP(noahmp, end_of_day, daily_mean_count)
   
