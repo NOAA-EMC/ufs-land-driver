@@ -5,14 +5,59 @@ module ufsLandSpecialOutput
   
 contains   
 
+  interface accumulate
+
+  subroutine accumulate_int1d(indata, end_of_day, daily_mean_count)
+    use ufsLandGenericType, only : int1d
+    type(int1d) :: indata
+    logical     :: end_of_day
+    integer     :: daily_mean_count
+
+    if(indata%daily_mean_flag) then
+      if(daily_mean_count == 1) then indata%daily_mean = 0
+      indata%daily_mean = indata%daily_mean + indata%data
+      if(end_of_day) indata%daily_mean = nint(indata%daily_mean / daily_mean_count)
+    end if
+
+  end subroutine accumulate_int1d
+
+  subroutine accumulate_real1d(indata, end_of_day, daily_mean_count)
+    use ufsLandGenericType, only : real1d
+    type(real1d) :: indata
+    logical      :: end_of_day
+    integer      :: daily_mean_count
+
+    if(indata%daily_mean_flag) then
+      if(daily_mean_count == 1) then indata%daily_mean = 0
+      indata%daily_mean = indata%daily_mean + indata%data
+      if(end_of_day) indata%daily_mean = indata%daily_mean / daily_mean_count
+    end if
+
+  end subroutine accumulate_real1d
+
+  subroutine accumulate_real2d(indata, end_of_day, daily_mean_count)
+    use ufsLandGenericType, only : int1d
+    type(real2d) :: indata
+    logical     :: end_of_day
+    integer     :: daily_mean_count
+
+    if(indata%daily_mean_flag) then
+      if(daily_mean_count == 1) then indata%daily_mean = 0
+      indata%daily_mean = indata%daily_mean + indata%data
+      if(end_of_day) indata%daily_mean = indata%daily_mean / daily_mean_count
+    end if
+
+  end subroutine accumulate_real2d
+
+  end interface accumulate
+
   subroutine DailyMeanNoahMP(noahmp, end_of_day, daily_mean_count)
   
   use ufsLandNoahMPType
   
-  type(noahmp_type)    :: noahmp
-
-  logical :: end_of_day
-  integer :: daily_mean_count
+  type(noahmp_type) :: noahmp
+  logical           :: end_of_day
+  integer           :: daily_mean_count
 
 ! Begin noahmp%static variables
 
