@@ -228,6 +228,7 @@ contains
   noahmp%static%temperature_soil_bot%data = this%deep_soil_temperature
   noahmp%model%max_vegetation_frac%data   = maxval(this%gvf_monthly,dim=2)
   noahmp%model%latitude%data              = this%latitude
+  noahmp%model%longitude%data             = this%longitude
 
   end subroutine TransferStaticNoahMP
 

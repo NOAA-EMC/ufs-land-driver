@@ -128,6 +128,7 @@ contains
 ! Begin noahmp%model variables
 
   call accumulate(noahmp%model%latitude                     , end_of_day, daily_mean_count, daily_mean)
+  call accumulate(noahmp%model%longitude                    , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%model%cosine_zenith                , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%model%forcing_height               , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%model%vegetation_fraction          , end_of_day, daily_mean_count, daily_mean)
@@ -289,7 +290,7 @@ contains
 
   end subroutine DailyMeanNoahMP
 
-  subroutine MonthlyMeanNoahMP(noahmp)
+  subroutine MonthlyMeanNoahMP(noahmp, end_of_month, monthly_mean_count)
   
   use ufsLandNoahMPType
   
@@ -312,6 +313,7 @@ contains
 ! Begin noahmp%model variables
 
   call accumulate(noahmp%model%latitude                     , end_of_month, monthly_mean_count, monthly_mean)
+  call accumulate(noahmp%model%longitude                    , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%model%cosine_zenith                , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%model%forcing_height               , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%model%vegetation_fraction          , end_of_month, monthly_mean_count, monthly_mean)

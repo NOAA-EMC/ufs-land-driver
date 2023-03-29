@@ -106,6 +106,8 @@ character(len=128)                 :: errmsg     ! CCPP error message
    real, allocatable, dimension(:) :: zvfun      ! some function of vegetation used for gfs stability
 logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
+   real, allocatable, dimension(:) :: latitude_radians
+   real, allocatable, dimension(:) :: longitude_radians
 
 logical :: do_mynnsfclay = .false.               ! flag for activating mynnsfclay
 logical :: thsfc_loc = .true.                    ! use local theta
@@ -263,6 +265,9 @@ allocate(   stress1(im))
 allocate(     fm101(im))
 allocate(      fh21(im))
 allocate(     zvfun(im))
+allocate(latitude_radians(im))
+
+latitude_radians  = noahmp%model%latitude%data  * 3.14159265/180.
 
 dry        = .true.
   where(static%vegetation_category == static%iswater) dry = .false.
@@ -329,7 +334,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             shdmin, shdmax, snoalb, sfalb, flag_iter,con_g,            &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
             iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,         &
-            iopt_stc, iopt_trs,xlatin, xcoszin, iyrlen, julian, garea, &
+            iopt_stc, iopt_trs,latitude_radians, xcoszin, iyrlen, julian, garea, &
             rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp,           &
             con_hvap, con_cp, con_jcal, rhoh2o, con_eps, con_epsm1,    &
             con_fvirt, con_rd, con_hfus, thsfc_loc,                    &
@@ -354,6 +359,8 @@ time_loop : do timestep = 1, namelist%run_timesteps
   
   where(dswsfc>0.0 .and. sfalb<0.0) dswsfc = 0.0
 
+!!! Output section !!!
+
   if(namelist%output_names_count > 0) then
 
     output_cases : select case(namelist%output_frequency_s)
@@ -377,11 +384,23 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   end if ! namelist%output_names_count > 0
 
+!!! Daily mean section !!!
+
   if(namelist%daily_mean_names_count > 0) then
 
     call output%WriteDailyMeanNoahMP(namelist, noahmp, now_time)
       
-  end if ! namelist%output_names_count > 0
+  end if ! namelist%daily_mean_names_count > 0
+
+!!! Monthly mean section !!!
+
+  if(namelist%monthly_mean_names_count > 0) then
+
+    call output%WriteMonthlyMeanNoahMP(namelist, noahmp, now_time)
+      
+  end if ! namelist%monthly_mean_names_count > 0
+
+!!! Restart section !!!
 
   restart_cases : select case(namelist%restart_frequency_s)
   

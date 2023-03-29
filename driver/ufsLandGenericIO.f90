@@ -105,6 +105,13 @@ contains
      (noahmp%model%latitude%solar_noon_flag   .and. io_type == solar_noon   ) ) &
     call Define1dReal(noahmp%model%latitude, ncid, realtype, dim_id_loc, dim_id_time)
 
+  if((noahmp%model%longitude%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%model%longitude%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%model%longitude%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%model%longitude%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%model%longitude%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Define1dReal(noahmp%model%longitude, ncid, realtype, dim_id_loc, dim_id_time)
+
   if((noahmp%model%cosine_zenith%restart_flag      .and. io_type == restart      ) .or. &
      (noahmp%model%cosine_zenith%output_flag       .and. io_type == output       ) .or. &
      (noahmp%model%cosine_zenith%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
@@ -1227,6 +1234,14 @@ contains
      (noahmp%model%latitude%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
      (noahmp%model%latitude%solar_noon_flag   .and. io_type == solar_noon   ) ) &
     call Write1dReal(io_type, noahmp%model%latitude, ncid,   &
+      start = (/local_start,output_counter/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%model%longitude%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%model%longitude%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%model%longitude%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%model%longitude%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%model%longitude%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Write1dReal(io_type, noahmp%model%longitude, ncid,   &
       start = (/local_start,output_counter/), count = (/namelist%subset_length, 1/))
 
   if((noahmp%model%cosine_zenith%restart_flag      .and. io_type == restart      ) .or. &
@@ -2473,6 +2488,10 @@ contains
 
   if(noahmp%model%latitude%restart_flag) &
     call Read1dReal(noahmp%model%latitude, ncid,   &
+      start = (/local_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%model%longitude%restart_flag) &
+    call Read1dReal(noahmp%model%longitude, ncid,   &
       start = (/local_start,1/), count = (/namelist%subset_length, 1/))
 
   if(noahmp%model%cosine_zenith%restart_flag) &

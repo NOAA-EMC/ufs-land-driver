@@ -53,7 +53,8 @@ type :: noahmp_model_type
   integer               :: j_location               ! grid index (not used in ccpp)
   integer               :: year_length              ! number of days in the current year
   real(kind=kind_phys)  :: julian_day               ! julian day of year [floating point]
-  type(real1d)          :: latitude                 ! latitude [radians]
+  type(real1d)          :: latitude                 ! latitude [degrees]
+  type(real1d)          :: longitude                ! longitude[degrees]
   type(real1d)          :: cosine_zenith            ! cosine solar zenith angle [-1,1]
   type(real1d)          :: forcing_height           ! forcing height [m]
   type(real1d)          :: vegetation_fraction      ! vegetation fraction [0.0-1.0]
@@ -354,6 +355,17 @@ contains
                     vector_length                                                                , &
                     "latitude"                                                                   , &
                     "grid cell latitude"                                                         , &
+                    "degrees_north"                                                              , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitReal1d(this%model%longitude                                                         , &
+                    vector_length                                                                , &
+                    "longitude"                                                                  , &
+                    "grid cell longitude"                                                        , &
                     "degrees_north"                                                              , &
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
