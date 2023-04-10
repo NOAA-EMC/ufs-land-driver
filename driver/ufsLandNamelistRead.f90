@@ -87,7 +87,15 @@ type, public :: namelist_type
   character*128  ::  forcing_name_temperature
   
   character*128, dimension(maximum_names)  ::  output_names
+  integer                                  ::  output_names_count
+  character*128, dimension(maximum_names)  ::  daily_mean_names
+  integer                                  ::  daily_mean_names_count
+  character*128, dimension(maximum_names)  ::  monthly_mean_names
+  integer                                  ::  monthly_mean_names_count
+  character*128, dimension(maximum_names)  ::  solar_noon_names
+  integer                                  ::  solar_noon_names_count
   character*128, dimension(maximum_names)  ::  restart_names
+  integer                                  ::  restart_names_count
   
   contains
 
@@ -179,9 +187,14 @@ contains
     character*128  ::  forcing_name_lw_radiation = ""
 
     character*128, dimension(maximum_names)  ::  output_names = ""
+    character*128, dimension(maximum_names)  ::  daily_mean_names = ""
+    character*128, dimension(maximum_names)  ::  monthly_mean_names = ""
+    character*128, dimension(maximum_names)  ::  solar_noon_names = ""
     character*128, dimension(maximum_names)  ::  restart_names = ""
   
     integer, parameter :: NOAHMP_LAND_SURFACE_MODEL = 2
+
+    integer :: icount
   
     namelist / run_setup  / static_file, init_file, forcing_dir, output_dir, timestep_seconds, &
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
@@ -208,7 +221,8 @@ contains
                          forcing_name_specific_humidity , forcing_name_wind_speed   , &
 			 forcing_name_pressure          , forcing_name_sw_radiation , &
                          forcing_name_lw_radiation
-    namelist / io / output_names, restart_names
+    namelist / io / output_names, daily_mean_names, monthly_mean_names, solar_noon_names, &
+                    restart_names
     
 !---------------------------------------------------------------------
 !  read input file, part 1
@@ -295,8 +309,17 @@ contains
     this%forcing_name_sw_radiation      = forcing_name_sw_radiation
     this%forcing_name_lw_radiation      = forcing_name_lw_radiation
     
-    this%output_names  = output_names
-    this%restart_names = restart_names
+    this%output_names       = output_names
+    this%daily_mean_names   = daily_mean_names
+    this%monthly_mean_names = monthly_mean_names
+    this%solar_noon_names   = solar_noon_names
+    this%restart_names      = restart_names
+
+    this%output_names_count       = count(this%output_names /= "")
+    this%daily_mean_names_count   = count(this%daily_mean_names /= "")
+    this%monthly_mean_names_count = count(this%monthly_mean_names /= "")
+    this%solar_noon_names_count   = count(this%solar_noon_names /= "")
+    this%restart_names_count      = count(this%restart_names /= "")
 
     if(this%location_start <= 0 .or. this%location_end <= 0) then
       write(*,*) "location_start = ", location_start

@@ -7,15 +7,26 @@ module ufsLandIOModule
   type, public :: output_type
 
     character*256    :: filename
+    character*256    :: filename_daily_mean
+    character*256    :: filename_monthly_mean
+    character*256    :: filename_solar_noon
     integer          :: output_counter
+    integer          :: daily_mean_count = 0
+    integer          :: monthly_mean_count = 0
 
   contains
 
     procedure, public  :: WriteOutputNoah
     procedure, public  :: WriteOutputNoahMP
+    procedure, public  :: WriteDailyMeanNoahMP
+    procedure, public  :: WriteMonthlyMeanNoahMP
+    procedure, public  :: WriteSolarNoonNoahMP
 
 end type output_type
      
+  integer, parameter :: output = 1, restart = 2, daily_mean = 3, monthly_mean = 4,  &
+                        solar_noon = 5
+
 contains   
 
   subroutine WriteOutputNoah(this, namelist, noah, forcing, now_time)
@@ -504,27 +515,23 @@ contains
   
   end subroutine WriteOutputNoah
   
-  subroutine WriteOutputNoahMP(this, namelist, noahmp, forcing, now_time)
+  subroutine WriteOutputNoahMP(this, namelist, noahmp, now_time)
   
   use netcdf
   use time_utilities
   use error_handling, only : handle_err
   use NamelistRead
   use ufsLandNoahMPType
-  use ufsLandForcingModule
   use ufsLandGenericIO
 
   class(output_type)   :: this  
   type(namelist_type)  :: namelist
   type(noahmp_type)    :: noahmp
-  type (forcing_type)  :: forcing
   double precision     :: now_time
   character*19     :: nowdate    ! current date
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad
-
-  integer, parameter :: output = 1, restart = 2
 
   if(now_time == namelist%initial_time + namelist%timestep_seconds .or. &
      namelist%separate_output ) then
@@ -602,5 +609,310 @@ contains
   
   end subroutine WriteOutputNoahMP
   
+  subroutine WriteDailyMeanNoahMP(this, namelist, noahmp, now_time)
+  
+  use netcdf
+  use time_utilities
+  use error_handling, only : handle_err
+  use NamelistRead
+  use ufsLandNoahMPType
+  use ufsLandGenericIO
+  use ufsLandMeanOutput, only : DailyMeanNoahMP
+
+  class(output_type)   :: this  
+  type(namelist_type)  :: namelist
+  type(noahmp_type)    :: noahmp
+  double precision     :: now_time
+  character*19     :: nowdate    ! current date
+  logical          :: end_of_day
+  integer          :: yyyy,mm,dd,hh,nn,ss
+  integer :: ncid, dimid, varid, status
+  integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad
+
+! check if next time step is new day
+
+  call date_from_since(namelist%reference_date, now_time + namelist%timestep_seconds, nowdate)
+  read(nowdate( 1: 4),'(i4.4)') yyyy
+  read(nowdate( 6: 7),'(i2.2)') mm
+  read(nowdate( 9:10),'(i2.2)') dd
+  read(nowdate(12:13),'(i2.2)') hh
+  read(nowdate(15:16),'(i2.2)') nn
+  read(nowdate(18:19),'(i2.2)') ss
+
+  end_of_day = .false.
+  if(hh == 0 .and. nn == 0 .and. ss == 0) end_of_day = .true.
+
+  this%daily_mean_count = this%daily_mean_count + 1
+
+  call DailyMeanNoahMP(noahmp, end_of_day, this%daily_mean_count)
+
+  if(end_of_day) then
+
+    call date_from_since(namelist%reference_date, now_time, nowdate)
+    read(nowdate( 1: 4),'(i4.4)') yyyy
+    read(nowdate( 6: 7),'(i2.2)') mm
+    read(nowdate( 9:10),'(i2.2)') dd
+    read(nowdate(12:13),'(i2.2)') hh
+    read(nowdate(15:16),'(i2.2)') nn
+    read(nowdate(18:19),'(i2.2)') ss
+
+    write(this%filename_daily_mean,'(a20,i4,a1,i2.2,a1,i2.2,a3)') &
+      "ufs_land_daily_mean.", yyyy, "-", mm, "-", dd, ".nc"
+
+    this%filename_daily_mean = trim(namelist%output_dir)//"/"//trim(this%filename_daily_mean)
+
+    write(*,*) "Creating: "//trim(this%filename_daily_mean)
+
+    status = nf90_create(this%filename_daily_mean, NF90_NETCDF4, ncid)
+      if (status /= nf90_noerr) call handle_err(status)
+
+! Define dimensions in the file.
+
+      status = nf90_def_dim(ncid, "location"    , namelist%location_length      , dim_id_loc)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "soil_levels" , noahmp%static%soil_levels     , dim_id_soil)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "snow_levels" , 3                             , dim_id_snow)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "snso_levels" , noahmp%static%soil_levels + 3 , dim_id_snso)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "radiation_bands" , 2                         , dim_id_rad)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "time"        , NF90_UNLIMITED                , dim_id_time)
+        if (status /= nf90_noerr) call handle_err(status)
+  
+! Define variables in the file.
+
+      status = nf90_def_var(ncid, "time", NF90_DOUBLE, dim_id_time, varid)
+        status = nf90_put_att(ncid, varid, "long_name", "time")
+        status = nf90_put_att(ncid, varid, "units", "seconds since "//namelist%reference_date)
+
+      status = nf90_def_var(ncid, "number_in_average", NF90_INT, varid)
+        status = nf90_put_att(ncid, varid, "long_name", "number_in_average")
+        status = nf90_put_att(ncid, varid, "units", "-")
+
+      call DefineNoahMP(daily_mean, noahmp, ncid, &
+                      dim_id_time, dim_id_loc, dim_id_soil, &
+                      dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad)
+
+
+      status = nf90_enddef(ncid)
+  
+      status = nf90_inq_varid(ncid, "time", varid)
+      status = nf90_put_var(ncid, varid , now_time)
+  
+      status = nf90_inq_varid(ncid, "number_in_average", varid)
+      status = nf90_put_var(ncid, varid , this%daily_mean_count)
+  
+      call WriteNoahMP(daily_mean, namelist, noahmp, ncid, 1)
+
+      status = nf90_close(ncid)
+
+      this%daily_mean_count = 0
+
+    end if ! end_of_day
+
+  end subroutine WriteDailyMeanNoahMP
+
+  subroutine WriteMonthlyMeanNoahMP(this, namelist, noahmp, now_time)
+  
+  use netcdf
+  use time_utilities
+  use error_handling, only : handle_err
+  use NamelistRead
+  use ufsLandNoahMPType
+  use ufsLandGenericIO
+  use ufsLandMeanOutput, only : MonthlyMeanNoahMP
+
+  class(output_type)   :: this  
+  type(namelist_type)  :: namelist
+  type(noahmp_type)    :: noahmp
+  double precision     :: now_time
+  character*19     :: nowdate    ! current date
+  logical          :: end_of_month
+  integer          :: yyyy,mm,dd,hh,nn,ss
+  integer :: ncid, dimid, varid, status
+  integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad
+
+! check if next time step is new month
+
+  call date_from_since(namelist%reference_date, now_time + namelist%timestep_seconds, nowdate)
+  read(nowdate( 1: 4),'(i4.4)') yyyy
+  read(nowdate( 6: 7),'(i2.2)') mm
+  read(nowdate( 9:10),'(i2.2)') dd
+  read(nowdate(12:13),'(i2.2)') hh
+  read(nowdate(15:16),'(i2.2)') nn
+  read(nowdate(18:19),'(i2.2)') ss
+
+  end_of_month = .false.
+  if(dd == 1 .and. hh == 0 .and. nn == 0 .and. ss == 0) end_of_month = .true.
+
+  this%monthly_mean_count = this%monthly_mean_count + 1
+
+  call MonthlyMeanNoahMP(noahmp, end_of_month, this%monthly_mean_count)
+
+  if(end_of_month) then
+
+    call date_from_since(namelist%reference_date, now_time, nowdate)
+    read(nowdate( 1: 4),'(i4.4)') yyyy
+    read(nowdate( 6: 7),'(i2.2)') mm
+    read(nowdate( 9:10),'(i2.2)') dd
+    read(nowdate(12:13),'(i2.2)') hh
+    read(nowdate(15:16),'(i2.2)') nn
+    read(nowdate(18:19),'(i2.2)') ss
+
+    write(this%filename_monthly_mean,'(a22,i4,a1,i2.2,a3)') &
+      "ufs_land_monthly_mean.", yyyy, "-", mm, ".nc"
+
+    this%filename_monthly_mean = trim(namelist%output_dir)//"/"//trim(this%filename_monthly_mean)
+
+    write(*,*) "Creating: "//trim(this%filename_monthly_mean)
+
+    status = nf90_create(this%filename_monthly_mean, NF90_NETCDF4, ncid)
+      if (status /= nf90_noerr) call handle_err(status)
+
+! Define dimensions in the file.
+
+      status = nf90_def_dim(ncid, "location"    , namelist%location_length      , dim_id_loc)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "soil_levels" , noahmp%static%soil_levels     , dim_id_soil)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "snow_levels" , 3                             , dim_id_snow)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "snso_levels" , noahmp%static%soil_levels + 3 , dim_id_snso)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "radiation_bands" , 2                         , dim_id_rad)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "time"        , NF90_UNLIMITED                , dim_id_time)
+        if (status /= nf90_noerr) call handle_err(status)
+  
+! Define variables in the file.
+
+      status = nf90_def_var(ncid, "time", NF90_DOUBLE, dim_id_time, varid)
+        status = nf90_put_att(ncid, varid, "long_name", "time")
+        status = nf90_put_att(ncid, varid, "units", "seconds since "//namelist%reference_date)
+
+      status = nf90_def_var(ncid, "number_in_average", NF90_INT, varid)
+        status = nf90_put_att(ncid, varid, "long_name", "number_in_average")
+        status = nf90_put_att(ncid, varid, "units", "-")
+
+      call DefineNoahMP(monthly_mean, noahmp, ncid, &
+                      dim_id_time, dim_id_loc, dim_id_soil, &
+                      dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad)
+
+
+      status = nf90_enddef(ncid)
+  
+      status = nf90_inq_varid(ncid, "time", varid)
+      status = nf90_put_var(ncid, varid , now_time)
+  
+      status = nf90_inq_varid(ncid, "number_in_average", varid)
+      status = nf90_put_var(ncid, varid , this%monthly_mean_count)
+  
+      call WriteNoahMP(monthly_mean, namelist, noahmp, ncid, 1)
+
+      status = nf90_close(ncid)
+
+      this%monthly_mean_count = 0
+
+    end if ! end_of_month
+
+  end subroutine WriteMonthlyMeanNoahMP
+
+  subroutine WriteSolarNoonNoahMP(this, namelist, noahmp, now_time)
+  
+  use netcdf
+  use time_utilities
+  use error_handling, only : handle_err
+  use NamelistRead
+  use ufsLandNoahMPType
+  use ufsLandGenericIO
+  use ufsLandTimeOutput, only : SolarNoonNoahMP
+
+  class(output_type)   :: this  
+  type(namelist_type)  :: namelist
+  type(noahmp_type)    :: noahmp
+  double precision     :: now_time
+  character*19     :: nowdate    ! current date
+  logical          :: end_of_day
+  integer          :: yyyy,mm,dd,hh,nn,ss
+  integer :: ncid, dimid, varid, status
+  integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad
+
+! check if next time step is new day
+
+  call date_from_since(namelist%reference_date, now_time + namelist%timestep_seconds, nowdate)
+  read(nowdate( 1: 4),'(i4.4)') yyyy
+  read(nowdate( 6: 7),'(i2.2)') mm
+  read(nowdate( 9:10),'(i2.2)') dd
+  read(nowdate(12:13),'(i2.2)') hh
+  read(nowdate(15:16),'(i2.2)') nn
+  read(nowdate(18:19),'(i2.2)') ss
+
+  end_of_day = .false.
+  if(hh == 0 .and. nn == 0 .and. ss == 0) end_of_day = .true.
+
+! get current hour
+
+  call date_from_since(namelist%reference_date, now_time, nowdate)
+  read(nowdate( 1: 4),'(i4.4)') yyyy
+  read(nowdate( 6: 7),'(i2.2)') mm
+  read(nowdate( 9:10),'(i2.2)') dd
+  read(nowdate(12:13),'(i2.2)') hh
+  read(nowdate(15:16),'(i2.2)') nn
+  read(nowdate(18:19),'(i2.2)') ss
+
+  call SolarNoonNoahMP(noahmp, hh)
+
+  if(end_of_day) then
+
+    write(this%filename_solar_noon,'(a20,i4,a1,i2.2,a1,i2.2,a3)') &
+      "ufs_land_solar_noon.", yyyy, "-", mm, "-", dd, ".nc"
+
+    this%filename_solar_noon = trim(namelist%output_dir)//"/"//trim(this%filename_solar_noon)
+
+    write(*,*) "Creating: "//trim(this%filename_solar_noon)
+
+    status = nf90_create(this%filename_solar_noon, NF90_NETCDF4, ncid)
+      if (status /= nf90_noerr) call handle_err(status)
+
+! Define dimensions in the file.
+
+      status = nf90_def_dim(ncid, "location"    , namelist%location_length      , dim_id_loc)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "soil_levels" , noahmp%static%soil_levels     , dim_id_soil)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "snow_levels" , 3                             , dim_id_snow)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "snso_levels" , noahmp%static%soil_levels + 3 , dim_id_snso)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "radiation_bands" , 2                         , dim_id_rad)
+        if (status /= nf90_noerr) call handle_err(status)
+      status = nf90_def_dim(ncid, "time"        , NF90_UNLIMITED                , dim_id_time)
+        if (status /= nf90_noerr) call handle_err(status)
+  
+! Define variables in the file.
+
+      status = nf90_def_var(ncid, "time", NF90_DOUBLE, dim_id_time, varid)
+        status = nf90_put_att(ncid, varid, "long_name", "time")
+        status = nf90_put_att(ncid, varid, "units", "seconds since "//namelist%reference_date)
+
+      call DefineNoahMP(solar_noon, noahmp, ncid, &
+                      dim_id_time, dim_id_loc, dim_id_soil, &
+                      dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad)
+
+
+      status = nf90_enddef(ncid)
+  
+      status = nf90_inq_varid(ncid, "time", varid)
+      status = nf90_put_var(ncid, varid , now_time)
+  
+      call WriteNoahMP(solar_noon, namelist, noahmp, ncid, 1)
+
+      status = nf90_close(ncid)
+
+    end if ! end_of_day
+
+  end subroutine WriteSolarNoonNoahMP
 
 end module ufsLandIOModule
