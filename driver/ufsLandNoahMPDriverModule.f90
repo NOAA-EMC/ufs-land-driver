@@ -107,7 +107,6 @@ character(len=128)                 :: errmsg     ! CCPP error message
 logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
    real, allocatable, dimension(:) :: latitude_radians
-   real, allocatable, dimension(:) :: longitude_radians
 
 logical :: do_mynnsfclay = .false.               ! flag for activating mynnsfclay
 logical :: thsfc_loc = .true.                    ! use local theta
@@ -399,6 +398,14 @@ time_loop : do timestep = 1, namelist%run_timesteps
     call output%WriteMonthlyMeanNoahMP(namelist, noahmp, now_time)
       
   end if ! namelist%monthly_mean_names_count > 0
+
+!!! Solar noon section !!!
+
+  if(namelist%solar_noon_names_count > 0) then
+
+    call output%WriteSolarNoonNoahMP(namelist, noahmp, now_time)
+      
+  end if ! namelist%solar_noon_names_count > 0
 
 !!! Restart section !!!
 

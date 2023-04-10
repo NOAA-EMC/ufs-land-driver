@@ -18,6 +18,7 @@ OBJS =	ufsLandDriver.o \
 	ufsLandNetcdf.o \
 	ufsLandGenericIO.o \
 	ufsLandMeanOutput.o \
+	ufsLandTimeOutput.o \
 	ufsLandInitialModule.o \
 	ufsLandForcingModule.o \
 	ufsLandStaticModule.o
@@ -52,9 +53,11 @@ ufsLandNoahDriverModule.o:	ufsLandNamelistRead.o ufsLandStaticModule.o ufsLandNo
 ufsLandNoahMPRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahMPType.o ufsLandNetcdf.o ufsLandGenericIO.o
 ufsLandNoahRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o
 ufsLandIOModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ufsLandGenericIO.o \
-                        ../util/module_error_handling.o ../util/module_time_utilities.o ufsLandMeanOutput.o
+                        ../util/module_error_handling.o ../util/module_time_utilities.o \
+                        ufsLandMeanOutput.o ufsLandTimeOutput.o
 ufsLandGenericIO.o:	ufsLandNamelistRead.o ufsLandNoahMPType.o ufsLandNetcdf.o
 ufsLandMeanOutput.o:	ufsLandNoahMPType.o ufsLandGenericType.o
+ufsLandTimeOutput.o:	ufsLandNoahMPType.o ufsLandGenericType.o
 ufsLandNoahType.o:	ufsLandNamelistRead.o 
 ufsLandNoahMPType.o:	ufsLandGenericType.o ufsLandNamelistRead.o ../mod/noahmp_tables.o
 ufsLandNetcdf.o:	ufsLandGenericType.o 

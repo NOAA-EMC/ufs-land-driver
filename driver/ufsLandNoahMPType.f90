@@ -55,6 +55,7 @@ type :: noahmp_model_type
   real(kind=kind_phys)  :: julian_day               ! julian day of year [floating point]
   type(real1d)          :: latitude                 ! latitude [degrees]
   type(real1d)          :: longitude                ! longitude[degrees]
+  type(int1d)           :: solar_noon_hour          ! hour of grid solar noon[-]
   type(real1d)          :: cosine_zenith            ! cosine solar zenith angle [-1,1]
   type(real1d)          :: forcing_height           ! forcing height [m]
   type(real1d)          :: vegetation_fraction      ! vegetation fraction [0.0-1.0]
@@ -366,6 +367,17 @@ contains
                     vector_length                                                                , &
                     "longitude"                                                                  , &
                     "grid cell longitude"                                                        , &
+                    "degrees_north"                                                              , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitInt1d(this%model%solar_noon_hour                                                    , &
+                    vector_length                                                                , &
+                    "solar_noon_hour"                                                            , &
+                    "grid cell hour at solar noon"                                               , &
                     "degrees_north"                                                              , &
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
