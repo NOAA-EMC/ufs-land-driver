@@ -26,7 +26,7 @@ OBJS =	ufsLandDriver.o \
 all:	$(OBJS)
 
 .f90.o:
-	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) -I../mod -I../util $(NETCDFMOD) $(*).f90
+	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) -I../mod -I../util -I../mpi $(NETCDFMOD) $(*).f90
 
 clean:
 	rm -f *.o *.mod *.exe
@@ -36,7 +36,7 @@ clean:
 # Dependencies:
 #
 
-ufsLandDriver.o:	ufsLandNoahDriverModule.o ufsLandNoahMPDriverModule.o
+ufsLandDriver.o:	ufsLandNoahDriverModule.o ufsLandNoahMPDriverModule.o ../mpi/mpi_land.o
 ufsLandNoahMPDriverModule.o:	ufsLandNamelistRead.o ufsLandStaticModule.o ufsLandNoahMPType.o \
                         ufsLandInitialModule.o ufsLandForcingModule.o ufsLandIOModule.o \
 			ufsLandNoahMPRestartModule.o \

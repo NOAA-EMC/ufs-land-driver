@@ -1,5 +1,6 @@
 module ufsLandNetcdf
 
+use mpi
 use netcdf
 
   integer, parameter, private :: output = 1, restart = 2, daily_mean = 3, monthly_mean = 4,  &
@@ -91,6 +92,9 @@ contains
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
+   if (status /= nf90_noerr) call handle_err(status,indata%name)
+
   write_cases : select case(io_type)
   
     case( output, restart )  ! write %data
@@ -147,6 +151,9 @@ contains
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
+   if (status /= nf90_noerr) call handle_err(status,indata%name)
+
   write_cases : select case(io_type)
   
     case( output, restart )  ! write %data
@@ -201,6 +208,9 @@ contains
   integer :: ncid, varid, status, start(2), count(2)
 
   status = nf90_inq_varid(ncid, trim(indata%name), varid)
+   if (status /= nf90_noerr) call handle_err(status,indata%name)
+
+  status = nf90_var_par_access(ncid, varid, NF90_COLLECTIVE)
    if (status /= nf90_noerr) call handle_err(status,indata%name)
 
   write_cases : select case(io_type)
