@@ -73,9 +73,16 @@ type (noah_restart_type)    :: restart
 integer          :: timestep
 double precision :: now_time
 real, allocatable, dimension(:) :: rho
-real, allocatable, dimension(:) :: albdvis_lnd, albdnir_lnd, albivis_lnd, albinir_lnd, adjvisbmd, adjnirbmd, adjvisdfd, adjnirdfd
-real, allocatable, dimension(:) :: prsik1,prslk1,ustar,rb,stress,fm,fh,fm10,fh2,z0pert,ztpert,garea,fake  ! some fields needed for sfc_diff
+real, allocatable, dimension(:) :: albdvis_lnd, albdnir_lnd, albivis_lnd, albinir_lnd, &
+                                   adjvisbmd, adjnirbmd, adjvisdfd, adjnirdfd, rhonewsn1
+real, allocatable, dimension(:) :: prsik1,prslk1,ustar,rb,stress,fm,fh,fm10,fh2,z0pert,ztpert, &
+                                   garea,fake  ! some fields needed for sfc_diff
 logical, allocatable, dimension(:) :: lfake
+
+logical                            :: exticeden
+
+integer                            :: errflg     ! CCPP error flag
+character(len=128)                 :: errmsg     ! CCPP error message
 
 real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
 real(kind=kind_phys)            :: cpinv, hvapi
@@ -177,6 +184,7 @@ allocate(adjvisbmd  (im))
 allocate(adjnirbmd  (im))
 allocate(adjvisdfd  (im))
 allocate(adjnirdfd  (im))
+allocate(rhonewsn1  (im))
 
 pertvegf = 0.d0
 bexppert = 0.d0
@@ -194,11 +202,13 @@ fh       =  1.0
 fm10     =  1.0
 fh2      =  1.0
 garea    =  3000.0
+rhonewsn1=  200.0
+exticeden=  .false.
 
 flag_iter  = .true.
 flag_guess = .false.
 
-call set_soilveg(0,isot,ivegsrc,0)
+call set_soilveg(0,isot,ivegsrc,0,errmsg,errflg)
 call gpvs()
 
 zorl     = z0_data(vegtype) * 100.0   ! at driver level, roughness length in cm
@@ -266,7 +276,8 @@ time_loop : do timestep = 1, namelist%run_timesteps
            lheatstrg, isot, ivegsrc,                                  &
            bexppert, xlaipert, vegfpert,pertvegf,                     &  !  ---  in/outs:
            albdvis_lnd, albdnir_lnd, albivis_lnd, albinir_lnd,        &  
-           adjvisbmd, adjnirbmd, adjvisdfd, adjnirdfd,                &  
+           adjvisbmd, adjnirbmd, adjvisdfd, adjnirdfd, rhonewsn1,     &  
+           exticeden,                                                 &
            weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
            canopy, trans, tsurf, zorl,                                &  !  ---  outputs:
            sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &

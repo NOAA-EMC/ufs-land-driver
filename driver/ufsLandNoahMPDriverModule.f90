@@ -48,6 +48,7 @@ use noahmpdrv
 use set_soilveg_mod
 use funcphys
 use namelist_soilveg, only : z0_data
+use noahmp_tables
 use physcons, only : con_hvap , con_cp, con_jcal, con_eps, con_epsm1,    &
                      con_fvirt, con_rd, con_hfus, con_g  ,               &
 		     tfreeze=> con_t0c, rhoh2o => rhowater
@@ -104,6 +105,7 @@ character(len=128)                 :: errmsg     ! CCPP error message
    real, allocatable, dimension(:) :: fm101      ! composite 2-meter momemtum stability
    real, allocatable, dimension(:) :: fh21       ! composite 10-meter heat/moisture stability
    real, allocatable, dimension(:) :: zvfun      ! some function of vegetation used for gfs stability
+   real, allocatable, dimension(:) :: rhonewsn1  ! holder for microphysics frozen density
 logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
    real, allocatable, dimension(:) :: latitude_radians
@@ -142,9 +144,11 @@ associate (                                                      &
    iopt_trs   => noahmp%options%thermal_roughness_scheme        ,&
    iopt_rsf   => noahmp%options%surface_evap_resistance         ,&
    iopt_gla   => noahmp%options%glacier                         ,&
+   iopt_diag  => noahmp%options%tq_diagnostic                   ,&
    soiltyp    => noahmp%static%soil_category%data               ,&
    vegtype    => noahmp%static%vegetation_category%data         ,&
    slopetyp   => noahmp%static%slope_category%data              ,&
+   soilcol    => noahmp%static%soil_color_category%data         ,&
    sigmaf     => noahmp%model%vegetation_fraction%data          ,&
    emiss      => noahmp%diag%emissivity_total%data              ,&
    albdvis    => noahmp%diag%albedo_direct%data(:,1)            ,&
@@ -264,6 +268,7 @@ allocate(   stress1(im))
 allocate(     fm101(im))
 allocate(      fh21(im))
 allocate(     zvfun(im))
+allocate( rhonewsn1(im))
 allocate(latitude_radians(im))
 
 latitude_radians  = noahmp%model%latitude%data  * 3.14159265/180.
@@ -273,8 +278,10 @@ dry        = .true.
 flag_iter  = .true.
 garea      = 3000.0 * 3000.0   ! any size >= 3km will give the same answer
 
-call set_soilveg(0,isot,ivegsrc,0)
+call set_soilveg(0,isot,ivegsrc,0,errmsg,errflg)
 call gpvs()
+
+call read_mp_table_parameters()
 
 zorl     = z0_data(vegtype) * 100.0   ! at driver level, roughness length in cm
 
@@ -323,18 +330,19 @@ time_loop : do timestep = 1, namelist%run_timesteps
   snow_mp = 0.0
   graupel_mp = 0.0
   ice_mp = 0.0
+  rhonewsn1 = huge(1.0)
   
   if(iopt_sfc == 4) do_mynnsfclay = .true.
 
       call noahmpdrv_run                                               &
-          ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,        &
+          ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,soilcol,&
             vegtype,sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,   &
             prsl1, prslk1, prslki, prsik1, zf,pblh, dry, wind, slopetyp,    &
             shdmin, shdmax, snoalb, sfalb, flag_iter,con_g,            &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
-            iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,         &
-            iopt_stc, iopt_trs,latitude_radians, xcoszin, iyrlen, julian, garea, &
-            rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp,           &
+            iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,iopt_stc,&
+            iopt_trs,iopt_diag,latitude_radians, xcoszin, iyrlen, julian, garea, &
+            rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp, rhonewsn1,&
             con_hvap, con_cp, con_jcal, rhoh2o, con_eps, con_epsm1,    &
             con_fvirt, con_rd, con_hfus, thsfc_loc,                    &
             weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
