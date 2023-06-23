@@ -2,7 +2,7 @@
 
 1) Clone the ufs-land-driver repository: 
 
-`git clone --recurse-submodules https://github.com/barlage/ufs-land-driver.git`
+`git clone --recurse-submodules https://github.com/NOAA-EMC/ufs-land-driver.git`
 
 2) Make sure your computer has a Fortran compiler and NetCDF software installed.
 
