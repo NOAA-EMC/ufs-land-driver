@@ -19,6 +19,7 @@ type :: noahmp_static_type
   type(int1d)          :: vegetation_category     ! vegetation type (integer index)
   type(int1d)          :: soil_category           ! soil texture type (integer index)
   type(int1d)          :: slope_category          ! slope category (integer index)
+  type(int1d)          :: soil_color_category     ! soil color category (integer index)
   type(real1d)         :: soil_interface_depth    ! soil layer-bottom depth from surface [m]
   type(int1d)          :: ice_flag                ! ice flag (1->ice)
   type(int1d)          :: surface_type            ! surface type flag 1->soil; 2->lake
@@ -44,6 +45,7 @@ type :: noahmp_options_type
   integer :: thermal_roughness_scheme   ! option for thermal roughness length
   integer :: surface_evap_resistance    ! option for surface resistent to evaporation/sublimation
   integer :: glacier                    ! option for glacier treatment
+  integer :: tq_diagnostic              ! option for 2m temperature and spec humidity
 
 end type noahmp_options_type
 
@@ -287,6 +289,17 @@ contains
                     vector_length                                                                , &
                     "slope_category"                                                             , &
                     "categorical slope type"                                                     , &
+                    ""                                                                           , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitInt1d (this%static%soil_color_category                                              , &
+                    vector_length                                                                , &
+                    "soil_color_category"                                                        , &
+                    "categorical soil color"                                                     , &
                     ""                                                                           , &
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
@@ -2302,6 +2315,7 @@ contains
   this%options%thermal_roughness_scheme   = namelist%thermal_roughness_scheme_option
   this%options%surface_evap_resistance    = namelist%surface_evap_resistance_option
   this%options%glacier                    = namelist%glacier_option
+  this%options%tq_diagnostic              = namelist%tq_diagnostic_option
   
   end subroutine TransferNamelist
 

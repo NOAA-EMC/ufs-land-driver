@@ -48,6 +48,7 @@ use noahmpdrv
 use set_soilveg_mod
 use funcphys
 use namelist_soilveg, only : z0_data
+use noahmp_tables
 use physcons, only : con_hvap , con_cp, con_jcal, con_eps, con_epsm1,    &
                      con_fvirt, con_rd, con_hfus, con_g  ,               &
 		     tfreeze=> con_t0c, rhoh2o => rhowater
@@ -104,6 +105,7 @@ character(len=128)                 :: errmsg     ! CCPP error message
    real, allocatable, dimension(:) :: fm101      ! composite 2-meter momemtum stability
    real, allocatable, dimension(:) :: fh21       ! composite 10-meter heat/moisture stability
    real, allocatable, dimension(:) :: zvfun      ! some function of vegetation used for gfs stability
+   real, allocatable, dimension(:) :: rhonewsn1  ! holder for microphysics frozen density
 logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
    real, allocatable, dimension(:) :: latitude_radians
@@ -142,9 +144,11 @@ associate (                                                      &
    iopt_trs   => noahmp%options%thermal_roughness_scheme        ,&
    iopt_rsf   => noahmp%options%surface_evap_resistance         ,&
    iopt_gla   => noahmp%options%glacier                         ,&
+   iopt_diag  => noahmp%options%tq_diagnostic                   ,&
    soiltyp    => noahmp%static%soil_category%data               ,&
    vegtype    => noahmp%static%vegetation_category%data         ,&
    slopetyp   => noahmp%static%slope_category%data              ,&
+   soilcol    => noahmp%static%soil_color_category%data         ,&
    sigmaf     => noahmp%model%vegetation_fraction%data          ,&
    emiss      => noahmp%diag%emissivity_total%data              ,&
    albdvis    => noahmp%diag%albedo_direct%data(:,1)            ,&
@@ -232,7 +236,45 @@ associate (                                                      &
    flhc1      => noahmp%model%heat_flux_multiplier%data         ,&
    flqc1      => noahmp%model%moisture_flux_multiplier%data     ,&
    t2mmp      => noahmp%diag%temperature_2m%data                ,&
-   q2mp       => noahmp%diag%spec_humidity_2m%data               &
+   q2mp       => noahmp%diag%spec_humidity_2m%data              ,&
+   canopy_heat_storage_ccpp   => noahmp%flux%canopy_heat_storage%data   ,&
+   rainfall_ccpp              => noahmp%forcing%rainfall%data           ,&
+   sw_absorbed_total_ccpp     => noahmp%flux%sw_absorbed_total%data     ,&
+   sw_reflected_total_ccpp    => noahmp%flux%sw_reflected_total%data    ,&
+   lw_absorbed_total_ccpp     => noahmp%flux%lw_absorbed_total%data     ,&
+   temperature_bare_grd_ccpp  => noahmp%state%temperature_bare_grd%data ,&
+   temperature_veg_grd_ccpp   => noahmp%state%temperature_veg_grd%data  ,&
+   temperature_veg_2m_ccpp    => noahmp%diag%temperature_veg_2m%data    ,&
+   temperature_bare_2m_ccpp   => noahmp%diag%temperature_bare_2m%data   ,&
+   spec_humidity_veg_2m_ccpp  => noahmp%diag%spec_humidity_veg_2m%data  ,&
+   spec_humidity_bare_2m_ccpp => noahmp%diag%spec_humidity_bare_2m%data ,&
+   sw_absorbed_veg_ccpp       => noahmp%flux%sw_absorbed_veg%data       ,&
+   sw_absorbed_ground_ccpp    => noahmp%flux%sw_absorbed_ground%data    ,&
+   snowmelt_out_ccpp          => noahmp%flux%snowmelt_out%data          ,&
+   snowmelt_shallow_ccpp      => noahmp%flux%snowmelt_shallow%data      ,&
+   albedo_direct_snow_ccpp    => noahmp%diag%albedo_direct_snow%data    ,&
+   albedo_diffuse_snow_ccpp   => noahmp%diag%albedo_diffuse_snow%data   ,&
+   ch_vegetated_ccpp          => noahmp%model%ch_vegetated%data         ,&
+   ch_bare_ground_ccpp        => noahmp%model%ch_bare_ground%data       ,&
+   sensible_heat_grd_veg_ccpp => noahmp%flux%sensible_heat_grd_veg%data ,&
+   sensible_heat_leaf_ccpp    => noahmp%flux%sensible_heat_leaf%data    ,&
+   sensible_heat_grd_bar_ccpp => noahmp%flux%sensible_heat_grd_bar%data ,&
+   latent_heat_grd_veg_ccpp   => noahmp%flux%latent_heat_grd_veg%data   ,&
+   latent_heat_grd_bare_ccpp  => noahmp%flux%latent_heat_grd_bare%data  ,&
+   ground_heat_veg_ccpp       => noahmp%flux%ground_heat_veg%data       ,&
+   ground_heat_bare_ccpp      => noahmp%flux%ground_heat_bare%data      ,&
+   lw_absorbed_grd_veg_ccpp   => noahmp%flux%lw_absorbed_grd_veg%data   ,&
+   lw_absorbed_leaf_ccpp      => noahmp%flux%lw_absorbed_leaf%data      ,&
+   lw_absorbed_grd_bare_ccpp  => noahmp%flux%lw_absorbed_grd_bare%data  ,&
+   latent_heat_trans_ccpp     => noahmp%flux%latent_heat_trans%data     ,&
+   latent_heat_leaf_ccpp      => noahmp%flux%latent_heat_leaf%data      ,&
+   ch_leaf_ccpp               => noahmp%model%ch_leaf%data              ,&
+   ch_below_canopy_ccpp       => noahmp%model%ch_below_canopy%data      ,&
+   ch_vegetated_2m_ccpp       => noahmp%model%ch_vegetated_2m%data      ,&
+   ch_bare_ground_2m_ccpp     => noahmp%model%ch_bare_ground_2m%data    ,&
+   precip_adv_heat_veg_ccpp   => noahmp%flux%precip_adv_heat_veg%data   ,&
+   precip_adv_heat_grd_v_ccpp => noahmp%flux%precip_adv_heat_grd_v%data ,&
+   precip_adv_heat_grd_b_ccpp => noahmp%flux%precip_adv_heat_grd_b%data  & 
    )
 
 allocate(       rho(im))
@@ -264,6 +306,7 @@ allocate(   stress1(im))
 allocate(     fm101(im))
 allocate(      fh21(im))
 allocate(     zvfun(im))
+allocate( rhonewsn1(im))
 allocate(latitude_radians(im))
 
 latitude_radians  = noahmp%model%latitude%data  * 3.14159265/180.
@@ -273,8 +316,10 @@ dry        = .true.
 flag_iter  = .true.
 garea      = 3000.0 * 3000.0   ! any size >= 3km will give the same answer
 
-call set_soilveg(0,isot,ivegsrc,0)
+call set_soilveg(0,isot,ivegsrc,0,errmsg,errflg)
 call gpvs()
+
+call read_mp_table_parameters(errmsg,errflg)
 
 zorl     = z0_data(vegtype) * 100.0   ! at driver level, roughness length in cm
 
@@ -323,18 +368,19 @@ time_loop : do timestep = 1, namelist%run_timesteps
   snow_mp = 0.0
   graupel_mp = 0.0
   ice_mp = 0.0
+  rhonewsn1 = huge(1.0)
   
   if(iopt_sfc == 4) do_mynnsfclay = .true.
 
       call noahmpdrv_run                                               &
-          ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,        &
+          ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,soilcol,&
             vegtype,sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,   &
             prsl1, prslk1, prslki, prsik1, zf,pblh, dry, wind, slopetyp,    &
             shdmin, shdmax, snoalb, sfalb, flag_iter,con_g,            &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
-            iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,         &
-            iopt_stc, iopt_trs,latitude_radians, xcoszin, iyrlen, julian, garea, &
-            rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp,           &
+            iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,iopt_stc,&
+            iopt_trs,iopt_diag,latitude_radians, xcoszin, iyrlen, julian, garea, &
+            rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp, rhonewsn1,&
             con_hvap, con_cp, con_jcal, rhoh2o, con_eps, con_epsm1,    &
             con_fvirt, con_rd, con_hfus, thsfc_loc,                    &
             weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
@@ -350,7 +396,45 @@ time_loop : do timestep = 1, namelist%run_timesteps
             sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &
             cmm, chh, evbs, evcw, sbsno, pah, ecan, etran, edir, snowc,&
             stm, snohf,smcwlt2, smcref2, wet1, t2mmp, q2mp,zvfun,      &
-            ztmax, errmsg, errflg)     
+            ztmax, errmsg, errflg,                                     &
+            canopy_heat_storage_ccpp,                                  &
+            rainfall_ccpp,                                             &
+            sw_absorbed_total_ccpp,                                    &
+            sw_reflected_total_ccpp,                                   &
+            lw_absorbed_total_ccpp,                                    &
+            temperature_bare_grd_ccpp,                                 &
+            temperature_veg_grd_ccpp,                                  &
+            temperature_veg_2m_ccpp,                                   &
+            temperature_bare_2m_ccpp,                                  &
+            spec_humidity_veg_2m_ccpp,                                 &
+            spec_humidity_bare_2m_ccpp,                                &
+            sw_absorbed_veg_ccpp,                                      &
+            sw_absorbed_ground_ccpp,                                   &
+            snowmelt_out_ccpp,                                         &
+            snowmelt_shallow_ccpp,                                     &
+            albedo_direct_snow_ccpp,                                   &
+            albedo_diffuse_snow_ccpp,                                  &
+            ch_vegetated_ccpp,                                         &
+            ch_bare_ground_ccpp,                                       &
+            sensible_heat_grd_veg_ccpp,                                &
+            sensible_heat_leaf_ccpp,                                   &
+            sensible_heat_grd_bar_ccpp,                                &
+            latent_heat_grd_veg_ccpp,                                  &
+            latent_heat_grd_bare_ccpp,                                 &
+            ground_heat_veg_ccpp,                                      &
+            ground_heat_bare_ccpp,                                     &
+            lw_absorbed_grd_veg_ccpp,                                  &
+            lw_absorbed_leaf_ccpp,                                     &
+            lw_absorbed_grd_bare_ccpp,                                 &
+            latent_heat_trans_ccpp,                                    &
+            latent_heat_leaf_ccpp,                                     &
+            ch_leaf_ccpp,                                              &
+            ch_below_canopy_ccpp,                                      &
+            ch_vegetated_2m_ccpp,                                      &
+            ch_bare_ground_2m_ccpp,                                    &
+            precip_adv_heat_veg_ccpp,                                  &
+            precip_adv_heat_grd_v_ccpp,                                &
+            precip_adv_heat_grd_b_ccpp                                )
 
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
   hflx = hflx * rho * con_cp

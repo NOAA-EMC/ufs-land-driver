@@ -70,6 +70,7 @@ type, public :: namelist_type
   integer        ::  thermal_roughness_scheme_option
   integer        ::  surface_evap_resistance_option
   integer        ::  glacier_option
+  integer        ::  tq_diagnostic_option
   
   integer        ::  forcing_timestep_seconds
   character*128  ::  forcing_regrid
@@ -170,6 +171,7 @@ contains
     integer        ::  thermal_roughness_scheme_option   = -999
     integer        ::  surface_evap_resistance_option    = -999
     integer        ::  glacier_option                    = -999
+    integer        ::  tq_diagnostic_option              = -999
 
     integer        ::  forcing_timestep_seconds = -999
     character*128  ::  forcing_regrid = ""
@@ -211,7 +213,7 @@ contains
                frozen_soil_adjust_option         , radiative_transfer_option         , &
                snow_albedo_option                , precip_partition_option           , &
                soil_temp_lower_bdy_option        , soil_temp_time_scheme_option      , &
-               thermal_roughness_scheme_option   , &
+               thermal_roughness_scheme_option   , tq_diagnostic_option              , &
                surface_evap_resistance_option    , glacier_option                    
     namelist / forcing / forcing_timestep_seconds       , forcing_regrid            , &
                          forcing_regrid_weights_filename,                             &
@@ -421,6 +423,7 @@ contains
       this%thermal_roughness_scheme_option   = thermal_roughness_scheme_option
       this%surface_evap_resistance_option    = surface_evap_resistance_option
       this%glacier_option                    = glacier_option
+      this%tq_diagnostic_option              = tq_diagnostic_option
     end if
 
   end subroutine ReadNamelist

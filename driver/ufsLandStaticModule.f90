@@ -15,6 +15,7 @@ type, public :: static_type
   integer, allocatable, dimension(:)    :: vegetation_category
   integer, allocatable, dimension(:)    :: soil_category
   integer, allocatable, dimension(:)    :: slope_category
+  integer, allocatable, dimension(:)    :: soil_color_category
   real   , allocatable, dimension(:)    :: deep_soil_temperature
   real   , allocatable, dimension(:)    :: elevation
   integer, allocatable, dimension(:)    :: land_mask
@@ -75,6 +76,7 @@ contains
   allocate(this%vegetation_category   (namelist%subset_length))
   allocate(this%soil_category         (namelist%subset_length))
   allocate(this%slope_category        (namelist%subset_length))
+  allocate(this%soil_color_category   (namelist%subset_length))
   allocate(this%deep_soil_temperature (namelist%subset_length))
   allocate(this%elevation             (namelist%subset_length))
   allocate(this%land_mask             (namelist%subset_length))
@@ -114,6 +116,12 @@ contains
   status = nf90_inq_varid(ncid, "slope_category", varid)
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%slope_category, &
+       start = (/namelist%subset_start/), count = (/namelist%subset_length/))
+   if(status /= nf90_noerr) call handle_err(status)
+
+  status = nf90_inq_varid(ncid, "soil_color_category", varid)
+   if(status /= nf90_noerr) call handle_err(status)
+  status = nf90_get_var(ncid, varid, this%soil_color_category, &
        start = (/namelist%subset_start/), count = (/namelist%subset_length/))
    if(status /= nf90_noerr) call handle_err(status)
 
@@ -225,6 +233,7 @@ contains
   noahmp%static%soil_category%data        = this%soil_category
   noahmp%static%vegetation_category%data  = this%vegetation_category
   noahmp%static%slope_category%data       = this%slope_category
+  noahmp%static%soil_color_category%data  = this%soil_color_category
   noahmp%static%temperature_soil_bot%data = this%deep_soil_temperature
   noahmp%model%max_vegetation_frac%data   = maxval(this%gvf_monthly,dim=2)
   noahmp%model%latitude%data              = this%latitude

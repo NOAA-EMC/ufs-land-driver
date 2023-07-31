@@ -49,11 +49,11 @@ lsm_noah.o: $(PHYSDIR)/lsm_noah.f
 date_def.o: $(PHYSDIR)/date_def.f
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/date_def.f
 
-module_sf_noahmp_glacier.o: $(PHYSDIR)/module_sf_noahmp_glacier.f90
-	$(COMPILERF90) -cpp -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/module_sf_noahmp_glacier.f90
+module_sf_noahmp_glacier.o: $(PHYSDIR)/module_sf_noahmp_glacier.F90
+	$(COMPILERF90) -cpp -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/module_sf_noahmp_glacier.F90
 
-module_sf_noahmplsm.o: $(PHYSDIR)/module_sf_noahmplsm.f90
-	$(COMPILERF90) -cpp -c $(F90FLAGS) -ffree-line-length-none $(FREESOURCE) $(PHYSDIR)/module_sf_noahmplsm.f90
+module_sf_noahmplsm.o: $(PHYSDIR)/module_sf_noahmplsm.F90
+	$(COMPILERF90) -cpp -c $(F90FLAGS) -ffree-line-length-none $(FREESOURCE) $(PHYSDIR)/module_sf_noahmplsm.F90
 
 noahmp_tables.o: $(PHYSDIR)/noahmp_tables.f90
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/noahmp_tables.f90

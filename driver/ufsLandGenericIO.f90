@@ -61,6 +61,13 @@ contains
      (noahmp%static%slope_category%solar_noon_flag   .and. io_type == solar_noon   ) ) &
     call Define1dInt(noahmp%static%slope_category, ncid, NF90_INT, dim_id_loc, dim_id_time)
 
+  if((noahmp%static%soil_color_category%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%static%soil_color_category%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%static%soil_color_category%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%static%soil_color_category%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%static%soil_color_category%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Define1dInt(noahmp%static%soil_color_category, ncid, NF90_INT, dim_id_loc, dim_id_time)
+
   if((noahmp%static%soil_interface_depth%restart_flag      .and. io_type == restart      ) .or. &
      (noahmp%static%soil_interface_depth%output_flag       .and. io_type == output       ) .or. &
      (noahmp%static%soil_interface_depth%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
@@ -1191,6 +1198,14 @@ contains
      (noahmp%static%slope_category%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
      (noahmp%static%slope_category%solar_noon_flag   .and. io_type == solar_noon   ) ) &
     call Write1dInt(io_type, noahmp%static%slope_category, ncid,   &
+      start = (/local_start,output_counter/), count = (/namelist%subset_length, 1/))
+
+  if((noahmp%static%soil_color_category%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%static%soil_color_category%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%static%soil_color_category%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%static%soil_color_category%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%static%soil_color_category%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Write1dInt(io_type, noahmp%static%soil_color_category, ncid,   &
       start = (/local_start,output_counter/), count = (/namelist%subset_length, 1/))
 
   if((noahmp%static%soil_interface_depth%restart_flag      .and. io_type == restart      ) .or. &
@@ -2477,6 +2492,10 @@ contains
 
   if(noahmp%static%slope_category%restart_flag) &
     call Read1dInt(noahmp%static%slope_category, ncid,   &
+      start = (/local_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%static%soil_color_category%restart_flag) &
+    call Read1dInt(noahmp%static%soil_color_category, ncid,   &
       start = (/local_start,1/), count = (/namelist%subset_length, 1/))
 
   if(noahmp%static%soil_interface_depth%restart_flag) &
