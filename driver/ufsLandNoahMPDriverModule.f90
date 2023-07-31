@@ -319,7 +319,7 @@ garea      = 3000.0 * 3000.0   ! any size >= 3km will give the same answer
 call set_soilveg(0,isot,ivegsrc,0,errmsg,errflg)
 call gpvs()
 
-call read_mp_table_parameters()
+call read_mp_table_parameters(errmsg,errflg)
 
 zorl     = z0_data(vegtype) * 100.0   ! at driver level, roughness length in cm
 
