@@ -26,6 +26,7 @@ OBJS =	../driver/ufsLandDriver.o \
 	../util/module_time_utilities.o \
 	../util/module_interpolation_utilities.o \
 	../util/module_cosine_zenith.o \
+	../util/module_diagnostics.o \
 	../mpi/mpi_land.o \
 	../mod/machine.o \
 	../mod/physcons.o \
