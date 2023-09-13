@@ -137,6 +137,9 @@ type :: noahmp_diag_type
   type(real1d)  :: spec_humidity_bare_2m  ! bare ground 2-m air specfic humidity [K]
   type(real1d)  :: spec_humidity_2m       ! composite 2-m air specfic humidity [K]
   type(real1d)  :: spec_humidity_surface  ! surface specific humidty [kg/kg]
+  type(real1d)  :: dewpoint_veg_2m        ! vegetated 2-m dewpoint temperature [K]
+  type(real1d)  :: dewpoint_bare_2m       ! bare ground 2-m dewpoint temperature [K]
+  type(real1d)  :: dewpoint_2m            ! composite 2-m dewpoint temperature [K]
 
 end type noahmp_diag_type
 
@@ -1140,7 +1143,7 @@ contains
     call InitReal1d(this%diag%spec_humidity_bare_2m                                              , &
                     vector_length                                                                , &
                     "spec_humidity_bare_2m"                                                      , &
-                    "2-m air specific humidity over vegetation fraction"                         , &
+                    "2-m air specific humidity over bare fraction"                               , &
                     "kg/kg"                                                                      , &
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
@@ -1164,6 +1167,39 @@ contains
                     "spec_humidity_surface"                                                      , &
                     "kg/kg"                                                                      , &
                     "diagnostic specific humidity at sfc"                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitReal1d(this%diag%dewpoint_bare_2m                                                   , &
+                    vector_length                                                                , &
+                    "dewpoint_bare_2m"                                                           , &
+                    "K"                                                                          , &
+                    "2-m dewpoint over bare fraction"                                            , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitReal1d(this%diag%dewpoint_veg_2m                                                   , &
+                    vector_length                                                                , &
+                    "dewpoint_veg_2m"                                                           , &
+                    "K"                                                                          , &
+                    "2-m dewpoint over vegetated fraction"                                            , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitReal1d(this%diag%dewpoint_2m                                                        , &
+                    vector_length                                                                , &
+                    "dewpoint_2m"                                                                , &
+                    "K"                                                                          , &
+                    "2-m dewpoint using composited specific humidity"                            , &
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &

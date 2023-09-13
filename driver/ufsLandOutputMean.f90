@@ -204,6 +204,9 @@ contains
   call accumulate(noahmp%diag%spec_humidity_bare_2m         , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%diag%spec_humidity_2m              , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%diag%spec_humidity_surface         , end_of_day, daily_mean_count, daily_mean)
+  call accumulate(noahmp%diag%dewpoint_veg_2m               , end_of_day, daily_mean_count, daily_mean)
+  call accumulate(noahmp%diag%dewpoint_bare_2m              , end_of_day, daily_mean_count, daily_mean)
+  call accumulate(noahmp%diag%dewpoint_2m                   , end_of_day, daily_mean_count, daily_mean)
 
 ! Begin noahmp%state variables
 
@@ -389,6 +392,9 @@ contains
   call accumulate(noahmp%diag%spec_humidity_bare_2m         , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%diag%spec_humidity_2m              , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%diag%spec_humidity_surface         , end_of_month, monthly_mean_count, monthly_mean)
+  call accumulate(noahmp%diag%dewpoint_veg_2m               , end_of_month, monthly_mean_count, monthly_mean)
+  call accumulate(noahmp%diag%dewpoint_bare_2m              , end_of_month, monthly_mean_count, monthly_mean)
+  call accumulate(noahmp%diag%dewpoint_2m                   , end_of_month, monthly_mean_count, monthly_mean)
 
 ! Begin noahmp%state variables
 

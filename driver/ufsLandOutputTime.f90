@@ -173,6 +173,9 @@ contains
   call solar_noon_add(noahmp%diag%spec_humidity_bare_2m         , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%diag%spec_humidity_2m              , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%diag%spec_humidity_surface         , noahmp%model%solar_noon_hour, current_hour, solar_noon)
+  call solar_noon_add(noahmp%diag%dewpoint_veg_2m               , noahmp%model%solar_noon_hour, current_hour, solar_noon)
+  call solar_noon_add(noahmp%diag%dewpoint_bare_2m              , noahmp%model%solar_noon_hour, current_hour, solar_noon)
+  call solar_noon_add(noahmp%diag%dewpoint_2m                   , noahmp%model%solar_noon_hour, current_hour, solar_noon)
 
 ! Begin noahmp%state variables
 

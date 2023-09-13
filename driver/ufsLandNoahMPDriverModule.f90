@@ -56,6 +56,7 @@ use physcons, only : con_hvap , con_cp, con_jcal, con_eps, con_epsm1,    &
 use interpolation_utilities
 use time_utilities
 use cosine_zenith
+use diagnostics
 use NamelistRead, only         : namelist_type
 use ufsLandNoahMPType, only    : noahmp_type
 use ufsLandStaticModule, only  : static_type
@@ -358,7 +359,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
   snet     = dswsfc * (1.0_kind_phys - sfalb)
   srflag   = 0.0d0
     where(t1 < tfreeze) srflag = 1.d0
-  prsl1    = ps * exp(-1.d0*zf/29.25d0/t1)       !  29.26 [m/K] / T [K] is the atmospheric scale height
+  prsl1    = ps * exp(-1.d0*zf/29.25d0/t1)       !  29.25 [m/K] / T [K] is the atmospheric scale height
   prslki   = (exp(zf/29.25d0/t1))**(2.d0/7.d0)  
   prslk1   = (exp(zf/29.25d0/t1))**(2.d0/7.d0)   !  assuming Exner function is approximately constant
   prsik1   = (exp(zf/29.25d0/t1))**(2.d0/7.d0)   !   for these subtleties
@@ -439,6 +440,13 @@ time_loop : do timestep = 1, namelist%run_timesteps
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
   hflx = hflx * rho * con_cp
   evap = evap * rho * con_hvap
+  
+  call calc_dewpoint(  namelist%subset_length, noahmp%diag%spec_humidity_veg_2m%data, &
+                     forcing%surface_pressure, noahmp%diag%dewpoint_veg_2m%data       ) 
+  call calc_dewpoint(  namelist%subset_length, noahmp%diag%spec_humidity_bare_2m%data, &
+                     forcing%surface_pressure, noahmp%diag%dewpoint_bare_2m%data       ) 
+  call calc_dewpoint(  namelist%subset_length, noahmp%diag%spec_humidity_2m%data, &
+                     forcing%surface_pressure, noahmp%diag%dewpoint_2m%data       ) 
   
   where(dswsfc>0.0 .and. sfalb<0.0) dswsfc = 0.0
 
