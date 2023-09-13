@@ -15,6 +15,7 @@ type :: int1d
   logical                           :: daily_mean_flag   = .false. ! 
   logical                           :: monthly_mean_flag = .false. ! 
   logical                           :: solar_noon_flag   = .false. ! 
+  logical                           :: diurnal_flag      = .false. ! 
   character*128                     :: name                        ! 
   character*128                     :: long_name                   ! 
   character*128                     :: units                       ! 
@@ -32,6 +33,7 @@ type :: real1d
   logical                           :: daily_mean_flag   = .false. ! 
   logical                           :: monthly_mean_flag = .false. ! 
   logical                           :: solar_noon_flag   = .false. ! 
+  logical                           :: diurnal_flag      = .false. ! 
   character*128                     :: name                        ! 
   character*128                     :: long_name                   ! 
   character*128                     :: units                       ! 
@@ -49,6 +51,7 @@ type :: int2d
   logical                           :: daily_mean_flag   = .false. ! 
   logical                           :: monthly_mean_flag = .false. ! 
   logical                           :: solar_noon_flag   = .false. ! 
+  logical                           :: diurnal_flag      = .false. ! 
   character*128                     :: name                        ! 
   character*128                     :: long_name                   ! 
   character*128                     :: units                       ! 
@@ -66,6 +69,7 @@ type :: real2d
   logical                           :: daily_mean_flag   = .false. ! 
   logical                           :: monthly_mean_flag = .false. ! 
   logical                           :: solar_noon_flag   = .false. ! 
+  logical                           :: diurnal_flag      = .false. ! 
   character*128                     :: name                        ! 
   character*128                     :: long_name                   ! 
   character*128                     :: units                       ! 

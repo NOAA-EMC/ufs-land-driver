@@ -4,7 +4,7 @@ use mpi
 use netcdf
 
   integer, parameter, private :: output = 1, restart = 2, daily_mean = 3, monthly_mean = 4,  &
-                                 solar_noon = 5
+                                 solar_noon = 5, diurnal = 6
 
 contains
 
@@ -170,6 +170,11 @@ contains
 
       status = nf90_put_var(ncid, varid, indata%monthly_mean,start = start, count = count)
         if (status /= nf90_noerr) call handle_err(status,"monthly_mean write:"//indata%name)
+
+    case( diurnal )  ! write %diurnal
+
+      status = nf90_put_var(ncid, varid, indata%diurnal,start = start, count = count)
+        if (status /= nf90_noerr) call handle_err(status,"diurnal write:"//indata%name)
 
     case( solar_noon )  ! write %solar_noon
 

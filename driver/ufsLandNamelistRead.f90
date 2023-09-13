@@ -95,6 +95,8 @@ type, public :: namelist_type
   integer                                  ::  monthly_mean_names_count
   character*128, dimension(maximum_names)  ::  solar_noon_names
   integer                                  ::  solar_noon_names_count
+  character*128, dimension(maximum_names)  ::  diurnal_names
+  integer                                  ::  diurnal_names_count
   character*128, dimension(maximum_names)  ::  restart_names
   integer                                  ::  restart_names_count
   
@@ -192,6 +194,7 @@ contains
     character*128, dimension(maximum_names)  ::  daily_mean_names = ""
     character*128, dimension(maximum_names)  ::  monthly_mean_names = ""
     character*128, dimension(maximum_names)  ::  solar_noon_names = ""
+    character*128, dimension(maximum_names)  ::  diurnal_names = ""
     character*128, dimension(maximum_names)  ::  restart_names = ""
   
     integer, parameter :: NOAHMP_LAND_SURFACE_MODEL = 2
@@ -224,7 +227,7 @@ contains
 			 forcing_name_pressure          , forcing_name_sw_radiation , &
                          forcing_name_lw_radiation
     namelist / io / output_names, daily_mean_names, monthly_mean_names, solar_noon_names, &
-                    restart_names
+                    restart_names, diurnal_names
     
 !---------------------------------------------------------------------
 !  read input file, part 1
@@ -315,12 +318,14 @@ contains
     this%daily_mean_names   = daily_mean_names
     this%monthly_mean_names = monthly_mean_names
     this%solar_noon_names   = solar_noon_names
+    this%diurnal_names      = diurnal_names
     this%restart_names      = restart_names
 
     this%output_names_count       = count(this%output_names /= "")
     this%daily_mean_names_count   = count(this%daily_mean_names /= "")
     this%monthly_mean_names_count = count(this%monthly_mean_names /= "")
     this%solar_noon_names_count   = count(this%solar_noon_names /= "")
+    this%diurnal_names_count      = count(this%diurnal_names /= "")
     this%restart_names_count      = count(this%restart_names /= "")
 
     if(this%location_start <= 0 .or. this%location_end <= 0) then
