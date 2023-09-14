@@ -2587,9 +2587,9 @@ contains
     end do
 
     numnames = count(diurnal_names /= "")
-    if(numname > 0) stop "diurnal output not supported for vertical dimensioned fields yet"
     do iname = 1, numnames
       if(indata%name == diurnal_names(iname)) then
+        if(numnames > 0) stop "diurnal output not supported for vertical dimensioned fields yet"
         indata%diurnal_flag = .true.
         allocate(indata%diurnal(vector_length, ztop:zbot, num_diurnal))
         indata%diurnal = 0

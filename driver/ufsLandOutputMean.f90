@@ -1,10 +1,10 @@
 module ufsLandMeanOutput
 
+  use NamelistRead
+    
   implicit none
   save
   
-  use NamelistRead
-    
   type(namelist_type) :: namelist
   integer, parameter, private :: output = 1, restart = 2, daily_mean = 3, monthly_mean = 4,  &
                                  solar_noon = 5, diurnal = 6
@@ -106,6 +106,7 @@ contains
     logical      :: end_of_period
     integer      :: period_mean_count
     integer      :: mean_type
+    integer      :: diurnal_time
 
     time_period : select case(mean_type)
   
@@ -123,6 +124,15 @@ contains
         if(period_mean_count == 1) indata%monthly_mean = 0.0
         indata%monthly_mean = indata%monthly_mean + indata%data
         if(end_of_period) indata%monthly_mean = indata%monthly_mean / period_mean_count
+      end if
+    
+    case( diurnal )
+
+      if(indata%diurnal_flag) then
+        diurnal_time = mod(period_mean_count,namelist%num_diurnal)
+        if(period_mean_count == 1) indata%diurnal = 0
+        indata%diurnal(:,diurnal_time,:) = indata%diurnal(:,diurnal_time,:) + indata%data
+        if(end_of_period) indata%diurnal = indata%diurnal / period_mean_count * namelist%num_diurnal
       end if
     
     end select time_period
