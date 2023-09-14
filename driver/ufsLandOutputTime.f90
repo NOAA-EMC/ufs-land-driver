@@ -4,7 +4,7 @@ module ufsLandTimeOutput
   save
   
   integer, parameter, private :: output = 1, restart = 2, daily_mean = 3, monthly_mean = 4,  &
-                                 solar_noon = 5
+                                 solar_noon = 5, diurnal = 6
 
   interface solar_noon_add
 

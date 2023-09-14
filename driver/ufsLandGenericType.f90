@@ -9,6 +9,7 @@ type :: int1d
   integer             , allocatable :: data (:)                    ! 
   integer             , allocatable :: daily_mean (:)              ! 
   integer             , allocatable :: monthly_mean (:)            ! 
+  integer             , allocatable :: diurnal (:,:)               ! 
   integer             , allocatable :: solar_noon (:)              ! 
   logical                           :: output_flag       = .false. ! 
   logical                           :: restart_flag      = .false. ! 
@@ -27,6 +28,7 @@ type :: real1d
   real(kind=kind_phys), allocatable :: data (:)                    ! 
   real(kind=kind_phys), allocatable :: daily_mean (:)              ! 
   real(kind=kind_phys), allocatable :: monthly_mean (:)            ! 
+  real(kind=kind_phys), allocatable :: diurnal (:,:)               ! 
   real(kind=kind_phys), allocatable :: solar_noon (:)              ! 
   logical                           :: output_flag       = .false. ! 
   logical                           :: restart_flag      = .false. ! 
@@ -45,6 +47,7 @@ type :: int2d
   integer             , allocatable :: data (:,:)                  ! 
   integer             , allocatable :: daily_mean (:,:)            ! 
   integer             , allocatable :: monthly_mean (:,:)          ! 
+  integer             , allocatable :: diurnal (:,:,:)             ! 
   integer             , allocatable :: solar_noon (:,:)            ! 
   logical                           :: output_flag       = .false. ! 
   logical                           :: restart_flag      = .false. ! 
@@ -63,6 +66,7 @@ type :: real2d
   real(kind=kind_phys), allocatable :: data (:,:)                  ! 
   real(kind=kind_phys), allocatable :: daily_mean (:,:)            ! 
   real(kind=kind_phys), allocatable :: monthly_mean (:,:)          ! 
+  real(kind=kind_phys), allocatable :: diurnal (:,:,:)             ! 
   real(kind=kind_phys), allocatable :: solar_noon (:,:)            ! 
   logical                           :: output_flag       = .false. ! 
   logical                           :: restart_flag      = .false. ! 

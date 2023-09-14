@@ -97,6 +97,7 @@ type, public :: namelist_type
   integer                                  ::  solar_noon_names_count
   character*128, dimension(maximum_names)  ::  diurnal_names
   integer                                  ::  diurnal_names_count
+  integer                                  ::  num_diurnal
   character*128, dimension(maximum_names)  ::  restart_names
   integer                                  ::  restart_names_count
   
@@ -196,6 +197,7 @@ contains
     character*128, dimension(maximum_names)  ::  solar_noon_names = ""
     character*128, dimension(maximum_names)  ::  diurnal_names = ""
     character*128, dimension(maximum_names)  ::  restart_names = ""
+    integer                                  ::  num_diurnal = -999
   
     integer, parameter :: NOAHMP_LAND_SURFACE_MODEL = 2
 
@@ -409,6 +411,8 @@ contains
         stop "output time not divisible by timestep"
       end if
     end if
+    
+    this%num_diurnal = nint(86400.0 / timestep_seconds)   ! number of time step in a day (for diurnal cycle size)
 
     this%initial_time = huge(1.d0)
 

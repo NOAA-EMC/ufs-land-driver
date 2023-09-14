@@ -960,7 +960,7 @@ contains
         if (status /= nf90_noerr) call handle_err(status)
       status = nf90_def_dim(ncid, "radiation_bands" , 2                         , dim_id_rad)
         if (status /= nf90_noerr) call handle_err(status)
-      status = nf90_def_dim(ncid, "hour"            , 24                        , dim_id_hour)
+      status = nf90_def_dim(ncid, "hour"        , namelist%num_diurnal          , dim_id_hour)
         if (status /= nf90_noerr) call handle_err(status)
       status = nf90_def_dim(ncid, "time"        , NF90_UNLIMITED                , dim_id_time)
         if (status /= nf90_noerr) call handle_err(status)

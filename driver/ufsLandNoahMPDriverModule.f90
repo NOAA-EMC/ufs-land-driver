@@ -491,6 +491,14 @@ time_loop : do timestep = 1, namelist%run_timesteps
       
   end if ! namelist%monthly_mean_names_count > 0
 
+!!! Monthly mean diurnal cycle section !!!
+
+  if(namelist%diurnal_names_count > 0) then
+
+    call output%WriteDiurnalNoahMP(namelist, noahmp, now_time)
+      
+  end if ! namelist%diurnal_names_count > 0
+
 !!! Solar noon section !!!
 
   if(namelist%solar_noon_names_count > 0) then

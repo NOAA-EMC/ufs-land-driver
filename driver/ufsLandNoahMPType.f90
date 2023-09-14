@@ -274,6 +274,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -285,6 +287,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -296,6 +300,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -307,6 +313,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -318,6 +326,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -329,6 +339,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -340,6 +352,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -351,6 +365,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -362,6 +378,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -376,6 +394,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -387,6 +407,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -398,6 +420,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -409,6 +433,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -420,6 +446,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -431,6 +459,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -442,6 +472,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -453,6 +485,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -465,6 +499,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -477,6 +513,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -488,6 +526,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -499,6 +539,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -510,6 +552,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -521,6 +565,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -532,6 +578,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -543,6 +591,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -554,6 +604,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -565,6 +617,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -576,6 +630,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -587,6 +643,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -598,6 +656,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -609,6 +669,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -620,6 +682,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -631,6 +695,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
  
@@ -642,6 +708,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -653,6 +721,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -664,6 +734,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -675,6 +747,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -686,6 +760,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -697,6 +773,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -711,6 +789,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -722,6 +802,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -733,6 +815,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -744,6 +828,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -755,6 +841,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -766,6 +854,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -777,6 +867,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -788,6 +880,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -799,6 +893,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -810,6 +906,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -821,6 +919,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -832,6 +932,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -843,6 +945,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -854,6 +958,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -868,6 +974,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -879,6 +987,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -890,6 +1000,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -902,6 +1014,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -914,6 +1028,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -926,6 +1042,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -938,6 +1056,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -949,6 +1069,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -960,6 +1082,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -971,6 +1095,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -982,6 +1108,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -993,6 +1121,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1004,6 +1134,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1015,6 +1147,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1026,6 +1160,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1037,6 +1173,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1048,6 +1186,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1060,6 +1200,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1071,6 +1213,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1082,6 +1226,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1093,6 +1239,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1104,6 +1252,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1115,6 +1265,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1126,6 +1278,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1137,6 +1291,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1148,6 +1304,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1159,6 +1317,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1170,6 +1330,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1181,6 +1343,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1192,6 +1356,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1203,6 +1369,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1219,6 +1387,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1231,6 +1401,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1242,6 +1414,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1253,6 +1427,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1264,6 +1440,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1275,6 +1453,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1286,6 +1466,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1297,6 +1479,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1308,6 +1492,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1320,6 +1506,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1332,6 +1520,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1343,6 +1533,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1355,6 +1547,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1367,6 +1561,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1378,6 +1574,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1389,6 +1587,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1400,6 +1600,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1411,6 +1613,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1422,6 +1626,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1433,6 +1639,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1445,6 +1653,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1456,6 +1666,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1467,6 +1679,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1478,6 +1692,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1489,6 +1705,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1500,6 +1718,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1511,6 +1731,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1522,6 +1744,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1533,6 +1757,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1544,6 +1770,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1555,6 +1783,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1566,6 +1796,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
                     
@@ -1580,6 +1812,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1591,6 +1825,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1602,6 +1838,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1613,6 +1851,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1624,6 +1864,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1635,6 +1877,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1646,6 +1890,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1657,6 +1903,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1668,6 +1916,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1679,6 +1929,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1690,6 +1942,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1701,6 +1955,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1712,6 +1968,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1723,6 +1981,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1734,6 +1994,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1745,6 +2007,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1756,6 +2020,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1767,6 +2033,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1778,6 +2046,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1789,6 +2059,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1800,6 +2072,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1811,6 +2085,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1822,6 +2098,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1833,6 +2111,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1844,8 +2124,10 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
-                     namelist%restart_names)
+                    namelist%restart_names)
 
     call InitReal1d(this%flux%precip_adv_heat_veg                                                , &
                     vector_length                                                                , &
@@ -1855,6 +2137,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1866,6 +2150,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1877,6 +2163,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1888,6 +2176,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1899,6 +2189,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1910,6 +2202,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1921,6 +2215,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1932,6 +2228,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1943,6 +2241,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1954,6 +2254,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1965,6 +2267,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1976,6 +2280,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1987,6 +2293,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -1998,6 +2306,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -2009,6 +2319,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -2020,6 +2332,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -2031,6 +2345,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -2042,6 +2358,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -2053,6 +2371,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -2064,6 +2384,8 @@ contains
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
@@ -2075,7 +2397,8 @@ contains
   
   subroutine InitInt1d(indata, vector_length, in_name, in_longname, &
                        in_units, output_names, daily_mean_names, &
-                       monthly_mean_names, solar_noon_names, restart_names)
+                       monthly_mean_names, diurnal_names, num_diurnal, &
+                       solar_noon_names, restart_names)
   
     type(int1d) :: indata
     integer :: vector_length, iname, numnames
@@ -2085,6 +2408,8 @@ contains
     character(len=128) :: output_names(200)
     character(len=128) :: daily_mean_names(200)
     character(len=128) :: monthly_mean_names(200)
+    character(len=128) :: diurnal_names(200)
+    integer            :: num_diurnal
     character(len=128) :: solar_noon_names(200)
     character(len=128) :: restart_names(200)
     
@@ -2117,6 +2442,15 @@ contains
       end if
     end do
 
+    numnames = count(diurnal_names /= "")
+    do iname = 1, numnames
+      if(indata%name == diurnal_names(iname)) then
+        indata%diurnal_flag = .true.
+        allocate(indata%diurnal(vector_length, num_diurnal))
+        indata%diurnal = 0
+      end if
+    end do
+
     numnames = count(solar_noon_names /= "")
     do iname = 1, numnames
       if(indata%name == solar_noon_names(iname)) then
@@ -2135,7 +2469,8 @@ contains
 
   subroutine InitReal1d(indata, vector_length, in_name, in_longname, &
                         in_units, output_names, daily_mean_names, &
-                        monthly_mean_names, solar_noon_names, restart_names)
+                        monthly_mean_names, diurnal_names, num_diurnal, &
+                        solar_noon_names, restart_names)
   
     type(real1d) :: indata
     integer :: vector_length, iname, numnames
@@ -2145,6 +2480,8 @@ contains
     character(len=128) :: output_names(200)
     character(len=128) :: daily_mean_names(200)
     character(len=128) :: monthly_mean_names(200)
+    character(len=128) :: diurnal_names(200)
+    integer            :: num_diurnal
     character(len=128) :: solar_noon_names(200)
     character(len=128) :: restart_names(200)
     
@@ -2177,6 +2514,15 @@ contains
       end if
     end do
 
+    numnames = count(diurnal_names /= "")
+    do iname = 1, numnames
+      if(indata%name == diurnal_names(iname)) then
+        indata%diurnal_flag = .true.
+        allocate(indata%diurnal(vector_length, num_diurnal))
+        indata%diurnal = 0
+      end if
+    end do
+
     numnames = count(solar_noon_names /= "")
     do iname = 1, numnames
       if(indata%name == solar_noon_names(iname)) then
@@ -2195,7 +2541,8 @@ contains
 
   subroutine InitReal2d(indata, vector_length, ztop, zbot, in_name, in_longname,&
                         in_units, output_names, daily_mean_names, &
-                        monthly_mean_names, solar_noon_names, restart_names)
+                        monthly_mean_names, diurnal_names, num_diurnal, &
+                        solar_noon_names, restart_names)
   
     type(real2d) :: indata
     integer :: vector_length, ztop, zbot, iname, numnames
@@ -2205,6 +2552,8 @@ contains
     character(len=128) :: output_names(200)
     character(len=128) :: daily_mean_names(200)
     character(len=128) :: monthly_mean_names(200)
+    character(len=128) :: diurnal_names(200)
+    integer            :: num_diurnal
     character(len=128) :: solar_noon_names(200)
     character(len=128) :: restart_names(200)
     
@@ -2234,6 +2583,16 @@ contains
         indata%monthly_mean_flag = .true.
         allocate(indata%monthly_mean(vector_length, ztop:zbot))
         indata%monthly_mean = 0
+      end if
+    end do
+
+    numnames = count(diurnal_names /= "")
+    if(numname > 0) stop "diurnal output not supported for vertical dimensioned fields yet"
+    do iname = 1, numnames
+      if(indata%name == diurnal_names(iname)) then
+        indata%diurnal_flag = .true.
+        allocate(indata%diurnal(vector_length, ztop:zbot, num_diurnal))
+        indata%diurnal = 0
       end if
     end do
 
