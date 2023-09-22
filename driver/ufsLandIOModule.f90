@@ -926,7 +926,7 @@ contains
 
   this%diurnal_count = this%diurnal_count + 1
 
-  call DiurnalNoahMP(noahmp, end_of_month, this%diurnal_count)
+  call DiurnalNoahMP(noahmp, end_of_month, this%diurnal_count, namelist%num_diurnal)
 
   if(end_of_month) then
 
@@ -938,7 +938,7 @@ contains
     read(nowdate(15:16),'(i2.2)') nn
     read(nowdate(18:19),'(i2.2)') ss
 
-    write(this%filename_diurnal,'(a22,i4,a1,i2.2,a3)') &
+    write(this%filename_diurnal,'(a17,i4,a1,i2.2,a3)') &
       "ufs_land_diurnal.", yyyy, "-", mm, ".nc"
 
     this%filename_diurnal = trim(namelist%output_dir)//"/"//trim(this%filename_diurnal)
