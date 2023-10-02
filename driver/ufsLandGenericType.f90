@@ -9,12 +9,14 @@ type :: int1d
   integer             , allocatable :: data (:)                    ! 
   integer             , allocatable :: daily_mean (:)              ! 
   integer             , allocatable :: monthly_mean (:)            ! 
+  integer             , allocatable :: diurnal (:,:)               ! 
   integer             , allocatable :: solar_noon (:)              ! 
   logical                           :: output_flag       = .false. ! 
   logical                           :: restart_flag      = .false. ! 
   logical                           :: daily_mean_flag   = .false. ! 
   logical                           :: monthly_mean_flag = .false. ! 
   logical                           :: solar_noon_flag   = .false. ! 
+  logical                           :: diurnal_flag      = .false. ! 
   character*128                     :: name                        ! 
   character*128                     :: long_name                   ! 
   character*128                     :: units                       ! 
@@ -26,12 +28,14 @@ type :: real1d
   real(kind=kind_phys), allocatable :: data (:)                    ! 
   real(kind=kind_phys), allocatable :: daily_mean (:)              ! 
   real(kind=kind_phys), allocatable :: monthly_mean (:)            ! 
+  real(kind=kind_phys), allocatable :: diurnal (:,:)               ! 
   real(kind=kind_phys), allocatable :: solar_noon (:)              ! 
   logical                           :: output_flag       = .false. ! 
   logical                           :: restart_flag      = .false. ! 
   logical                           :: daily_mean_flag   = .false. ! 
   logical                           :: monthly_mean_flag = .false. ! 
   logical                           :: solar_noon_flag   = .false. ! 
+  logical                           :: diurnal_flag      = .false. ! 
   character*128                     :: name                        ! 
   character*128                     :: long_name                   ! 
   character*128                     :: units                       ! 
@@ -43,12 +47,14 @@ type :: int2d
   integer             , allocatable :: data (:,:)                  ! 
   integer             , allocatable :: daily_mean (:,:)            ! 
   integer             , allocatable :: monthly_mean (:,:)          ! 
+  integer             , allocatable :: diurnal (:,:,:)             ! 
   integer             , allocatable :: solar_noon (:,:)            ! 
   logical                           :: output_flag       = .false. ! 
   logical                           :: restart_flag      = .false. ! 
   logical                           :: daily_mean_flag   = .false. ! 
   logical                           :: monthly_mean_flag = .false. ! 
   logical                           :: solar_noon_flag   = .false. ! 
+  logical                           :: diurnal_flag      = .false. ! 
   character*128                     :: name                        ! 
   character*128                     :: long_name                   ! 
   character*128                     :: units                       ! 
@@ -60,12 +66,14 @@ type :: real2d
   real(kind=kind_phys), allocatable :: data (:,:)                  ! 
   real(kind=kind_phys), allocatable :: daily_mean (:,:)            ! 
   real(kind=kind_phys), allocatable :: monthly_mean (:,:)          ! 
+  real(kind=kind_phys), allocatable :: diurnal (:,:,:)             ! 
   real(kind=kind_phys), allocatable :: solar_noon (:,:)            ! 
   logical                           :: output_flag       = .false. ! 
   logical                           :: restart_flag      = .false. ! 
   logical                           :: daily_mean_flag   = .false. ! 
   logical                           :: monthly_mean_flag = .false. ! 
   logical                           :: solar_noon_flag   = .false. ! 
+  logical                           :: diurnal_flag      = .false. ! 
   character*128                     :: name                        ! 
   character*128                     :: long_name                   ! 
   character*128                     :: units                       ! 
