@@ -137,6 +137,8 @@ type :: noahmp_diag_type
   type(real1d)  :: spec_humidity_bare_2m  ! bare ground 2-m air specfic humidity [K]
   type(real1d)  :: spec_humidity_2m       ! composite 2-m air specfic humidity [K]
   type(real1d)  :: spec_humidity_surface  ! surface specific humidty [kg/kg]
+  type(real1d)  :: spec_humid_sfc_veg     ! surface specific humidty over vegetation [kg/kg]
+  type(real1d)  :: spec_humid_sfc_bare    ! surface specific humidty over bare soil [kg/kg]
   type(real1d)  :: dewpoint_veg_2m        ! vegetated 2-m dewpoint temperature [K]
   type(real1d)  :: dewpoint_bare_2m       ! bare ground 2-m dewpoint temperature [K]
   type(real1d)  :: dewpoint_2m            ! composite 2-m dewpoint temperature [K]
@@ -1327,6 +1329,32 @@ contains
                     "spec_humidity_surface"                                                      , &
                     "kg/kg"                                                                      , &
                     "diagnostic specific humidity at sfc"                                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitReal1d(this%diag%spec_humid_sfc_veg                                                 , &
+                    vector_length                                                                , &
+                    "spec_humid_sfc_veg"                                                         , &
+                    "kg/kg"                                                                      , &
+                    "diagnostic specific humidity at sfc over vegetation"                        , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitReal1d(this%diag%spec_humid_sfc_bare                                                , &
+                    vector_length                                                                , &
+                    "spec_humid_sfc_bare"                                                        , &
+                    "kg/kg"                                                                      , &
+                    "diagnostic specific humidity at sfc over bare soil"                         , &
                     namelist%output_names                                                        , &
                     namelist%daily_mean_names                                                    , &
                     namelist%monthly_mean_names                                                  , &

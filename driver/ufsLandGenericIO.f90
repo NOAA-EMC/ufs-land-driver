@@ -695,6 +695,22 @@ contains
      (noahmp%diag%spec_humidity_surface%solar_noon_flag   .and. io_type == solar_noon   ) ) &
     call Define1dReal(noahmp%diag%spec_humidity_surface, ncid, realtype, dim_id_loc, dim_id_time, dim_id_hour)
 
+  if((noahmp%diag%spec_humid_sfc_veg%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Define1dReal(noahmp%diag%spec_humid_sfc_veg, ncid, realtype, dim_id_loc, dim_id_time, dim_id_hour)
+
+  if((noahmp%diag%spec_humid_sfc_bare%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Define1dReal(noahmp%diag%spec_humid_sfc_bare, ncid, realtype, dim_id_loc, dim_id_time, dim_id_hour)
+
   if((noahmp%diag%dewpoint_veg_2m%restart_flag      .and. io_type == restart      ) .or. &
      (noahmp%diag%dewpoint_veg_2m%output_flag       .and. io_type == output       ) .or. &
      (noahmp%diag%dewpoint_veg_2m%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
@@ -2101,6 +2117,24 @@ contains
     call Write1dReal(io_type, noahmp%diag%spec_humidity_surface, ncid, namelist%num_diurnal,   &
       start_in = (/local_start,output_counter/), count_in = (/namelist%subset_length, 1/))
 
+  if((noahmp%diag%spec_humid_sfc_veg%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%diag%spec_humid_sfc_veg%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Write1dReal(io_type, noahmp%diag%spec_humid_sfc_veg, ncid, namelist%num_diurnal,   &
+      start_in = (/local_start,output_counter/), count_in = (/namelist%subset_length, 1/))
+
+  if((noahmp%diag%spec_humid_sfc_bare%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%diag%spec_humid_sfc_bare%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Write1dReal(io_type, noahmp%diag%spec_humid_sfc_bare, ncid, namelist%num_diurnal,   &
+      start_in = (/local_start,output_counter/), count_in = (/namelist%subset_length, 1/))
+
   if((noahmp%diag%dewpoint_veg_2m%restart_flag      .and. io_type == restart      ) .or. &
      (noahmp%diag%dewpoint_veg_2m%output_flag       .and. io_type == output       ) .or. &
      (noahmp%diag%dewpoint_veg_2m%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
@@ -3185,6 +3219,14 @@ contains
 
   if(noahmp%diag%spec_humidity_surface%restart_flag) &
     call Read1dReal(noahmp%diag%spec_humidity_surface, ncid,   &
+      start = (/local_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%diag%spec_humid_sfc_veg%restart_flag) &
+    call Read1dReal(noahmp%diag%spec_humid_sfc_veg, ncid,   &
+      start = (/local_start,1/), count = (/namelist%subset_length, 1/))
+
+  if(noahmp%diag%spec_humid_sfc_bare%restart_flag) &
+    call Read1dReal(noahmp%diag%spec_humid_sfc_bare, ncid,   &
       start = (/local_start,1/), count = (/namelist%subset_length, 1/))
 
   if(noahmp%diag%dewpoint_veg_2m%restart_flag) &
