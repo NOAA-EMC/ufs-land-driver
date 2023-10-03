@@ -275,7 +275,9 @@ associate (                                                      &
    ch_bare_ground_2m_ccpp     => noahmp%model%ch_bare_ground_2m%data    ,&
    precip_adv_heat_veg_ccpp   => noahmp%flux%precip_adv_heat_veg%data   ,&
    precip_adv_heat_grd_v_ccpp => noahmp%flux%precip_adv_heat_grd_v%data ,&
-   precip_adv_heat_grd_b_ccpp => noahmp%flux%precip_adv_heat_grd_b%data  & 
+   precip_adv_heat_grd_b_ccpp => noahmp%flux%precip_adv_heat_grd_b%data ,& 
+   spec_humid_sfc_veg_ccpp    => noahmp%diag%spec_humid_sfc_veg%data    ,&
+   spec_humid_sfc_bare_ccpp   => noahmp%diag%spec_humid_sfc_bare%data    & 
    )
 
 allocate(       rho(im))
@@ -435,7 +437,9 @@ time_loop : do timestep = 1, namelist%run_timesteps
             ch_bare_ground_2m_ccpp,                                    &
             precip_adv_heat_veg_ccpp,                                  &
             precip_adv_heat_grd_v_ccpp,                                &
-            precip_adv_heat_grd_b_ccpp                                )
+            precip_adv_heat_grd_b_ccpp,                                &
+            spec_humid_sfc_veg_ccpp,                                   &
+            spec_humid_sfc_bare_ccpp                                   )
 
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
   hflx = hflx * rho * con_cp
