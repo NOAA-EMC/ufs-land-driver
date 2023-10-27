@@ -25,8 +25,8 @@ program ufsLandDriver
   
   call mpi_land_init(namelist%location_length,mpi_land)
   
-  namelist%subset_start  = mpi_land%location_start
-  namelist%subset_end    = mpi_land%location_end
+  namelist%subset_start  = mpi_land%location_start + namelist%location_start - 1
+  namelist%subset_end    = mpi_land%location_end + namelist%location_start - 1
   namelist%subset_length = mpi_land%location_end - mpi_land%location_start + 1
   
   land_model : select case(namelist%land_model)
