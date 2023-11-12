@@ -46,10 +46,13 @@ type, public :: namelist_type
   integer        :: run_minutes
   integer        :: run_seconds
 
+  integer        :: num_soil_levels_ic
   integer        :: num_soil_levels
   integer        :: num_snow_levels
   real           :: forcing_height
 
+  real, allocatable, dimension(:) ::  soil_level_thickness_ic ! soil level thicknesses for ic [m]
+  real, allocatable, dimension(:) ::  soil_level_nodes_ic     ! soil level centroids from surface for ic [m]
   real, allocatable, dimension(:) ::  soil_level_thickness ! soil level thicknesses [m]
   real, allocatable, dimension(:) ::  soil_level_nodes     ! soil level centroids from surface [m]
   
@@ -150,10 +153,13 @@ contains
     
     integer        :: land_model = -999
 
+    integer        :: num_soil_levels_ic = -999
     integer        :: num_soil_levels = -999
     integer        :: num_snow_levels = -999
     real           :: forcing_height = -999.
 
+    real, allocatable, dimension(:) ::  soil_level_thickness_ic ! soil level thicknesses for ic [m]
+    real, allocatable, dimension(:) ::  soil_level_nodes_ic     ! soil level centroids from surface for ic [m]
     real, allocatable, dimension(:) ::  soil_level_thickness ! soil level thicknesses [m]
     real, allocatable, dimension(:) ::  soil_level_nodes     ! soil level centroids from surface [m]
     
@@ -209,8 +215,8 @@ contains
 			    restart_dir, restart_frequency_s, restart_simulation, restart_date, &
                             output_frequency_s, output_initial, reference_date
     namelist / land_model_option / land_model
-    namelist / structure  / num_soil_levels, forcing_height
-    namelist / soil_setup / soil_level_thickness, soil_level_nodes
+    namelist / structure  / num_soil_levels_ic, num_soil_levels, forcing_height
+    namelist / soil_setup / soil_level_thickness_ic, soil_level_nodes_ic, soil_level_thickness, soil_level_nodes
     namelist / noahmp_options /                                                        &
                dynamic_vegetation_option         , canopy_stomatal_resistance_option , &
                soil_wetness_option               , runoff_option                     , &
@@ -243,6 +249,8 @@ contains
      read(30, io)
     close(30)
 
+    allocate (soil_level_thickness_ic (1:num_soil_levels_ic))   ! soil level thicknesses [m]
+    allocate (soil_level_nodes_ic     (1:num_soil_levels_ic))   ! soil level centroids from surface [m]
     allocate (soil_level_thickness (1:num_soil_levels))   ! soil level thicknesses [m]
     allocate (soil_level_nodes     (1:num_soil_levels))   ! soil level centroids from surface [m]
     
@@ -296,9 +304,12 @@ contains
     this%run_hours            = run_hours
     this%run_minutes          = run_minutes
     this%run_seconds          = run_seconds
+    this%num_soil_levels_ic   = num_soil_levels_ic
     this%num_soil_levels      = num_soil_levels
     this%num_snow_levels      = 3   ! this is currently hard-coded in CCPP sfc_noahmp_drv
     this%forcing_height       = forcing_height
+    this%soil_level_thickness_ic = soil_level_thickness_ic
+    this%soil_level_nodes_ic     = soil_level_nodes_ic
     this%soil_level_thickness = soil_level_thickness
     this%soil_level_nodes     = soil_level_nodes
     this%forcing_timestep_seconds       = forcing_timestep_seconds

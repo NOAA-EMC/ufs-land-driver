@@ -88,6 +88,12 @@ type :: noahmp_model_type
 
 end type noahmp_model_type
 
+type :: noahmp_ic_type
+  type(real2d)  :: temperature_soil_ic        ! soil temperature [K]
+  type(real2d)  :: soil_liquid_vol_ic         ! volumetric liquid soil moisture [m3/m3]
+  type(real2d)  :: soil_moisture_vol_ic       ! volumetric soil moisture (ice + liq.) [m3/m3]
+end type noahmp_ic_type
+
 type :: noahmp_forcing_type
 
   type(real1d)  :: temperature_forcing        ! temperature at forcing level [K]
@@ -237,6 +243,7 @@ type, public :: noahmp_type
   type (noahmp_static_type)      :: static
   type (noahmp_options_type)     :: options
   type (noahmp_model_type)       :: model
+  type (noahmp_ic_type)          :: ic
   type (noahmp_forcing_type)     :: forcing
   type (noahmp_diag_type)        :: diag
   type (noahmp_state_type)       :: state
@@ -257,12 +264,13 @@ contains
 
     class(noahmp_type) :: this
     type(namelist_type) :: namelist
-    integer :: vector_length, soil_levels, snow_index
+    integer :: vector_length, soil_levels_ic, soil_levels, snow_index
 
     this%static%vector_length   = vector_length
     this%static%soil_levels     = namelist%num_soil_levels
     this%static%max_snow_levels = namelist%num_snow_levels
     soil_levels = namelist%num_soil_levels
+    soil_levels_ic = namelist%num_soil_levels_ic
     snow_index = -1*namelist%num_snow_levels + 1
     
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -781,6 +789,50 @@ contains
                     namelist%restart_names)
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Begin noahmp%ic variables
+
+    call InitReal2d(this%ic%temperature_soil_ic                                               , &
+                    vector_length                                                                , &
+                    1, soil_levels_ic                                                            , &
+                    "temperature_soil_ic"                                                        , &
+                    "soil level temperature"                                                     , &
+                    "K"                                                                          , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitReal2d(this%ic%soil_liquid_vol_ic                                                , &
+                    vector_length                                                                , &
+                    1, soil_levels_ic                                                            , &
+                    "soil_liquid_vol_ic"                                                         , &
+                    "volumetric liquid content in soil level"                                    , &
+                    "m3/m3"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
+    call InitReal2d(this%ic%soil_moisture_vol_ic                                              , &
+                    vector_length                                                                , &
+                    1, soil_levels_ic                                                            , &
+                    "soil_moisture_vol"                                                          , &
+                    "volumetric moisture content in soil level"                                  , &
+                    "m3/m3"                                                                      , &
+                    namelist%output_names                                                        , &
+                    namelist%daily_mean_names                                                    , &
+                    namelist%monthly_mean_names                                                  , &
+                    namelist%diurnal_names                                                       , &
+                    namelist%num_diurnal                                                         , &
+                    namelist%solar_noon_names                                                    , &
+                    namelist%restart_names)
+
 ! Begin noahmp%forcing variables
 
     call InitReal1d(this%forcing%temperature_forcing                                             , &

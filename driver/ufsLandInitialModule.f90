@@ -18,8 +18,8 @@ type, public :: initial_type
   real, allocatable, dimension(:)    :: snow_depth
   real, allocatable, dimension(:)    :: canopy_water
   real, allocatable, dimension(:)    :: skin_temperature
-  real, allocatable, dimension(:)    :: soil_level_thickness
-  real, allocatable, dimension(:)    :: soil_level_nodes
+  real, allocatable, dimension(:)    :: soil_level_thickness_ic
+  real, allocatable, dimension(:)    :: soil_level_nodes_ic
   real, allocatable, dimension(:,:)  :: soil_temperature
   real, allocatable, dimension(:,:)  :: soil_moisture
   real, allocatable, dimension(:,:)  :: soil_liquid
@@ -60,7 +60,7 @@ contains
   if(namelist%location_start > this%nlocations .or. namelist%location_end > this%nlocations) &
     stop "location_start or location_end in namelist not consistent with nlocations in static read"
    
-  status = nf90_inq_dimid(ncid, "soil_levels", dimid)
+  status = nf90_inq_dimid(ncid, "soil_levels_ic", dimid)
    if (status /= nf90_noerr) call handle_err(status)
 
   status = nf90_inquire_dimension(ncid, dimid, len = this%nlevels)
@@ -72,8 +72,8 @@ contains
   allocate(this%snow_depth           (namelist%subset_length))
   allocate(this%canopy_water         (namelist%subset_length))
   allocate(this%skin_temperature     (namelist%subset_length))
-  allocate(this%soil_level_thickness (this%nlevels))
-  allocate(this%soil_level_nodes     (this%nlevels))
+  allocate(this%soil_level_thickness_ic (this%nlevels))
+  allocate(this%soil_level_nodes_ic     (this%nlevels))
   allocate(this%soil_temperature     (namelist%subset_length,this%nlevels))
   allocate(this%soil_moisture        (namelist%subset_length,this%nlevels))
   allocate(this%soil_liquid          (namelist%subset_length,this%nlevels))
@@ -124,14 +124,14 @@ contains
        start = (/namelist%subset_start/), count = (/namelist%subset_length/))
    if(status /= nf90_noerr) call handle_err(status)
   
-  status = nf90_inq_varid(ncid, "soil_level_thickness", varid)
+  status = nf90_inq_varid(ncid, "soil_level_thickness_ic", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%soil_level_thickness)
+  status = nf90_get_var(ncid, varid, this%soil_level_thickness_ic)
    if(status /= nf90_noerr) call handle_err(status)
   
-  status = nf90_inq_varid(ncid, "soil_level_nodes", varid)
+  status = nf90_inq_varid(ncid, "soil_level_nodes_ic", varid)
    if(status /= nf90_noerr) call handle_err(status)
-  status = nf90_get_var(ncid, varid, this%soil_level_nodes)
+  status = nf90_get_var(ncid, varid, this%soil_level_nodes_ic)
    if(status /= nf90_noerr) call handle_err(status)
   
   status = nf90_inq_varid(ncid, "soil_temperature", varid)
@@ -192,15 +192,15 @@ contains
   type(noahmp_type)    :: noahmp
   
   if(namelist%subset_length /= noahmp%static%vector_length)   stop "vector length mismatch in ufsLandInitial_TransferInitial"
-  if(this%nlevels    /= noahmp%static%soil_levels) stop "  soil levels mismatch in ufsLandInitial_TransferInitial"
+! if(this%nlevels    /= noahmp%static%soil_levels) stop "  soil levels mismatch in ufsLandInitial_TransferInitial"
   
   noahmp%state%snow_water_equiv%data       = this%snow_water_equivalent
   noahmp%state%snow_depth%data             = this%snow_depth * 1000.0  ! driver wants mm
   noahmp%diag%canopy_water%data            = this%canopy_water
   noahmp%state%temperature_radiative%data  = this%skin_temperature
-  noahmp%state%temperature_soil%data       = this%soil_temperature
-  noahmp%state%soil_moisture_vol%data      = this%soil_moisture
-  noahmp%state%soil_liquid_vol%data        = this%soil_liquid
+  noahmp%ic%temperature_soil_ic%data       = this%soil_temperature
+  noahmp%ic%soil_moisture_vol_ic%data      = this%soil_moisture
+  noahmp%ic%soil_liquid_vol_ic%data        = this%soil_liquid
 
   noahmp%model%pbl_height%data               = 1000.0
   noahmp%model%mo_length_inverse%data        = 1.0

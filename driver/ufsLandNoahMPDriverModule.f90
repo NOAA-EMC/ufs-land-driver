@@ -49,6 +49,7 @@ use set_soilveg_mod
 use funcphys
 use namelist_soilveg, only : z0_data
 use noahmp_tables
+use module_soil_init
 use physcons, only : con_hvap , con_cp, con_jcal, con_eps, con_epsm1,    &
                      con_fvirt, con_rd, con_hfus, con_g  ,               &
 		     tfreeze=> con_t0c, rhoh2o => rhowater
@@ -375,11 +376,39 @@ time_loop : do timestep = 1, namelist%run_timesteps
   
   if(iopt_sfc == 4) do_mynnsfclay = .true.
 
+        if ( namelist%num_soil_levels_ic /= km) then
+        call noahmp_soil_init (im              , & ! in
+                       km                      , & ! in
+        namelist%num_soil_levels_ic            , & ! in
+        namelist%soil_level_nodes_ic           , & ! in
+        namelist%soil_level_nodes              , & ! in
+        noahmp%ic%soil_moisture_vol_ic%data    , & ! in
+        noahmp%ic%temperature_soil_ic%data     , & ! in
+                       soiltyp                 , & ! in
+                       smc                     , & ! out
+                       slc                     , & ! out
+                       stc                     , & ! out
+                       errmsg                  , & ! out
+                       errflg                  )   ! out
+         if(errflg /= 0) then
+           write(*,*) "noahmp_soil_init reporting an error"
+           write(*,*) errmsg
+           stop
+         end if
+        else
+
+        smc=noahmp%ic%soil_moisture_vol_ic%data
+        slc=noahmp%ic%soil_liquid_vol_ic%data
+        stc=noahmp%ic%temperature_soil_ic%data
+
+        endif
+
       call noahmpdrv_run                                               &
           ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,soilcol,&
             vegtype,sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,   &
             prsl1, prslk1, prslki, prsik1, zf,pblh, dry, wind, slopetyp,    &
             shdmin, shdmax, snoalb, sfalb, flag_iter,con_g,            &
+            namelist%soil_level_nodes,namelist%soil_level_thickness,   &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
             iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,iopt_stc,&
             iopt_trs,iopt_diag,latitude_radians, xcoszin, iyrlen, julian, garea, &
