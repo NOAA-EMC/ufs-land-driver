@@ -376,6 +376,9 @@ time_loop : do timestep = 1, namelist%run_timesteps
   
   if(iopt_sfc == 4) do_mynnsfclay = .true.
 
+        write(*,*)"num_soil_levels_ic="
+        write(*,*)namelist%num_soil_levels_ic,km
+
         if ( namelist%num_soil_levels_ic /= km) then
         call noahmp_soil_init (im              , & ! in
                        km                      , & ! in
@@ -395,11 +398,6 @@ time_loop : do timestep = 1, namelist%run_timesteps
            write(*,*) errmsg
            stop
          end if
-        else
-
-        smc=noahmp%ic%soil_moisture_vol_ic%data
-        slc=noahmp%ic%soil_liquid_vol_ic%data
-        stc=noahmp%ic%temperature_soil_ic%data
 
         endif
 
