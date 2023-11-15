@@ -737,13 +737,13 @@ contains
 
 ! Begin noahmp%state variables
 
-  if((noahmp%state%temperature_soil%restart_flag      .and. io_type == restart      ) .or. &
-     (noahmp%state%temperature_soil%output_flag       .and. io_type == output       ) .or. &
-     (noahmp%state%temperature_soil%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
-     (noahmp%state%temperature_soil%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
-     (noahmp%state%temperature_soil%diurnal_flag      .and. io_type == diurnal      ) .or. &
-     (noahmp%state%temperature_soil%solar_noon_flag   .and. io_type == solar_noon   ) ) &
-    call Define2dReal(noahmp%state%temperature_soil, ncid, realtype, dim_id_loc, dim_id_soil, dim_id_time, dim_id_hour)
+  if((noahmp%state%temperature_soil_mp%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%state%temperature_soil_mp%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%state%temperature_soil_mp%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%state%temperature_soil_mp%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%state%temperature_soil_mp%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%state%temperature_soil_mp%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Define2dReal(noahmp%state%temperature_soil_mp, ncid, realtype, dim_id_loc, dim_id_soil, dim_id_time, dim_id_hour)
 
   if((noahmp%state%temperature_snow%restart_flag      .and. io_type == restart      ) .or. &
      (noahmp%state%temperature_snow%output_flag       .and. io_type == output       ) .or. &
@@ -809,21 +809,21 @@ contains
      (noahmp%state%vapor_pres_canopy_air%solar_noon_flag   .and. io_type == solar_noon   ) ) &
     call Define1dReal(noahmp%state%vapor_pres_canopy_air, ncid, realtype, dim_id_loc, dim_id_time, dim_id_hour)
 
-  if((noahmp%state%soil_liquid_vol%restart_flag      .and. io_type == restart      ) .or. &
-     (noahmp%state%soil_liquid_vol%output_flag       .and. io_type == output       ) .or. &
-     (noahmp%state%soil_liquid_vol%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
-     (noahmp%state%soil_liquid_vol%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
-     (noahmp%state%soil_liquid_vol%diurnal_flag      .and. io_type == diurnal      ) .or. &
-     (noahmp%state%soil_liquid_vol%solar_noon_flag   .and. io_type == solar_noon   ) ) &
-    call Define2dReal(noahmp%state%soil_liquid_vol, ncid, realtype, dim_id_loc, dim_id_soil, dim_id_time, dim_id_hour)
+  if((noahmp%state%soil_liquid_vol_mp%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Define2dReal(noahmp%state%soil_liquid_vol_mp, ncid, realtype, dim_id_loc, dim_id_soil, dim_id_time, dim_id_hour)
 
-  if((noahmp%state%soil_moisture_vol%restart_flag      .and. io_type == restart      ) .or. &
-     (noahmp%state%soil_moisture_vol%output_flag       .and. io_type == output       ) .or. &
-     (noahmp%state%soil_moisture_vol%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
-     (noahmp%state%soil_moisture_vol%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
-     (noahmp%state%soil_moisture_vol%diurnal_flag      .and. io_type == diurnal      ) .or. &
-     (noahmp%state%soil_moisture_vol%solar_noon_flag   .and. io_type == solar_noon   ) ) &
-    call Define2dReal(noahmp%state%soil_moisture_vol, ncid, realtype, dim_id_loc, dim_id_soil, dim_id_time, dim_id_hour)
+  if((noahmp%state%soil_moisture_vol_mp%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Define2dReal(noahmp%state%soil_moisture_vol_mp, ncid, realtype, dim_id_loc, dim_id_soil, dim_id_time, dim_id_hour)
 
   if((noahmp%state%snow_water_equiv%restart_flag      .and. io_type == restart      ) .or. &
      (noahmp%state%snow_water_equiv%output_flag       .and. io_type == output       ) .or. &
@@ -2164,13 +2164,13 @@ contains
 
 ! Begin noahmp%state variables
 
-  if((noahmp%state%temperature_soil%restart_flag      .and. io_type == restart      ) .or. &
-     (noahmp%state%temperature_soil%output_flag       .and. io_type == output       ) .or. &
-     (noahmp%state%temperature_soil%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
-     (noahmp%state%temperature_soil%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
-     (noahmp%state%temperature_soil%diurnal_flag      .and. io_type == diurnal      ) .or. &
-     (noahmp%state%temperature_soil%solar_noon_flag   .and. io_type == solar_noon   ) ) &
-    call Write2dReal(io_type, noahmp%state%temperature_soil, ncid, namelist%num_diurnal,    &
+  if((noahmp%state%temperature_soil_mp%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%state%temperature_soil_mp%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%state%temperature_soil_mp%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%state%temperature_soil_mp%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%state%temperature_soil_mp%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%state%temperature_soil_mp%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Write2dReal(io_type, noahmp%state%temperature_soil_mp, ncid, namelist%num_diurnal,    &
       start_in = (/local_start           ,                         1, output_counter/) , &
       count_in = (/namelist%subset_length, noahmp%static%soil_levels,             1/))
 
@@ -2247,23 +2247,23 @@ contains
     call Write1dReal(io_type, noahmp%state%vapor_pres_canopy_air, ncid, namelist%num_diurnal,   &
       start_in = (/local_start,output_counter/), count_in = (/namelist%subset_length, 1/))
 
-  if((noahmp%state%soil_liquid_vol%restart_flag      .and. io_type == restart      ) .or. &
-     (noahmp%state%soil_liquid_vol%output_flag       .and. io_type == output       ) .or. &
-     (noahmp%state%soil_liquid_vol%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
-     (noahmp%state%soil_liquid_vol%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
-     (noahmp%state%soil_liquid_vol%diurnal_flag      .and. io_type == diurnal      ) .or. &
-     (noahmp%state%soil_liquid_vol%solar_noon_flag   .and. io_type == solar_noon   ) ) &
-    call Write2dReal(io_type, noahmp%state%soil_liquid_vol, ncid, namelist%num_diurnal,     &
+  if((noahmp%state%soil_liquid_vol_mp%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%state%soil_liquid_vol_mp%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Write2dReal(io_type, noahmp%state%soil_liquid_vol_mp, ncid, namelist%num_diurnal,     &
       start_in = (/local_start           ,                         1, output_counter/) , &
       count_in = (/namelist%subset_length, noahmp%static%soil_levels,             1/))
 
-  if((noahmp%state%soil_moisture_vol%restart_flag      .and. io_type == restart      ) .or. &
-     (noahmp%state%soil_moisture_vol%output_flag       .and. io_type == output       ) .or. &
-     (noahmp%state%soil_moisture_vol%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
-     (noahmp%state%soil_moisture_vol%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
-     (noahmp%state%soil_moisture_vol%diurnal_flag      .and. io_type == diurnal      ) .or. &
-     (noahmp%state%soil_moisture_vol%solar_noon_flag   .and. io_type == solar_noon   ) ) &
-    call Write2dReal(io_type, noahmp%state%soil_moisture_vol, ncid, namelist%num_diurnal,   &
+  if((noahmp%state%soil_moisture_vol_mp%restart_flag      .and. io_type == restart      ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%output_flag       .and. io_type == output       ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%daily_mean_flag   .and. io_type == daily_mean   ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%monthly_mean_flag .and. io_type == monthly_mean ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%diurnal_flag      .and. io_type == diurnal      ) .or. &
+     (noahmp%state%soil_moisture_vol_mp%solar_noon_flag   .and. io_type == solar_noon   ) ) &
+    call Write2dReal(io_type, noahmp%state%soil_moisture_vol_mp, ncid, namelist%num_diurnal,   &
       start_in = (/local_start           ,                         1, output_counter/) , &
       count_in = (/namelist%subset_length, noahmp%static%soil_levels,             1/))
 
@@ -2902,7 +2902,8 @@ contains
 
   if(noahmp%static%soil_interface_depth%restart_flag) &
     call Read1dReal(noahmp%static%soil_interface_depth, ncid,   &
-      start = (/1,1/), count = (/noahmp%static%soil_levels, 1/))
+      start = (/1,1/), count = (/namelist%num_soil_levels_ic, 1/))
+!     start = (/1,1/), count = (/noahmp%static%soil_levels, 1/))
 
   if(noahmp%static%ice_flag%restart_flag) &
     call Read1dInt(noahmp%static%ice_flag, ncid,   &
@@ -2957,12 +2958,14 @@ contains
   if(noahmp%model%interface_depth%restart_flag) &
     call Read2dReal(noahmp%model%interface_depth, ncid,   &
       start = (/local_start           ,                           1, 1/) , &
-      count = (/namelist%subset_length, noahmp%static%soil_levels+3, 1/))
+      count = (/namelist%subset_length, namelist%num_soil_levels_ic+3, 1/))
+!     count = (/namelist%subset_length, noahmp%static%soil_levels+3, 1/))
 
   if(noahmp%model%snow_soil_thickness%restart_flag) &
     call Read2dReal(noahmp%model%snow_soil_thickness, ncid,   &
       start = (/local_start           ,                           1, 1/) , &
-      count = (/namelist%subset_length, noahmp%static%soil_levels+3, 1/))
+      count = (/namelist%subset_length, namelist%num_soil_levels_ic+3, 1/))
+!     count = (/namelist%subset_length, noahmp%static%soil_levels+3, 1/))
 
   if(noahmp%model%leaf_area_index%restart_flag) &
     call Read1dReal(noahmp%model%leaf_area_index, ncid,   &
@@ -3243,10 +3246,13 @@ contains
 
 ! Begin noahmp%state variables
 
-  if(noahmp%state%temperature_soil%restart_flag) &
-    call Read2dReal(noahmp%state%temperature_soil, ncid,    &
+  if(noahmp%state%temperature_soil_mp%restart_flag) &
+!   call Read2dReal(noahmp%state%temperature_soil_mp, ncid,    &
+!     start = (/local_start           ,                         1, 1/) , &
+!     count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
+    call Read2dReal(noahmp%ic%temperature_soil, ncid,   &
       start = (/local_start           ,                         1, 1/) , &
-      count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
+      count = (/namelist%subset_length, namelist%num_soil_levels_ic, 1/))
 
   if(noahmp%state%temperature_snow%restart_flag) &
     call Read2dReal(noahmp%state%temperature_snow, ncid,   &
@@ -3281,15 +3287,21 @@ contains
     call Read1dReal(noahmp%state%vapor_pres_canopy_air, ncid,   &
       start = (/local_start,1/), count = (/namelist%subset_length, 1/))
 
-  if(noahmp%state%soil_liquid_vol%restart_flag) &
-    call Read2dReal(noahmp%state%soil_liquid_vol, ncid,     &
+  if(noahmp%state%soil_liquid_vol_mp%restart_flag) &
+!   call Read2dReal(noahmp%state%soil_liquid_vol_mp, ncid,     &
+!     start = (/local_start           ,                         1, 1/) , &
+!     count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
+    call Read2dReal(noahmp%ic%soil_liquid_vol, ncid,   &
       start = (/local_start           ,                         1, 1/) , &
-      count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
+      count = (/namelist%subset_length, namelist%num_soil_levels_ic, 1/))
 
-  if(noahmp%state%soil_moisture_vol%restart_flag) &
-    call Read2dReal(noahmp%state%soil_moisture_vol, ncid,   &
+  if(noahmp%state%soil_moisture_vol_mp%restart_flag) &
+!   call Read2dReal(noahmp%state%soil_moisture_vol_mp, ncid,   &
+!     start = (/local_start           ,                         1, 1/) , &
+!     count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
+    call Read2dReal(noahmp%ic%soil_moisture_vol, ncid,   &
       start = (/local_start           ,                         1, 1/) , &
-      count = (/namelist%subset_length, noahmp%static%soil_levels, 1/))
+      count = (/namelist%subset_length, namelist%num_soil_levels_ic, 1/))
 
   if(noahmp%state%snow_water_equiv%restart_flag) &
     call Read1dReal(noahmp%state%snow_water_equiv, ncid,   &
@@ -3332,7 +3344,8 @@ contains
   if(noahmp%state%eq_soil_water_vol%restart_flag) &
     call Read2dReal(noahmp%state%eq_soil_water_vol, ncid,   &
       start = (/local_start           ,                           1, 1/) , &
-      count = (/namelist%subset_length, noahmp%static%soil_levels  , 1/))
+      count = (/namelist%subset_length, namelist%num_soil_levels_ic  , 1/))
+!     count = (/namelist%subset_length, noahmp%static%soil_levels  , 1/))
 
   if(noahmp%state%leaf_carbon%restart_flag) &
     call Read1dReal(noahmp%state%leaf_carbon, ncid,   &

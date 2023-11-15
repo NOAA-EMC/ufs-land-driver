@@ -245,7 +245,7 @@ contains
 
 ! Begin noahmp%state variables
 
-  call accumulate(noahmp%state%temperature_soil             , end_of_day, daily_mean_count, daily_mean)
+  call accumulate(noahmp%state%temperature_soil_mp             , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%state%temperature_snow             , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%state%temperature_canopy_air       , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%state%temperature_radiative        , end_of_day, daily_mean_count, daily_mean)
@@ -254,8 +254,8 @@ contains
   call accumulate(noahmp%state%temperature_bare_grd         , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%state%temperature_veg_grd          , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%state%vapor_pres_canopy_air        , end_of_day, daily_mean_count, daily_mean)
-  call accumulate(noahmp%state%soil_liquid_vol              , end_of_day, daily_mean_count, daily_mean)
-  call accumulate(noahmp%state%soil_moisture_vol            , end_of_day, daily_mean_count, daily_mean)
+  call accumulate(noahmp%state%soil_liquid_vol_mp              , end_of_day, daily_mean_count, daily_mean)
+  call accumulate(noahmp%state%soil_moisture_vol_mp            , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%state%snow_water_equiv             , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%state%snow_level_ice               , end_of_day, daily_mean_count, daily_mean)
   call accumulate(noahmp%state%snow_level_liquid            , end_of_day, daily_mean_count, daily_mean)
@@ -435,7 +435,7 @@ contains
 
 ! Begin noahmp%state variables
 
-  call accumulate(noahmp%state%temperature_soil             , end_of_month, monthly_mean_count, monthly_mean)
+  call accumulate(noahmp%state%temperature_soil_mp             , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%state%temperature_snow             , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%state%temperature_canopy_air       , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%state%temperature_radiative        , end_of_month, monthly_mean_count, monthly_mean)
@@ -444,8 +444,8 @@ contains
   call accumulate(noahmp%state%temperature_bare_grd         , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%state%temperature_veg_grd          , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%state%vapor_pres_canopy_air        , end_of_month, monthly_mean_count, monthly_mean)
-  call accumulate(noahmp%state%soil_liquid_vol              , end_of_month, monthly_mean_count, monthly_mean)
-  call accumulate(noahmp%state%soil_moisture_vol            , end_of_month, monthly_mean_count, monthly_mean)
+  call accumulate(noahmp%state%soil_liquid_vol_mp              , end_of_month, monthly_mean_count, monthly_mean)
+  call accumulate(noahmp%state%soil_moisture_vol_mp            , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%state%snow_water_equiv             , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%state%snow_level_ice               , end_of_month, monthly_mean_count, monthly_mean)
   call accumulate(noahmp%state%snow_level_liquid            , end_of_month, monthly_mean_count, monthly_mean)
@@ -626,7 +626,7 @@ contains
 
 ! Begin noahmp%state variables
 
-  call accumulate(noahmp%state%temperature_soil             , end_of_month, diurnal_count, diurnal, num_diurnal)
+  call accumulate(noahmp%state%temperature_soil_mp             , end_of_month, diurnal_count, diurnal, num_diurnal)
   call accumulate(noahmp%state%temperature_snow             , end_of_month, diurnal_count, diurnal, num_diurnal)
   call accumulate(noahmp%state%temperature_canopy_air       , end_of_month, diurnal_count, diurnal, num_diurnal)
   call accumulate(noahmp%state%temperature_radiative        , end_of_month, diurnal_count, diurnal, num_diurnal)
@@ -635,8 +635,8 @@ contains
   call accumulate(noahmp%state%temperature_bare_grd         , end_of_month, diurnal_count, diurnal, num_diurnal)
   call accumulate(noahmp%state%temperature_veg_grd          , end_of_month, diurnal_count, diurnal, num_diurnal)
   call accumulate(noahmp%state%vapor_pres_canopy_air        , end_of_month, diurnal_count, diurnal, num_diurnal)
-  call accumulate(noahmp%state%soil_liquid_vol              , end_of_month, diurnal_count, diurnal, num_diurnal)
-  call accumulate(noahmp%state%soil_moisture_vol            , end_of_month, diurnal_count, diurnal, num_diurnal)
+  call accumulate(noahmp%state%soil_liquid_vol_mp              , end_of_month, diurnal_count, diurnal, num_diurnal)
+  call accumulate(noahmp%state%soil_moisture_vol_mp            , end_of_month, diurnal_count, diurnal, num_diurnal)
   call accumulate(noahmp%state%snow_water_equiv             , end_of_month, diurnal_count, diurnal, num_diurnal)
   call accumulate(noahmp%state%snow_level_ice               , end_of_month, diurnal_count, diurnal, num_diurnal)
   call accumulate(noahmp%state%snow_level_liquid            , end_of_month, diurnal_count, diurnal, num_diurnal)

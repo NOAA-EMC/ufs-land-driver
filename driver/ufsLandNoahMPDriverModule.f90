@@ -171,9 +171,9 @@ associate (                                                      &
    zorl       => noahmp%diag%z0_total%data                      ,&
    ztmax      => noahmp%diag%z0h_total%data                     ,&
    ustar1     => noahmp%model%friction_velocity%data            ,&
-   smc        => noahmp%state%soil_moisture_vol%data            ,&
-   stc        => noahmp%state%temperature_soil%data             ,&
-   slc        => noahmp%state%soil_liquid_vol%data              ,&
+   smc        => noahmp%state%soil_moisture_vol_mp%data            ,&
+   stc        => noahmp%state%temperature_soil_mp%data             ,&
+   slc        => noahmp%state%soil_liquid_vol_mp%data              ,&
    qsurf      => noahmp%diag%spec_humidity_surface%data         ,&
    gflux      => noahmp%flux%ground_heat_total%data             ,&
    drain      => noahmp%flux%runoff_baseflow%data               ,&
@@ -379,14 +379,14 @@ time_loop : do timestep = 1, namelist%run_timesteps
         write(*,*)"num_soil_levels_ic="
         write(*,*)namelist%num_soil_levels_ic,km
 
-        if ( namelist%num_soil_levels_ic /= km) then
+!       if ( namelist%num_soil_levels_ic /= km) then
         call noahmp_soil_init (im              , & ! in
                        km                      , & ! in
         namelist%num_soil_levels_ic            , & ! in
         namelist%soil_level_nodes_ic           , & ! in
         namelist%soil_level_nodes              , & ! in
-        noahmp%ic%soil_moisture_vol_ic%data    , & ! in
-        noahmp%ic%temperature_soil_ic%data     , & ! in
+        noahmp%ic%soil_moisture_vol%data    , & ! in
+        noahmp%ic%temperature_soil%data     , & ! in
                        soiltyp                 , & ! in
                        smc                     , & ! out
                        slc                     , & ! out
@@ -399,7 +399,9 @@ time_loop : do timestep = 1, namelist%run_timesteps
            stop
          end if
 
-        endif
+!       endif
+
+       write(*,*)stc
 
       call noahmpdrv_run                                               &
           ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,soilcol,&

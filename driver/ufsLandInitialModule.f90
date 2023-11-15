@@ -198,9 +198,9 @@ contains
   noahmp%state%snow_depth%data             = this%snow_depth * 1000.0  ! driver wants mm
   noahmp%diag%canopy_water%data            = this%canopy_water
   noahmp%state%temperature_radiative%data  = this%skin_temperature
-  noahmp%ic%temperature_soil_ic%data       = this%soil_temperature
-  noahmp%ic%soil_moisture_vol_ic%data      = this%soil_moisture
-  noahmp%ic%soil_liquid_vol_ic%data        = this%soil_liquid
+  noahmp%ic%temperature_soil%data          = this%soil_temperature
+  noahmp%ic%soil_moisture_vol%data         = this%soil_moisture
+  noahmp%ic%soil_liquid_vol%data           = this%soil_liquid
 
   noahmp%model%pbl_height%data               = 1000.0
   noahmp%model%mo_length_inverse%data        = 1.0

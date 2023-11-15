@@ -181,7 +181,7 @@ contains
 
 ! Begin noahmp%state variables
 
-  call solar_noon_add(noahmp%state%temperature_soil             , noahmp%model%solar_noon_hour, current_hour, solar_noon)
+  call solar_noon_add(noahmp%state%temperature_soil_mp             , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%state%temperature_snow             , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%state%temperature_canopy_air       , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%state%temperature_radiative        , noahmp%model%solar_noon_hour, current_hour, solar_noon)
@@ -190,8 +190,8 @@ contains
   call solar_noon_add(noahmp%state%temperature_bare_grd         , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%state%temperature_veg_grd          , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%state%vapor_pres_canopy_air        , noahmp%model%solar_noon_hour, current_hour, solar_noon)
-  call solar_noon_add(noahmp%state%soil_liquid_vol              , noahmp%model%solar_noon_hour, current_hour, solar_noon)
-  call solar_noon_add(noahmp%state%soil_moisture_vol            , noahmp%model%solar_noon_hour, current_hour, solar_noon)
+  call solar_noon_add(noahmp%state%soil_liquid_vol_mp              , noahmp%model%solar_noon_hour, current_hour, solar_noon)
+  call solar_noon_add(noahmp%state%soil_moisture_vol_mp            , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%state%snow_water_equiv             , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%state%snow_level_ice               , noahmp%model%solar_noon_hour, current_hour, solar_noon)
   call solar_noon_add(noahmp%state%snow_level_liquid            , noahmp%model%solar_noon_hour, current_hour, solar_noon)

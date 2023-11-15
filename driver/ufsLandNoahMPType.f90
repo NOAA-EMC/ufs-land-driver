@@ -89,9 +89,9 @@ type :: noahmp_model_type
 end type noahmp_model_type
 
 type :: noahmp_ic_type
-  type(real2d)  :: temperature_soil_ic        ! soil temperature [K]
-  type(real2d)  :: soil_liquid_vol_ic         ! volumetric liquid soil moisture [m3/m3]
-  type(real2d)  :: soil_moisture_vol_ic       ! volumetric soil moisture (ice + liq.) [m3/m3]
+  type(real2d)  :: temperature_soil        ! soil temperature [K]
+  type(real2d)  :: soil_liquid_vol         ! volumetric liquid soil moisture [m3/m3]
+  type(real2d)  :: soil_moisture_vol       ! volumetric soil moisture (ice + liq.) [m3/m3]
 end type noahmp_ic_type
 
 type :: noahmp_forcing_type
@@ -153,7 +153,7 @@ end type noahmp_diag_type
 
 type :: noahmp_state_type
 
-  type(real2d)  :: temperature_soil        ! soil temperature [K]
+  type(real2d)  :: temperature_soil_mp     ! soil temperature [K]
   type(real2d)  :: temperature_snow        ! snow temperature [K]
   type(real1d)  :: temperature_canopy_air  ! canopy air temperature [K]
   type(real1d)  :: temperature_radiative   ! surface radiative temperature [K]
@@ -162,8 +162,8 @@ type :: noahmp_state_type
   type(real1d)  :: temperature_bare_grd    ! bare ground surface temperature [K]
   type(real1d)  :: temperature_veg_grd     ! below_canopy ground surface temperature [K]
   type(real1d)  :: vapor_pres_canopy_air   ! canopy air vapor pressure [Pa]
-  type(real2d)  :: soil_liquid_vol         ! volumetric liquid soil moisture [m3/m3]
-  type(real2d)  :: soil_moisture_vol       ! volumetric soil moisture (ice + liq.) [m3/m3]
+  type(real2d)  :: soil_liquid_vol_mp      ! volumetric liquid soil moisture [m3/m3]
+  type(real2d)  :: soil_moisture_vol_mp    ! volumetric soil moisture (ice + liq.) [m3/m3]
   type(real1d)  :: snow_water_equiv        ! snow water equivalent [kg/m2]
   type(real2d)  :: snow_level_ice          ! snow level ice [mm]
   type(real2d)  :: snow_level_liquid       ! snow level liquid [mm]
@@ -272,6 +272,7 @@ contains
     soil_levels = namelist%num_soil_levels
     soil_levels_ic = namelist%num_soil_levels_ic
     snow_index = -1*namelist%num_snow_levels + 1
+
     
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%static variables
@@ -791,10 +792,10 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%ic variables
 
-    call InitReal2d(this%ic%temperature_soil_ic                                               , &
+    call InitReal2d(this%ic%temperature_soil                                                     , &
                     vector_length                                                                , &
                     1, soil_levels_ic                                                            , &
-                    "temperature_soil_ic"                                                        , &
+                    "temperature_soil"                                                           , &
                     "soil level temperature"                                                     , &
                     "K"                                                                          , &
                     namelist%output_names                                                        , &
@@ -805,10 +806,10 @@ contains
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
-    call InitReal2d(this%ic%soil_liquid_vol_ic                                                , &
+    call InitReal2d(this%ic%soil_liquid_vol                                                      , &
                     vector_length                                                                , &
                     1, soil_levels_ic                                                            , &
-                    "soil_liquid_vol_ic"                                                         , &
+                    "soil_liquid_vol"                                                            , &
                     "volumetric liquid content in soil level"                                    , &
                     "m3/m3"                                                                      , &
                     namelist%output_names                                                        , &
@@ -819,7 +820,7 @@ contains
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
-    call InitReal2d(this%ic%soil_moisture_vol_ic                                              , &
+    call InitReal2d(this%ic%soil_moisture_vol                                                    , &
                     vector_length                                                                , &
                     1, soil_levels_ic                                                            , &
                     "soil_moisture_vol"                                                          , &
@@ -1458,7 +1459,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Begin noahmp%state variables
 
-    call InitReal2d(this%state%temperature_soil                                                  , &
+    call InitReal2d(this%state%temperature_soil_mp                                               , &
                     vector_length                                                                , &
                     1, soil_levels                                                               , &
                     "temperature_soil"                                                           , &
@@ -1577,7 +1578,7 @@ contains
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
-    call InitReal2d(this%state%soil_liquid_vol                                                   , &
+    call InitReal2d(this%state%soil_liquid_vol_mp                                                , &
                     vector_length                                                                , &
                     1, soil_levels                                                               , &
                     "soil_liquid_vol"                                                            , &
@@ -1591,7 +1592,7 @@ contains
                     namelist%solar_noon_names                                                    , &
                     namelist%restart_names)
 
-    call InitReal2d(this%state%soil_moisture_vol                                                 , &
+    call InitReal2d(this%state%soil_moisture_vol_mp                                              , &
                     vector_length                                                                , &
                     1, soil_levels                                                               , &
                     "soil_moisture_vol"                                                          , &
@@ -2710,9 +2711,9 @@ contains
     this%state%snow_water_equiv%restart_flag       = .true.
     this%state%snow_depth%restart_flag             = .true.
     this%state%temperature_radiative%restart_flag  = .true.
-    this%state%soil_moisture_vol%restart_flag      = .true.
-    this%state%temperature_soil%restart_flag       = .true.
-    this%state%soil_liquid_vol%restart_flag        = .true.
+    this%state%soil_moisture_vol_mp%restart_flag      = .true.
+    this%state%temperature_soil_mp%restart_flag       = .true.
+    this%state%soil_liquid_vol_mp%restart_flag        = .true.
     this%diag%canopy_water%restart_flag            = .true.
     this%flux%transpiration_heat%restart_flag      = .true.
     this%model%friction_velocity%restart_flag      = .true.
@@ -2880,11 +2881,11 @@ contains
 
     if (this%static%vegetation_category%data(iloc)  == isice_table )  then
       do ilevel = 1, namelist%num_soil_levels
-        this%state%temperature_soil%data(iloc,ilevel) = &
-           min(this%state%temperature_soil%data(iloc,ilevel),min(this%static%temperature_soil_bot%data(iloc),263.15))
+        this%state%temperature_soil_mp%data(iloc,ilevel) = &
+           min(this%state%temperature_soil_mp%data(iloc,ilevel),min(this%static%temperature_soil_bot%data(iloc),263.15))
       end do
-      this%state%soil_liquid_vol%data  (iloc,:) = 0.0
-      this%state%soil_moisture_vol%data(iloc,:) = 1.0
+      this%state%soil_liquid_vol_mp%data  (iloc,:) = 0.0
+      this%state%soil_moisture_vol_mp%data(iloc,:) = 1.0
     end if
 
     snow_depth_meters = this%state%snow_depth%data(iloc) / 1000.0  ! snow depth in meters
