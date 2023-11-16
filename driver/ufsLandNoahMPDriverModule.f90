@@ -376,6 +376,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
   
   if(iopt_sfc == 4) do_mynnsfclay = .true.
 
+!      write(87,*)noahmp%ic%temperature_soil%data
 
 !       if ( namelist%num_soil_levels_ic /= km) then
         call noahmp_soil_init (im              , & ! in
@@ -384,6 +385,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
         namelist%soil_level_nodes_ic           , & ! in
         namelist%soil_level_nodes              , & ! in
         noahmp%ic%soil_moisture_vol%data    , & ! in
+        noahmp%ic%soil_liquid_vol%data    , & ! in
         noahmp%ic%temperature_soil%data     , & ! in
                        soiltyp                 , & ! in
                        smc                     , & ! out
@@ -399,13 +401,12 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
 !       endif
 
-
       call noahmpdrv_run                                               &
           ( im, km, lsnowl, itime, ps, u1, v1, t1, q1, soiltyp,soilcol,&
             vegtype,sigmaf, dlwflx, dswsfc, snet, delt, tg3, cm, ch,   &
             prsl1, prslk1, prslki, prsik1, zf,pblh, dry, wind, slopetyp,    &
             shdmin, shdmax, snoalb, sfalb, flag_iter,con_g,            &
-            namelist%soil_level_nodes,namelist%soil_level_thickness,   &
+            namelist%soil_level_bot,namelist%soil_level_thickness,   &
             idveg, iopt_crs, iopt_btr, iopt_run, iopt_sfc, iopt_frz,   &
             iopt_inf, iopt_rad, iopt_alb, iopt_snf, iopt_tbot,iopt_stc,&
             iopt_trs,iopt_diag,latitude_radians, xcoszin, iyrlen, julian, garea, &

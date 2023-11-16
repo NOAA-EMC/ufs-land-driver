@@ -21,6 +21,7 @@ type, public :: static_type
   integer, allocatable, dimension(:)    :: land_mask
   real   , allocatable, dimension(:)    :: soil_level_thickness
   real   , allocatable, dimension(:)    :: soil_level_nodes
+  real   , allocatable, dimension(:)    :: soil_level_bot
   real   , allocatable, dimension(:)    :: max_snow_albedo
   real   , allocatable, dimension(:)    :: emissivity
   real   , allocatable, dimension(:,:)  :: gvf_monthly
@@ -82,6 +83,7 @@ contains
   allocate(this%land_mask             (namelist%subset_length))
   allocate(this%soil_level_thickness  (this%nlevels))
   allocate(this%soil_level_nodes      (this%nlevels))
+  allocate(this%soil_level_bot        (this%nlevels))
   allocate(this%max_snow_albedo       (namelist%subset_length))
   allocate(this%emissivity            (namelist%subset_length))
   allocate(this%gvf_monthly           (namelist%subset_length,12))
