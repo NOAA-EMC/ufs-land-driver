@@ -94,7 +94,7 @@ end do
   num_veg = num(region.eq.ivegs(iveg))
   res@tiMainString = tostring(region_names(ivegs(iveg)-1,:))+" ("+num_veg+")"
   res@gsnXYFillColors = (/"transparent","transparent","transparent","transparent","transparent","transparent","grey80"/)
-  plots(iveg) = gsn_csm_xy(wks,time,(/sd_sim1,sw_sim2,sd_sim1,sw_sim2/),res)
+  plots(iveg) = gsn_csm_xy(wks,time,(/sd_sim1,sd_sim2,sw_sim1,sw_sim2/),res)
 
 end do
 
