@@ -1,7 +1,7 @@
 &run_setup
 
-  static_file      = "/scratch2/NCEPDEV/land/data/forcing/era5/static/C96_conus/ufs-land_C96_conus_static_fields_hr3.nc"
-  init_file        = "/scratch2/NCEPDEV/land/data/forcing/era5/init/C96_conus/ufs-land_C96_conus_era5_init_1989-12-31_23-00-00.nc"
+  static_file      = "/scratch2/NCEPDEV/land/data/forcing/era5/static/C96_conus/ufs-land_C96_conus_hr3_static_fields.nc"
+  init_file        = "/scratch2/NCEPDEV/land/data/forcing/era5/init/C96_conus/ufs-land_C96_conus_hr3_era5_init_1989-12-31_23-00-00.nc"
   forcing_dir      = "/scratch2/NCEPDEV/land/data/forcing/era5/datm/C96_conus/"
   
   separate_output = .true.
@@ -94,5 +94,9 @@
                  "ground_heat_total"
  monthly_mean_names = "transpiration",
                       "evaporation_soil",
-                      "evaporation_canopy"
+                      "evaporation_canopy",
+                      "snow_water_equiv",
+                      "snow_depth",
+                      "soil_moisture_vol",
+                      "temperature_soil"
 /
