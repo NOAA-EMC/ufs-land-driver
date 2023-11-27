@@ -25,7 +25,6 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   call static%ReadStatic(namelist)
   
   call noahmp%Init(namelist,namelist%subset_length)
-
   if(namelist%restart_simulation) then
     call restart%ReadRestartNoahMP(namelist, noahmp)
   else
