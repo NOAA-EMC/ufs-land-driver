@@ -398,6 +398,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
            stop
          end if
 
+!      write(88,*)stc
 !       endif
 
       call noahmpdrv_run                                               &
