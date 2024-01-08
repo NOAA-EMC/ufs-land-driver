@@ -6,6 +6,8 @@ contains
 
 subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
 
+  use machine , only : kind_phys
+  use noahmpdrv
   use NamelistRead
   use ufsLandNoahMPType
   use ufsLandStaticModule
@@ -21,6 +23,13 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   type (initial_type)        :: initial
   type (forcing_type)        :: forcing
   type (noahmp_restart_type) :: restart
+  
+  integer, parameter :: lsm_noahmp = 2
+  integer            :: errflg                  ! CCPP error flag
+  character(len=128) :: errmsg                  ! CCPP error message
+  logical            :: do_mynnsfclay = .false. ! flag for activating mynnsfclay
+  logical            :: do_mynnedmf   = .false.  ! flag for activating mynnedmf, set to true for mynn check
+  real (kind=kind_phys), dimension(30) :: pores, resid
 
   call static%ReadStatic(namelist)
   
@@ -39,13 +48,17 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   
   call forcing%ReadForcingInit(namelist)
   
+  if(noahmp%options%surface_exchange == 4) do_mynnsfclay = .true.
+  call noahmpdrv_init(namelist%land_model, lsm_noahmp, 0,                      &
+                      noahmp%static%soil_source, noahmp%static%veg_source, 0,  &
+                      pores, resid, do_mynnsfclay, do_mynnedmf, errmsg, errflg )
+
 end subroutine ufsLandNoahMPDriverInit
   
 subroutine ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp)
 
 use machine , only : kind_phys
 use noahmpdrv
-use set_soilveg_mod
 use funcphys
 use namelist_soilveg, only : z0_data
 use noahmp_tables
@@ -319,10 +332,7 @@ dry        = .true.
 flag_iter  = .true.
 garea      = 3000.0 * 3000.0   ! any size >= 3km will give the same answer
 
-call set_soilveg(0,isot,ivegsrc,0,errmsg,errflg)
 call gpvs()
-
-call read_mp_table_parameters(errmsg,errflg)
 
 zorl     = z0_data(vegtype) * 100.0   ! at driver level, roughness length in cm
 
