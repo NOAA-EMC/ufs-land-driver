@@ -8,6 +8,8 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
 
   use machine , only : kind_phys
   use noahmpdrv
+  use namelist_soilveg, only : z0_data
+  use funcphys
   use NamelistRead
   use ufsLandNoahMPType
   use ufsLandStaticModule
@@ -52,6 +54,8 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   call noahmpdrv_init(namelist%land_model, lsm_noahmp, 0,                      &
                       noahmp%static%soil_source, noahmp%static%veg_source, 0,  &
                       pores, resid, do_mynnsfclay, do_mynnedmf, errmsg, errflg )
+  noahmp%diag%z0_total%data = z0_data(noahmp%static%vegetation_category%data) * 100.0   ! at driver level, roughness length in cm
+  call gpvs()
 
 end subroutine ufsLandNoahMPDriverInit
   
@@ -59,8 +63,6 @@ subroutine ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp)
 
 use machine , only : kind_phys
 use noahmpdrv
-use funcphys
-use namelist_soilveg, only : z0_data
 use noahmp_tables
 use physcons, only : con_hvap , con_cp, con_jcal, con_eps, con_epsm1,    &
                      con_fvirt, con_rd, con_hfus, con_g  ,               &
@@ -331,10 +333,6 @@ dry        = .true.
   where(static%vegetation_category == static%iswater) dry = .false.
 flag_iter  = .true.
 garea      = 3000.0 * 3000.0   ! any size >= 3km will give the same answer
-
-call gpvs()
-
-zorl     = z0_data(vegtype) * 100.0   ! at driver level, roughness length in cm
 
 time_loop : do timestep = 1, namelist%run_timesteps
 
