@@ -52,6 +52,7 @@ type, public :: namelist_type
 
   real, allocatable, dimension(:) ::  soil_level_thickness ! soil level thicknesses [m]
   real, allocatable, dimension(:) ::  soil_level_nodes     ! soil level centroids from surface [m]
+  real, allocatable, dimension(:) ::  soil_level_bot       ! layer-bottom depth from soil surf (m)
   
   double precision :: initial_time
 
@@ -156,6 +157,7 @@ contains
 
     real, allocatable, dimension(:) ::  soil_level_thickness ! soil level thicknesses [m]
     real, allocatable, dimension(:) ::  soil_level_nodes     ! soil level centroids from surface [m]
+    real, allocatable, dimension(:) ::  soil_level_bot       ! layer-bottom depth from soil surf (m)
     
     double precision :: run_time = -999.d0
     
@@ -210,7 +212,7 @@ contains
                             output_frequency_s, output_initial, reference_date
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
-    namelist / soil_setup / soil_level_thickness, soil_level_nodes
+    namelist / soil_setup / soil_level_thickness, soil_level_nodes, soil_level_bot
     namelist / noahmp_options /                                                        &
                dynamic_vegetation_option         , canopy_stomatal_resistance_option , &
                soil_wetness_option               , runoff_option                     , &
@@ -245,6 +247,7 @@ contains
 
     allocate (soil_level_thickness (1:num_soil_levels))   ! soil level thicknesses [m]
     allocate (soil_level_nodes     (1:num_soil_levels))   ! soil level centroids from surface [m]
+    allocate (soil_level_bot       (1:num_soil_levels))   ! layer-bottom depth from soil surf[m]
     
     if(forcing_timestep_seconds < 0) forcing_timestep_seconds = timestep_seconds
 
@@ -301,6 +304,7 @@ contains
     this%forcing_height       = forcing_height
     this%soil_level_thickness = soil_level_thickness
     this%soil_level_nodes     = soil_level_nodes
+    this%soil_level_bot       = soil_level_bot
     this%forcing_timestep_seconds       = forcing_timestep_seconds
     this%forcing_regrid                 = forcing_regrid
     this%forcing_regrid_weights_filename= forcing_regrid_weights_filename
