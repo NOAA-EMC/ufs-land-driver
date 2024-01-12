@@ -38,6 +38,7 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   call noahmp%Init(namelist,namelist%subset_length)
 
   if(namelist%restart_simulation) then
+    if(namelist%num_soil_levels_ir /= noahmp%static%soil_levels) stop "  model soil levels mismatch with restart" 
     call restart%ReadRestartNoahMP(namelist, noahmp)
   else
     call initial%ReadInitial(namelist)
