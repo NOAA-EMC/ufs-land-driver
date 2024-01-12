@@ -81,6 +81,7 @@ set_soilveg.o:		        namelist_soilveg.o
 sflx.o: 		        machine.o physcons.o namelist_soilveg.o
 lsm_noah.o:		        machine.o physcons.o funcphys.o surface_perturbation.o sflx.o 
 sfc_diff.o:		        machine.o
+module_soil_init.o:		machine.o noahmp_tables.o
 module_sf_noahmp_glacier.o:	module_sf_noahmplsm.o
 noahmpdrv.o:	                set_soilveg.o machine.o date_def.o funcphys.o \
                                 module_sf_noahmplsm.o \
