@@ -20,6 +20,7 @@ type, public :: initial_type
   real, allocatable, dimension(:)    :: skin_temperature
   real, allocatable, dimension(:)    :: soil_level_thickness
   real, allocatable, dimension(:)    :: soil_level_nodes
+  real, allocatable, dimension(:)    :: soil_level_bot
   real, allocatable, dimension(:,:)  :: soil_temperature
   real, allocatable, dimension(:,:)  :: soil_moisture
   real, allocatable, dimension(:,:)  :: soil_liquid
@@ -46,7 +47,7 @@ contains
   class(initial_type)  :: this
   type(namelist_type)  :: namelist
   
-  integer :: ncid, dimid, varid, status
+  integer :: ncid, dimid, varid, status, k
   
   status = nf90_open(namelist%init_file, NF90_NOWRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)
@@ -74,6 +75,7 @@ contains
   allocate(this%skin_temperature     (namelist%subset_length))
   allocate(this%soil_level_thickness (this%nlevels))
   allocate(this%soil_level_nodes     (this%nlevels))
+  allocate(this%soil_level_bot       (this%nlevels))
   allocate(this%soil_temperature     (namelist%subset_length,this%nlevels))
   allocate(this%soil_moisture        (namelist%subset_length,this%nlevels))
   allocate(this%soil_liquid          (namelist%subset_length,this%nlevels))
@@ -128,6 +130,11 @@ contains
    if(status /= nf90_noerr) call handle_err(status)
   status = nf90_get_var(ncid, varid, this%soil_level_thickness)
    if(status /= nf90_noerr) call handle_err(status)
+
+    this%soil_level_bot(1)=-1.*this%soil_level_thickness(1)
+   do k=2,this%nlevels
+    this%soil_level_bot(k)=this%soil_level_bot(k-1)-this%soil_level_thickness(k)
+   end do
   
   status = nf90_inq_varid(ncid, "soil_level_nodes", varid)
    if(status /= nf90_noerr) call handle_err(status)
@@ -192,15 +199,17 @@ contains
   type(noahmp_type)    :: noahmp
   
   if(namelist%subset_length /= noahmp%static%vector_length)   stop "vector length mismatch in ufsLandInitial_TransferInitial"
-  if(this%nlevels    /= noahmp%static%soil_levels) stop "  soil levels mismatch in ufsLandInitial_TransferInitial"
+! if(this%nlevels    /= noahmp%static%soil_levels) stop "  soil levels mismatch in ufsLandInitial_TransferInitial"
   
   noahmp%state%snow_water_equiv%data       = this%snow_water_equivalent
   noahmp%state%snow_depth%data             = this%snow_depth * 1000.0  ! driver wants mm
   noahmp%diag%canopy_water%data            = this%canopy_water
   noahmp%state%temperature_radiative%data  = this%skin_temperature
-  noahmp%state%temperature_soil%data       = this%soil_temperature
-  noahmp%state%soil_moisture_vol%data      = this%soil_moisture
-  noahmp%state%soil_liquid_vol%data        = this%soil_liquid
+  if(this%nlevels    == noahmp%static%soil_levels) then
+   noahmp%state%temperature_soil%data       = this%soil_temperature
+   noahmp%state%soil_moisture_vol%data      = this%soil_moisture
+   noahmp%state%soil_liquid_vol%data        = this%soil_liquid
+  end if
 
   noahmp%model%pbl_height%data               = 1000.0
   noahmp%model%mo_length_inverse%data        = 1.0

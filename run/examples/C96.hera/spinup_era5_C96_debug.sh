@@ -7,7 +7,7 @@
 #SBATCH -q debug
 #
 # -- Specify a maximum wallclock
-#SBATCH --time=0:05:00
+#SBATCH --time=0:15:00
 #
 # -- Specify under which account a job should run
 #SBATCH --account=fv3-cpu
@@ -24,6 +24,7 @@ module load intel/2022.2.0
 module load impi/2022.2.0
 module load netcdf-hdf5parallel/4.7.4 
 
-ln -sf ufs-land.namelist.era5.C96 ufs-land.namelist
+#ln -sf ufs-land.namelist.era5.C96 ufs-land.namelist
+ln -sf ufs-land.namelist.era5.C96_conus.monthly_restart ufs-land.namelist
 
 time srun -n $nt ../../ufsLand.exe
