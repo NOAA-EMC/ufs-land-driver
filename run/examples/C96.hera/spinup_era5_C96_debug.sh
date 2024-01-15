@@ -7,7 +7,7 @@
 #SBATCH -q debug
 #
 # -- Specify a maximum wallclock
-#SBATCH --time=0:05:00
+#SBATCH --time=0:15:00
 #
 # -- Specify under which account a job should run
 #SBATCH --account=fv3-cpu

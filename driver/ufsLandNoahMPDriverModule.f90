@@ -52,24 +52,28 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   call forcing%ReadForcingInit(namelist)
   
   if(noahmp%options%surface_exchange == 4) do_mynnsfclay = .true.
-!   write(96,*)noahmp%static%soil_levels,namelist%soil_level_bot
-!   write(97,*)noahmp%static%soil_category%data
-!   write(98,*)initial%soil_moisture
-!   write(99,*)initial%soil_liquid
-!   write(100,*)initial%soil_temperature
-!   stop
-  call noahmpdrv_init(namelist%subset_length, namelist%land_model, lsm_noahmp, 0,           &
-                      noahmp%static%soil_source, noahmp%static%veg_source, 0,               &
-                      pores, resid, initial%nlevels,initial%soil_level_bot,                 &
-                      noahmp%static%soil_levels,namelist%soil_level_bot,                    &
-                      noahmp%static%soil_category%data, noahmp%static%vegetation_category%data,       &
-                      initial%soil_moisture, initial%soil_liquid, initial%soil_temperature, &
-                      noahmp%state%soil_moisture_vol%data, noahmp%state%temperature_soil%data,      &
+
+  if(namelist%restart_simulation) then
+   call noahmpdrv_init(namelist%subset_length, namelist%land_model, lsm_noahmp, 0,              &
+                      noahmp%static%soil_source, noahmp%static%veg_source, 0,                   &
+                      pores, resid, namelist%num_soil_levels_ir,namelist%soil_level_bot,        &
+                      noahmp%static%soil_levels,namelist%soil_level_bot,                        &
+                      noahmp%static%soil_category%data, noahmp%static%vegetation_category%data, &
+                      noahmp%state%soil_moisture_vol%data, noahmp%state%soil_liquid_vol%data,   &
+                      noahmp%state%temperature_soil%data,                                       &
+                      noahmp%state%soil_moisture_vol%data, noahmp%state%temperature_soil%data,  &
                       noahmp%state%soil_liquid_vol%data, do_mynnsfclay,errmsg, errflg )
-!   write(88,*)noahmp%state%soil_moisture_vol%data
-!   write(89,*)noahmp%state%temperature_soil%data
-!   write(90,*)noahmp%state%soil_liquid_vol%data
-!   stop
+  else
+   call noahmpdrv_init(namelist%subset_length, namelist%land_model, lsm_noahmp, 0,              &
+                      noahmp%static%soil_source, noahmp%static%veg_source, 0,                   &
+                      pores, resid, initial%nlevels,initial%soil_level_bot,                     &
+                      noahmp%static%soil_levels,namelist%soil_level_bot,                        &
+                      noahmp%static%soil_category%data, noahmp%static%vegetation_category%data, &
+                      initial%soil_moisture, initial%soil_liquid, initial%soil_temperature,     &
+                      noahmp%state%soil_moisture_vol%data, noahmp%state%temperature_soil%data,  &
+                      noahmp%state%soil_liquid_vol%data, do_mynnsfclay,errmsg, errflg )
+  endif
+
   noahmp%diag%z0_total%data = z0_data(noahmp%static%vegetation_category%data) * 100.0   ! at driver level, roughness length in cm
   call gpvs()
 
