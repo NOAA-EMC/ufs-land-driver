@@ -23,13 +23,13 @@
               print "=====================================================================\n"; 
               print "================== hera configure environment set ===================\n"; 
               print "=====================================================================\n"; 
+              print " \n"; 
               print "NEED TO LOAD MODULES: \n"; 
               print " \n"; 
               print "module load stack-intel/2021.5.0 stack-intel-oneapi-mpi/2021.5.1 netcdf-hdf5parallel/4.7.4 \n"; 
               print " \n"; 
               print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
               print " \n"; 
-              print "Make certain you are on a parallel branch \n"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
             }
@@ -40,11 +40,13 @@
               print "=====================================================================\n"; 
               print "================= orion configure environment set ===================\n"; 
               print "=====================================================================\n"; 
+              print " \n"; 
               print "NEED TO LOAD MODULES: \n"; 
               print " \n"; 
               print "module load intel/2022.1.2 impi/2022.1.2 netcdf/4.7.4 \n"; 
               print " \n"; 
               print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
+              print " \n"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
             }
@@ -54,9 +56,9 @@
               system "cp config/user_build_config.gfortran.parallel user_build_config"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
-              print "Generic gfortran user_build_config created. \nYou will likely have to modify for your system.\n"; 
               print " \n"; 
-              print "Make certain you are on a parallel branch \n"; 
+              print "Generic gfortran user_build_config created. \n\nYou will likely have to modify for your system.\n"; 
+              print " \n"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
             }
