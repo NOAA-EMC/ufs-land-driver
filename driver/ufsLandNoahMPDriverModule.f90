@@ -93,7 +93,7 @@ integer          :: now_yyyy
 
 integer                            :: itime      ! not used
 integer                            :: errflg     ! CCPP error flag
-character(len=128)                 :: errmsg     ! CCPP error message
+character(len=2048)                :: errmsg     ! CCPP error message
    real, allocatable, dimension(:) :: rho        ! density [kg/m3]
    real, allocatable, dimension(:) :: u1         ! u-component of wind [m/s]
    real, allocatable, dimension(:) :: v1         ! v-component of wind [m/s]
@@ -449,6 +449,12 @@ time_loop : do timestep = 1, namelist%run_timesteps
             spec_humid_sfc_veg_ccpp,                                   &
             spec_humid_sfc_bare_ccpp                                   )
 
+  if(errflg /= 0) then
+    write(*,*) "noahmpdrv_run reporting an error"
+    write(*,*) trim(errmsg)
+    exit time_loop
+  end if
+
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
   hflx = hflx * rho * con_cp
   evap = evap * rho * con_hvap
@@ -539,12 +545,6 @@ time_loop : do timestep = 1, namelist%run_timesteps
         call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
 
   end select restart_cases
-
-  if(errflg /= 0) then
-    write(*,*) "noahmpdrv_run reporting an error"
-    write(*,*) errmsg
-    stop
-  end if
 
 end do time_loop
 
