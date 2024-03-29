@@ -7,6 +7,6 @@
  FREESOURCE     =       #-ffree-form  -ffree-line-length-none
  F90FLAGS       =       -r8 -init=huge
  NETCDFMOD      =       -I${NETCDF}/include
- NETCDFLIB      =       -L${NETCDF}/lib -lnetcdf -lnetcdff
+ NETCDFLIB      =       -L${NETCDF}/lib -lnetcdff
  PHYSDIR        =       ../ccpp-physics/physics
 
