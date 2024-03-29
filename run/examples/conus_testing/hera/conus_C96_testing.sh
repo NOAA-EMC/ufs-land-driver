@@ -7,7 +7,7 @@
 #SBATCH -q debug
 #
 # -- Specify a maximum wallclock
-#SBATCH --time=0:15:00
+#SBATCH --time=0:30:00
 #
 # -- Specify under which account a job should run
 #SBATCH --account=fv3-cpu
@@ -18,11 +18,12 @@
 # -- Tell the batch system to set the working directory to the current working directory
 #SBATCH --chdir=.
 
-module load intel/2022.2.0
-module load impi/2022.2.0
-module load netcdf-hdf5parallel/4.7.4 
-module load nco
-module load ncl
+module purge
+module load stack-intel/2021.5.0  
+module load stack-intel-oneapi-mpi/2021.5.1
+module load netcdf-hdf5parallel/4.7.4
+module load nco/5.0.6
+module load ncl/6.6.2_spack
 
 testname="baseline_hr3"
 compare_to="baseline_hr3"
@@ -32,7 +33,6 @@ restart_version="hr3"
 mkdir $testname
 cd $testname
 
-cp /scratch2/NCEPDEV/land/data/conus/restart/$restart_version/ufs_land_restart.2010-01-01_00-00-00.nc .
 ln -s -f ../../namelists/ufs-land.namelist.$testname ufs-land.namelist
 cp $table ./noahmptable.tbl
 
