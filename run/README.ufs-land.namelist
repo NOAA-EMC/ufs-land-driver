@@ -1,0 +1,114 @@
+!
+! Brief documentation for namelist available options, default values are listed
+!
+
+&run_setup
+
+  static_file         = ""      ! path to static file [char*128]
+  init_file           = ""      ! path to initial condition file, used for cold starts [char*128]
+  forcing_dir         = ""      ! directory path to data atmosphere files [char*128]
+  
+  output_frequency_s  = 0       ! instantaneous output file frequency in seconds, -1 for daily, -2 for monthly [integer]
+  separate_output     = .false. ! write a separate file for each output time [logical]
+  output_hour         = "00"    ! for daily/monthly instantaneous output, hour of day to output [char*2]
+  output_day          = "01"    ! for monthly instantaneous output, day of month to output [char*2]
+  output_dir          = ""      ! directory path for instantaneous output [char*128]
+  output_initial      = .false. ! write instantaneous output file before first model execution [logical]
+
+  restart_frequency_s = 0       ! restart file frequency in seconds, -1 for daily, -2 for monthly [integer]
+  restart_simulation  = .false. ! simulation is a restart from restart_date [logical]
+  restart_date        = ""      ! date of restart in format "YYYY-MM-DD hh:mm:ss" [char*19]
+  restart_dir         = ""      ! directory path for read and write of restart files [char*128]
+  restart_hour        = "00"    ! for daily/monthly restart frequency, hour of day to write restart [char*2]
+  restart_day         = "01"    ! for monthly restart frequency, day of month to write restart [char*2]
+
+  timestep_seconds = 3600       ! model integration timestep in seconds [integer]
+
+! simulation_start is required for cold start runs
+! either set simulation_end or run_* or run_timesteps, priority
+!   1. simulation_end 
+!   2. run_[days/hours/minutes/seconds] 
+!   3. run_timesteps
+
+  simulation_start = ""         ! start date for cold start simulation in format "YYYY-MM-DD hh:mm:ss" [char*19]
+  simulation_end   = ""         !   end date for cold start and restart simulations in format "YYYY-MM-DD hh:mm:ss" [char*19]
+
+  run_days         = -999       ! number of days to run [integer]
+  run_hours        = -999       ! number of hours to run [integer]
+  run_minutes      = -999       ! number of minutes to run [integer]
+  run_seconds      = -999       ! number of seconds to run [integer]
+  
+  run_timesteps    = -999       ! number of timesteps to run [integer]
+  
+  location_start   = -999       ! starting spatial location within vector [integer]
+  location_end     = -999       ! ending spatial location within vector [integer]
+  
+  reference_date = "1970-01-01 00:00:00" ! reference date for time calculation in format "YYYY-MM-DD hh:mm:ss" [char*19]
+
+/
+
+&land_model_option
+ land_model        = -999       ! land model: 1=noah, 2=noahmp [integer]
+/
+
+&structure
+ num_soil_levels   = -999       ! number of soil levels [integer]
+ forcing_height    = -999.      ! forcing height in meters [real]
+/
+
+&soil_setup
+ soil_level_thickness   =       ! soil level thicknesses in meters, no default since dynamically allocated [real]
+                                !  for the standard 4-layer: 0.10,    0.30,    0.60,    1.00
+ soil_level_nodes       =       ! soil level centroids from surface in meters, no default since dynamically allocated [real]
+                                !  for the standard 4-layer: 0.05,    0.25,    0.70,    1.50
+/
+
+&noahmp_options
+ dynamic_vegetation_option         = -999 ! GFS:4 ! dynamic vegetation option (see code header for more details)
+ canopy_stomatal_resistance_option = -999 ! GFS:2 ! canopy stomatal resistance option (see code header for more details)
+ soil_wetness_option               = -999 ! GFS:1 ! soil wetness option (see code header for more details)
+ runoff_option                     = -999 ! GFS:1 ! subsurface runoff option (see code header for more details)
+ surface_exchange_option           = -999 ! GFS:3 ! above-canopy exchange coefficient option (see code header for more details)
+ supercooled_soilwater_option      = -999 ! GFS:1 ! supercooled soil water capacity option (see code header for more details)
+ frozen_soil_adjust_option         = -999 ! GFS:1 ! frozen soil infiltration option (see code header for more details)
+ radiative_transfer_option         = -999 ! GFS:3 ! canopy radiative transfer option (see code header for more details)
+ snow_albedo_option                = -999 ! GFS:1 ! snow aging/albedo option (see code header for more details)
+ precip_partition_option           = -999 ! GFS:1 ! rain/snow partitioning option (see code header for more details)
+ soil_temp_lower_bdy_option        = -999 ! GFS:2 ! soil heat diffusion bottom boundary condition option (see code header for more details)
+ soil_temp_time_scheme_option      = -999 ! GFS:3 ! soil heat diffusion top boundary condition option (see code header for more details)
+ thermal_roughness_scheme_option   = -999 ! GFS:2 ! thermal roughness length option (see code header for more details)
+ surface_evap_resistance_option    = -999 ! GFS:1 ! surface evaporation resistance option (see code header for more details)
+ glacier_option                    = -999 ! GFS:1 ! glacier grid option (see code header for more details)
+ tq_diagnostic_option              = -999 ! GFS:3 ! 2-m temperature/specific humidity option (see code header for more details)
+/
+
+&forcing
+ forcing_timestep_seconds       = -999  ! data atmosphere file frequency in seconds [integer]
+ forcing_regrid                 = ""    ! "none" = forcing in vector format; "esmf" = runtime regrid [char*128]
+ forcing_regrid_weights_filename= ""    ! path to regrid weights filename for "esmf" forcing_regrid option [char*128]
+ forcing_type                   = ""    ! forcing temporal format [char*128] 
+                                            "dd_1h" = daily files with hourly forcings (example: era5)
+                                            "mm_1h" = monthly files with hourly forcings (example: none - all have been converted to daily)
+                                            "mm_3h" = monthly files with 3-hourly forcings (example: gswp3 - mostly defunct)
+                                            "single_point" = all time in one file (example: bondville - not used anymore)
+ forcing_filename               = ""    ! forcing filename template [char*128]
+ forcing_interp_solar           = ""    ! interpolation method for SW radiation: "zenith" or "linear" [char*128]
+ forcing_time_solar             = ""    ! format of SW radiation in forcing file "period_average" or "instantaneous" [char*128]
+ forcing_name_precipitation     = ""    ! variable name for precipitation in forcing file [char*128]
+ forcing_name_temperature       = ""    ! variable name for temperature in forcing file [char*128]
+ forcing_name_specific_humidity = ""    ! variable name for specific humidity in forcing file [char*128]
+ forcing_name_wind_speed        = ""    ! variable name for wind speed in forcing file [char*128]
+ forcing_name_pressure          = ""    ! variable name for surface pressure in forcing file [char*128]
+ forcing_name_sw_radiation      = ""    ! variable name for SW radiation in forcing file [char*128]
+ forcing_name_lw_radiation      = ""    ! variable name for LW radiation in forcing file [char*128]
+/
+
+&io
+ output_names       = "" ! variable names separated by commas to put in instantaneous output file [char*128]
+ restart_names      = "" ! variable names separated by commas to add to default restart file list [char*128]
+ monthly_mean_names = "" ! variable names separated by commas to put in monthly mean file [char*128]
+ diurnal_names      = "" ! variable names separated by commas to put in monthly mean diurnal cycle file [char*128]
+ daily_mean_names   = "" ! variable names separated by commas to put in daily mean file [char*128]
+ solar_noon_names   = "" ! variable names separated by commas to put in daily solar noon file [char*128]
+                         ! example format for all: ""temperature_2m","dewpoint_2m","sensible_heat_total"
+/

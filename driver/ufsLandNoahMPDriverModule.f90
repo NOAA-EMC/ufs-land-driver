@@ -479,14 +479,14 @@ time_loop : do timestep = 1, namelist%run_timesteps
         if(mod(timestep,namelist%output_timesteps) == 0) &
           call output%WriteOutputNoahMP(namelist, noahmp, now_time)
 
-      case( -1 )  ! output daily at 00Z
+      case( -1 )  ! output daily at output_hour
 
-        if(now_date(12:19) == "00:00:00") &
+        if(now_date(12:19) == namelist%output_hour//":00:00") &
           call output%WriteOutputNoahMP(namelist, noahmp, now_time)
       
-      case( -2 )  ! output monthly at 00Z on 1st of month
+      case( -2 )  ! output monthly at output_hour on 1st of month
 
-        if(now_date( 9:19) == "01 00:00:00") &
+        if(now_date( 9:19) == namelist%output_day//" "//namelist%output_hour//":00:00") &
           call output%WriteOutputNoahMP(namelist, noahmp, now_time)
       
     end select output_cases
@@ -536,12 +536,12 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
     case( -1 )  ! restart daily at 00Z
 
-      if(now_date(12:19) == "00:00:00") &
+      if(now_date(12:19) == namelist%restart_hour//":00:00") &
         call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
 
     case( -2 )  ! restart monthly at 00Z on 1st of month
 
-      if(now_date( 9:19) == "01 00:00:00") &
+      if(now_date( 9:19) == namelist%restart_day//" "//namelist%restart_hour//":00:00") &
         call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
 
   end select restart_cases
