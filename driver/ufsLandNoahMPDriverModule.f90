@@ -121,13 +121,16 @@ character(len=2048)                :: errmsg     ! CCPP error message
    real, allocatable, dimension(:) :: fm101      ! composite 2-meter momemtum stability
    real, allocatable, dimension(:) :: fh21       ! composite 10-meter heat/moisture stability
    real, allocatable, dimension(:) :: zvfun      ! some function of vegetation used for gfs stability
+   real, allocatable, dimension(:) :: rca        ! LAI-scale canopy conductance (1/Rs)
    real, allocatable, dimension(:) :: rhonewsn1  ! holder for microphysics frozen density
 logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
    real, allocatable, dimension(:) :: latitude_radians
 
 logical :: do_mynnsfclay = .false.               ! flag for activating mynnsfclay
-logical :: thsfc_loc = .true.                    ! use local theta
+logical :: thsfc_loc     = .true.                ! use local theta
+logical :: cpllnd        = .false.               ! Flag for land coupling (atm->lnd)
+logical :: cpllnd2atm    = .false.               ! Flag for land coupling (lnd->atm)
 
 integer                         :: lsnowl = -2   ! lower limit for snow vector
 real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
@@ -324,6 +327,7 @@ allocate(   stress1(im))
 allocate(     fm101(im))
 allocate(      fh21(im))
 allocate(     zvfun(im))
+allocate(       rca(im))
 allocate( rhonewsn1(im))
 allocate(latitude_radians(im))
 
@@ -393,7 +397,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             iopt_trs,iopt_diag,latitude_radians, xcoszin, iyrlen, julian, garea, &
             rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp, rhonewsn1,&
             con_hvap, con_cp, con_jcal, rhoh2o, con_eps, con_epsm1,    &
-            con_fvirt, con_rd, con_hfus, thsfc_loc,                    &
+            con_fvirt, con_rd, con_hfus, thsfc_loc, cpllnd, cpllnd2atm,&
             weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
             canopy, trans, tsurf, zorl,                                &
             rb1, fm1, fh1, ustar1, stress1, fm101, fh21,               &
@@ -407,7 +411,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &
             cmm, chh, evbs, evcw, sbsno, pah, ecan, etran, edir, snowc,&
             stm, snohf,smcwlt2, smcref2, wet1, t2mmp, q2mp,zvfun,      &
-            ztmax, errmsg, errflg,                                     &
+            ztmax, rca, errmsg, errflg,                                &
             canopy_heat_storage_ccpp,                                  &
             rainfall_ccpp,                                             &
             sw_absorbed_total_ccpp,                                    &
