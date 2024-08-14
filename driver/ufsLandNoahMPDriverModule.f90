@@ -62,7 +62,7 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
                       noahmp%state%soil_moisture_vol%data, noahmp%state%soil_liquid_vol%data,   &
                       noahmp%state%temperature_soil%data,                                       &
                       noahmp%state%soil_moisture_vol%data, noahmp%state%temperature_soil%data,  &
-                      noahmp%state%soil_liquid_vol%data, do_mynnsfclay,errmsg, errflg )
+                      noahmp%state%soil_liquid_vol%data, do_mynnsfclay,do_mynnedmf,errmsg, errflg )
   else
    call noahmpdrv_init(namelist%subset_length, namelist%land_model, lsm_noahmp, 0,              &
                       noahmp%static%soil_source, noahmp%static%veg_source, 0,                   &
@@ -71,7 +71,7 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
                       noahmp%static%soil_category%data, noahmp%static%vegetation_category%data, &
                       initial%soil_moisture, initial%soil_liquid, initial%soil_temperature,     &
                       noahmp%state%soil_moisture_vol%data, noahmp%state%temperature_soil%data,  &
-                      noahmp%state%soil_liquid_vol%data, do_mynnsfclay,errmsg, errflg )
+                      noahmp%state%soil_liquid_vol%data, do_mynnsfclay,do_mynnedmf,errmsg, errflg )
   endif
 
   noahmp%diag%z0_total%data = z0_data(noahmp%static%vegetation_category%data) * 100.0   ! at driver level, roughness length in cm
