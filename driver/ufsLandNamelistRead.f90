@@ -14,6 +14,8 @@ type, public :: namelist_type
   
   logical        :: separate_output
   integer        :: output_frequency_s
+  character*2    :: output_hour
+  character*2    :: output_day
   character*128  :: output_dir
   logical        :: output_initial
   
@@ -22,6 +24,8 @@ type, public :: namelist_type
   integer        :: restart_frequency_s
   logical        :: restart_simulation
   character*19   :: restart_date
+  character*2    :: restart_hour
+  character*2    :: restart_day
   character*128  :: restart_dir
   
   character*19   :: simulation_start
@@ -123,6 +127,8 @@ contains
     
     integer        :: output_frequency_s = 0
     logical        :: separate_output = .false.
+    character*2    :: output_hour = "00"
+    character*2    :: output_day = "01"
     character*128  :: output_dir = ""
     logical        :: output_initial = .false.
   
@@ -131,6 +137,8 @@ contains
     integer        :: restart_frequency_s = 0
     logical        :: restart_simulation = .false.
     character*19   :: restart_date = ""
+    character*2    :: restart_hour = "00"
+    character*2    :: restart_day = "01"
     character*128  :: restart_dir = ""
   
     character*19   :: simulation_start = ""
@@ -211,7 +219,8 @@ contains
                             simulation_start, simulation_end, run_days, run_hours, run_minutes, &
 			    run_seconds, run_timesteps, separate_output, location_start, location_end, &
 			    restart_dir, restart_frequency_s, restart_simulation, restart_date, &
-                            output_frequency_s, output_initial, reference_date
+                            output_frequency_s, output_initial, reference_date, output_hour, &
+                            restart_hour, output_day, restart_day
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels_ir,num_soil_levels, forcing_height
     namelist / soil_setup / soil_level_thickness, soil_level_nodes, soil_level_bot
@@ -280,6 +289,8 @@ contains
     this%init_file            = init_file
     this%forcing_dir          = forcing_dir
     this%output_frequency_s   = output_frequency_s
+    this%output_hour          = output_hour
+    this%output_day           = output_day
     this%output_dir           = output_dir
     this%separate_output      = separate_output
     this%output_initial       = output_initial
@@ -287,6 +298,8 @@ contains
     this%restart_frequency_s  = restart_frequency_s
     this%restart_simulation   = restart_simulation
     this%restart_date         = restart_date
+    this%restart_hour         = restart_hour
+    this%restart_day          = restart_day
     this%restart_dir          = restart_dir
     this%location_start       = location_start
     this%location_end         = location_end

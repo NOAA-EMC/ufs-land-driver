@@ -113,7 +113,7 @@ integer          :: now_yyyy
 
 integer                            :: itime      ! not used
 integer                            :: errflg     ! CCPP error flag
-character(len=128)                 :: errmsg     ! CCPP error message
+character(len=2048)                :: errmsg     ! CCPP error message
    real, allocatable, dimension(:) :: rho        ! density [kg/m3]
    real, allocatable, dimension(:) :: u1         ! u-component of wind [m/s]
    real, allocatable, dimension(:) :: v1         ! v-component of wind [m/s]
@@ -141,13 +141,16 @@ character(len=128)                 :: errmsg     ! CCPP error message
    real, allocatable, dimension(:) :: fm101      ! composite 2-meter momemtum stability
    real, allocatable, dimension(:) :: fh21       ! composite 10-meter heat/moisture stability
    real, allocatable, dimension(:) :: zvfun      ! some function of vegetation used for gfs stability
+   real, allocatable, dimension(:) :: rca        ! LAI-scale canopy conductance (1/Rs)
    real, allocatable, dimension(:) :: rhonewsn1  ! holder for microphysics frozen density
 logical, allocatable, dimension(:) :: dry        ! land flag [-]
 logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
    real, allocatable, dimension(:) :: latitude_radians
 
 logical :: do_mynnsfclay = .false.               ! flag for activating mynnsfclay
-logical :: thsfc_loc = .true.                    ! use local theta
+logical :: thsfc_loc     = .true.                ! use local theta
+logical :: cpllnd        = .false.               ! Flag for land coupling (atm->lnd)
+logical :: cpllnd2atm    = .false.               ! Flag for land coupling (lnd->atm)
 
 integer                         :: lsnowl = -2   ! lower limit for snow vector
 real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
@@ -344,6 +347,7 @@ allocate(   stress1(im))
 allocate(     fm101(im))
 allocate(      fh21(im))
 allocate(     zvfun(im))
+allocate(       rca(im))
 allocate( rhonewsn1(im))
 allocate(latitude_radians(im))
 
@@ -414,7 +418,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             iopt_trs,iopt_diag,latitude_radians, xcoszin, iyrlen, julian, garea, &
             rainn_mp, rainc_mp, snow_mp, graupel_mp, ice_mp, rhonewsn1,&
             con_hvap, con_cp, con_jcal, rhoh2o, con_eps, con_epsm1,    &
-            con_fvirt, con_rd, con_hfus, thsfc_loc,                    &
+            con_fvirt, con_rd, con_hfus, thsfc_loc, cpllnd, cpllnd2atm,&
             weasd, snwdph, tskin, tprcp, srflag, smc, stc, slc,        &
             canopy, trans, tsurf, zorl,                                &
             rb1, fm1, fh1, ustar1, stress1, fm101, fh21,               &
@@ -428,7 +432,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             sncovr1, qsurf, gflux, drain, evap, hflx, ep, runoff,      &
             cmm, chh, evbs, evcw, sbsno, pah, ecan, etran, edir, snowc,&
             stm, snohf,smcwlt2, smcref2, wet1, t2mmp, q2mp,zvfun,      &
-            ztmax, errmsg, errflg,                                     &
+            ztmax, rca, errmsg, errflg,                                &
             canopy_heat_storage_ccpp,                                  &
             rainfall_ccpp,                                             &
             sw_absorbed_total_ccpp,                                    &
@@ -470,6 +474,12 @@ time_loop : do timestep = 1, namelist%run_timesteps
             spec_humid_sfc_veg_ccpp,                                   &
             spec_humid_sfc_bare_ccpp                                   )
 
+  if(errflg /= 0) then
+    write(*,*) "noahmpdrv_run reporting an error"
+    write(*,*) trim(errmsg)
+    exit time_loop
+  end if
+
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
   hflx = hflx * rho * con_cp
   evap = evap * rho * con_hvap
@@ -494,14 +504,14 @@ time_loop : do timestep = 1, namelist%run_timesteps
         if(mod(timestep,namelist%output_timesteps) == 0) &
           call output%WriteOutputNoahMP(namelist, noahmp, now_time)
 
-      case( -1 )  ! output daily at 00Z
+      case( -1 )  ! output daily at output_hour
 
-        if(now_date(12:19) == "00:00:00") &
+        if(now_date(12:19) == namelist%output_hour//":00:00") &
           call output%WriteOutputNoahMP(namelist, noahmp, now_time)
       
-      case( -2 )  ! output monthly at 00Z on 1st of month
+      case( -2 )  ! output monthly at output_hour on 1st of month
 
-        if(now_date( 9:19) == "01 00:00:00") &
+        if(now_date( 9:19) == namelist%output_day//" "//namelist%output_hour//":00:00") &
           call output%WriteOutputNoahMP(namelist, noahmp, now_time)
       
     end select output_cases
@@ -551,21 +561,15 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
     case( -1 )  ! restart daily at 00Z
 
-      if(now_date(12:19) == "00:00:00") &
+      if(now_date(12:19) == namelist%restart_hour//":00:00") &
         call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
 
     case( -2 )  ! restart monthly at 00Z on 1st of month
 
-      if(now_date( 9:19) == "01 00:00:00") &
+      if(now_date( 9:19) == namelist%restart_day//" "//namelist%restart_hour//":00:00") &
         call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
 
   end select restart_cases
-
-  if(errflg /= 0) then
-    write(*,*) "noahmpdrv_run reporting an error"
-    write(*,*) errmsg
-    stop
-  end if
 
 end do time_loop
 

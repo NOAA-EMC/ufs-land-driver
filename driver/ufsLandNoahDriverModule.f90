@@ -246,7 +246,9 @@ time_loop : do timestep = 1, namelist%run_timesteps
                          sigmaf,vegtype,shdmax,ivegsrc,            &  !intent(in)
                          z0pert,ztpert,                            &  ! mg, sfc-perts !intent(in)
                          flag_iter,.false.,                        &  !intent(in)
+                         lfake,                                    &  !intent(in)
                          fake,fake,-999,                           &  !hafs,z0 type !intent(in)
+                         fake,fake,fake,fake,-999,                 &  !additional hafs
                          lfake,land,lfake,                         &  !intent(in)
                          .true.,                                   &  !intent(in)
                          fake, tskin,fake,                         &  !intent(in)
