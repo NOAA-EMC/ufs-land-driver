@@ -59,7 +59,7 @@ module_sf_noahmplsm.o: $(PHYSDIR)/SFC_Models/Land/Noahmp/module_sf_noahmplsm.F90
 noahmp_tables.o: $(PHYSDIR)/SFC_Models/Land/Noahmp/noahmp_tables.f90
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/SFC_Models/Land/Noahmp/noahmp_tables.f90
 
-module_soil_init.o: $(PHYSDIR)/FC_Models/Land/Noahmp/module_soil_init.f90
+module_soil_init.o: $(PHYSDIR)/SFC_Models/Land/Noahmp/module_soil_init.f90
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/SFC_Models/Land/Noahmp/module_soil_init.f90
 
 noahmpdrv.o: $(PHYSDIR)/SFC_Models/Land/Noahmp/noahmpdrv.F90
