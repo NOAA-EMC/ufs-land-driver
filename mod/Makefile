@@ -18,6 +18,7 @@ OBJS =	machine.o \
 	module_sf_noahmplsm.o \
 	module_sf_noahmp_glacier.o \
 	noahmp_tables.o \
+	module_soil_init.o\
 	noahmpdrv.o
 	
 all:	$(OBJS)
@@ -58,6 +59,9 @@ module_sf_noahmplsm.o: $(PHYSDIR)/SFC_Models/Land/Noahmp/module_sf_noahmplsm.F90
 noahmp_tables.o: $(PHYSDIR)/SFC_Models/Land/Noahmp/noahmp_tables.f90
 	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/SFC_Models/Land/Noahmp/noahmp_tables.f90
 
+module_soil_init.o: $(PHYSDIR)/SFC_Models/Land/Noahmp/module_soil_init.f90
+	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/SFC_Models/Land/Noahmp/module_soil_init.f90
+
 noahmpdrv.o: $(PHYSDIR)/SFC_Models/Land/Noahmp/noahmpdrv.F90
 	$(COMPILERF90) -cpp -c $(F90FLAGS) $(FREESOURCE) $(PHYSDIR)/SFC_Models/Land/Noahmp/noahmpdrv.F90
 
@@ -77,8 +81,9 @@ set_soilveg.o:		        namelist_soilveg.o
 sflx.o: 		        machine.o physcons.o namelist_soilveg.o
 lsm_noah.o:		        machine.o physcons.o funcphys.o surface_perturbation.o sflx.o 
 sfc_diff.o:		        machine.o
+module_soil_init.o:		machine.o noahmp_tables.o
 module_sf_noahmp_glacier.o:	module_sf_noahmplsm.o
 noahmpdrv.o:	                set_soilveg.o machine.o date_def.o funcphys.o \
                                 module_sf_noahmplsm.o \
-                                module_sf_noahmp_glacier.o noahmp_tables.o
+                                module_sf_noahmp_glacier.o noahmp_tables.o module_soil_init.o
 
