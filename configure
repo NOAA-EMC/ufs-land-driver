@@ -6,7 +6,7 @@
   }else {
      print "Please select from following predefined environments: \n\n";
 
-     print "   1. NOAA Hera parallel \n";
+     print "   1. NOAA Ursa parallel \n";
      print "   2. MSU/NOAA Orion parallel \n";
      print "   3. gfortran compiler parallel \n";
      print "   0. exit only \n";
@@ -18,18 +18,18 @@
   }
 
   if ($response == 1) {
-              # NOAA Hera parallel
-              system "cp config/user_build_config.hera.parallel user_build_config"; 
+              # NOAA Ursa parallel
+              system "cp config/user_build_config.ursa.parallel user_build_config"; 
               print "=====================================================================\n"; 
-              print "================== hera configure environment set ===================\n"; 
+              print "================== ursa configure environment set ===================\n"; 
               print "=====================================================================\n"; 
               print " \n"; 
               print "NEED TO LOAD MODULES: \n"; 
               print " \n"; 
-              print "module use /scratch1/NCEPDEV/nems/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/modulefiles/Core \n"; 
-              print "module load stack-intel/2021.5.0 stack-intel-oneapi-mpi/2021.5.1 netcdf-hdf5parallel/4.7.4 \n"; 
+              print "module use /contrib/spack-stack/spack-stack-1.9.2/envs/ue-oneapi-2024.2.1/install/modulefiles/Core \n"; 
+              print "module load stack-oneapi/2024.2.1 stack-intel-oneapi-mpi/2021.13 netcdf-fortran/4.6.1 \n"; 
               print " \n"; 
-              print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
+              print "If modules are outdated, create issue at https://github.com/NOAA-EMC/ufs-land-driver \n"; 
               print " \n"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
@@ -47,7 +47,7 @@
               print "module use /work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/unified-env-rocky9/install/modulefiles/Core \n"; 
               print "module load stack-intel/2021.9.0 stack-intel-oneapi-mpi/2021.9.0 netcdf-fortran/4.6.1 \n"; 
               print " \n"; 
-              print "If modules are outdated, create issue at https://github.com/barlage/ufs-land-driver \n"; 
+              print "If modules are outdated, create issue at https://github.com/NOAA-EMC/ufs-land-driver \n"; 
               print " \n"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
