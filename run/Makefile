@@ -32,6 +32,7 @@ OBJS =	../driver/ufsLandDriver.o \
 	../mod/physcons.o \
 	../mod/funcphys.o \
 	../mod/surface_perturbation.o \
+	../mod/lnd_iau_mod.o \
 	../mod/namelist_soilveg.o \
 	../mod/set_soilveg.o \
 	../mod/sflx.o \
