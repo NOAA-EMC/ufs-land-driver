@@ -1,6 +1,6 @@
 
 #===============================================================================
-#  Baseline configuration for NOAA Hera parallel build
+#  Baseline configuration for NOAA Ursa parallel build
 #===============================================================================
 
  COMPILERF90    =       mpiifort
