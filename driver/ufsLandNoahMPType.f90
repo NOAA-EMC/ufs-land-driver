@@ -2890,7 +2890,7 @@ contains
     do ilevel = isnow , 0
       this%state%temperature_snow%data (iloc,ilevel) = this%state%temperature_ground%data(iloc)
       this%state%snow_level_liquid%data(iloc,ilevel) = 0.0
-      this%state%snow_level_ice%data(iloc,ilevel)    = this%model%snow_soil_thickness%data(iloc,-2) / snow_depth_meters &
+      this%state%snow_level_ice%data(iloc,ilevel)    = this%model%snow_soil_thickness%data(iloc,ilevel) / snow_depth_meters &
                                                         * this%state%snow_water_equiv%data(iloc)
     end do
 
