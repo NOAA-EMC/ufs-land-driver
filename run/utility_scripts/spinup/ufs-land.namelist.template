@@ -1,0 +1,94 @@
+&run_setup
+
+  static_file      = "<static_file>"
+  init_file        = "<init_file>"
+  forcing_dir      = "<forcing_dir>"
+  
+  separate_output = .true.
+  output_dir       = "./"
+  output_frequency_s = <output_frequency_s>
+
+  restart_frequency_s = <restart_frequency_s>
+  restart_simulation  = <restart_simulation>
+  restart_date        = "<restart_date>"
+  restart_dir         = "./"
+
+  timestep_seconds = <timestep_seconds>
+
+! simulation_start is required
+! either set simulation_end or run_* or run_timesteps, priority
+!   1. simulation_end 2. run_[days/hours/minutes/seconds] 3. run_timesteps
+
+  simulation_start = "<simulation_start>"   ! start date [yyyy-mm-dd hh:mm:ss]
+  simulation_end   = "<simulation_end>"   !   end date [yyyy-mm-dd hh:mm:ss]
+
+  run_days         = 1   ! number of days to run
+  run_hours        = 0   ! number of hours to run
+  run_minutes      = 0   ! number of minutes to run
+  run_seconds      = 0   ! number of seconds to run
+  
+  run_timesteps    = 0   ! number of timesteps to run
+  
+  location_start   = 1
+  location_end     = <location_end>
+  
+/
+
+&land_model_option
+ land_model        = 2   ! choose land model: 1=noah, 2=noahmp
+/
+
+&structure
+ num_soil_levels   = 4     ! number of soil levels
+ forcing_height    = 10    ! forcing height [m]
+/
+
+&soil_setup
+ soil_level_thickness   =  0.10,    0.30,    0.60,    1.00      ! soil level thicknesses [m]
+ soil_level_nodes       =  0.05,    0.25,    0.70,    1.50      ! soil level centroids from surface [m]
+/
+
+&noahmp_options
+ dynamic_vegetation_option         = <dynamic_vegetation_option>
+ canopy_stomatal_resistance_option = <canopy_stomatal_resistance_option>
+ soil_wetness_option               = <soil_wetness_option>
+ runoff_option                     = <runoff_option>
+ surface_exchange_option           = <surface_exchange_option>
+ supercooled_soilwater_option      = <supercooled_soilwater_option>
+ frozen_soil_adjust_option         = <frozen_soil_adjust_option>
+ radiative_transfer_option         = <radiative_transfer_option>
+ snow_albedo_option                = <snow_albedo_option>
+ precip_partition_option           = <precip_partition_option>
+ soil_temp_lower_bdy_option        = <soil_temp_lower_bdy_option>
+ soil_temp_time_scheme_option      = <soil_temp_time_scheme_option>
+ thermal_roughness_scheme_option   = <thermal_roughness_scheme_option>
+ surface_evap_resistance_option    = <surface_evap_resistance_option>
+ glacier_option                    = <glacier_option>
+ tq_diagnostic_option              = <tq_diagnostic_option>
+/
+
+&forcing
+ forcing_timestep_seconds       = 3600
+ forcing_regrid                 = "none"
+ forcing_regrid_weights_filename= ""
+ forcing_type                   = "dd_1h"
+ forcing_filename               = "<forcing_filename_preamble>"
+ forcing_interp_solar           = "zenith"          ! zenith or linear
+ forcing_time_solar             = "period_average"  ! period_average or instantaneous
+ forcing_name_precipitation     = "precipitation"
+ forcing_name_temperature       = "temperature"
+ forcing_name_specific_humidity = "specific_humidity"
+ forcing_name_wind_speed        = "wind_speed"
+ forcing_name_pressure          = "surface_pressure"
+ forcing_name_sw_radiation      = "solar_radiation"
+ forcing_name_lw_radiation      = "longwave_radiation"
+/
+
+&io
+ output_names  = "snow_water_equiv",
+                 "snow_depth",
+                 "soil_moisture_vol",
+                 "temperature_soil",
+                 "soil_liquid_vol"
+ restart_names = ""
+/
