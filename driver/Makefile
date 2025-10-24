@@ -26,7 +26,7 @@ OBJS =	ufsLandDriver.o \
 all:	$(OBJS)
 
 .f90.o:
-	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) -I../mod -I../util -I../mpi $(NETCDFMOD) $(*).f90
+	$(COMPILERF90) -c $(F90FLAGS) $(FREESOURCE) -I../mod -I../utility_code -I../mpi $(NETCDFMOD) $(*).f90
 
 clean:
 	rm -f *.o *.mod *.exe
@@ -40,20 +40,20 @@ ufsLandDriver.o:	ufsLandNoahDriverModule.o ufsLandNoahMPDriverModule.o ../mpi/mp
 ufsLandNoahMPDriverModule.o:	ufsLandNamelistRead.o ufsLandStaticModule.o ufsLandNoahMPType.o \
                         ufsLandInitialModule.o ufsLandForcingModule.o ufsLandIOModule.o \
 			ufsLandNoahMPRestartModule.o \
-			../util/module_interpolation_utilities.o ../util/module_cosine_zenith.o \
-			../util/module_time_utilities.o ../util/module_diagnostics.o \
+			../utility_code/module_interpolation_utilities.o ../utility_code/module_cosine_zenith.o \
+			../utility_code/module_time_utilities.o ../utility_code/module_diagnostics.o \
                         ../mod/machine.o  ../mod/set_soilveg.o \
                         ../mod/physcons.o ../mod/noahmpdrv.o ../mod/funcphys.o
 ufsLandNoahDriverModule.o:	ufsLandNamelistRead.o ufsLandStaticModule.o ufsLandNoahType.o \
                         ufsLandInitialModule.o ufsLandForcingModule.o ufsLandIOModule.o \
 			ufsLandNoahRestartModule.o \
-			../util/module_interpolation_utilities.o \
+			../utility_code/module_interpolation_utilities.o \
                         ../mod/machine.o  ../mod/set_soilveg.o \
                         ../mod/physcons.o ../mod/lsm_noah.o ../mod/funcphys.o
 ufsLandNoahMPRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahMPType.o ufsLandNetcdf.o ufsLandGenericIO.o
 ufsLandNoahRestartModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o
 ufsLandIOModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ufsLandGenericIO.o \
-                        ../util/module_error_handling.o ../util/module_time_utilities.o \
+                        ../utility_code/module_error_handling.o ../utility_code/module_time_utilities.o \
                         ufsLandOutputMean.o ufsLandOutputTime.o
 ufsLandGenericIO.o:	ufsLandNamelistRead.o ufsLandNoahMPType.o ufsLandNetcdf.o
 ufsLandOutputMean.o:	ufsLandNoahMPType.o ufsLandGenericType.o
@@ -61,9 +61,9 @@ ufsLandOutputTime.o:	ufsLandNoahMPType.o ufsLandGenericType.o
 ufsLandNoahType.o:	ufsLandNamelistRead.o 
 ufsLandNoahMPType.o:	ufsLandGenericType.o ufsLandNamelistRead.o ../mod/noahmp_tables.o
 ufsLandNetcdf.o:	ufsLandGenericType.o 
-ufsLandInitialModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ../util/module_error_handling.o
-ufsLandStaticModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ../util/module_error_handling.o
+ufsLandInitialModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ../utility_code/module_error_handling.o
+ufsLandStaticModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o ../utility_code/module_error_handling.o
 ufsLandForcingModule.o:	ufsLandNamelistRead.o ufsLandNoahType.o ufsLandNoahMPType.o \
-                        ../util/module_error_handling.o	../util/module_time_utilities.o \
+                        ../utility_code/module_error_handling.o	../utility_code/module_time_utilities.o \
 			ufsLandStaticModule.o
-ufsLandNamelistRead.o:	../util/module_time_utilities.o
+ufsLandNamelistRead.o:	../utility_code/module_time_utilities.o

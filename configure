@@ -19,7 +19,7 @@
 
   if ($response == 1) {
               # NOAA Ursa parallel
-              system "cp config/user_build_config.ursa.parallel user_build_config"; 
+              system "cp environments/user_build_config.ursa.parallel user_build_config"; 
               print "=====================================================================\n"; 
               print "================== ursa configure environment set ===================\n"; 
               print "=====================================================================\n"; 
@@ -37,7 +37,7 @@
 
   elsif ($response == 2) {
               # MSU/NOAA Orion parallel
-              system "cp config/user_build_config.orion.parallel user_build_config"; 
+              system "cp environments/user_build_config.orion.parallel user_build_config"; 
               print "=====================================================================\n"; 
               print "================= orion configure environment set ===================\n"; 
               print "=====================================================================\n"; 
@@ -55,7 +55,7 @@
 
   elsif ($response == 3) {
               # generic gfortran settings
-              system "cp config/user_build_config.gfortran.parallel user_build_config"; 
+              system "cp environments/user_build_config.gfortran.parallel user_build_config"; 
               print "=====================================================================\n"; 
               print "=====================================================================\n"; 
               print " \n"; 
