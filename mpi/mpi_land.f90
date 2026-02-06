@@ -5,6 +5,8 @@ module module_mpi_land
   implicit none
   
   type mpi_land_type
+    integer :: group_id     
+    integer :: comm_group    !ids below are within this group
     integer :: my_id
     integer :: numprocs
     integer :: global_nlocations
@@ -15,23 +17,39 @@ module module_mpi_land
   
   contains
 
-  subroutine mpi_land_init(global_nlocations_in, mpiland)
+  subroutine mpi_land_init(num_groups, global_nlocations_in, mpiland)
 
     implicit none
- 
+
+    integer             :: num_groups
     integer             :: global_nlocations_in
     type(mpi_land_type) :: mpiland
+
     integer             :: ierr
     logical             :: mpi_inited
     integer             :: i, overlap, location_start_shift
+    integer             :: tot_num_procs, group_size, my_global_rank, extra_proc
 
     call mpi_initialized( mpi_inited, ierr )
     if ( .not. mpi_inited ) then
       call mpi_init( ierr )  
     endif
     
-    call mpi_comm_rank( MPI_COMM_WORLD, mpiland%my_id, ierr )
-    call mpi_comm_size( MPI_COMM_WORLD, mpiland%numprocs, ierr )
+    call mpi_comm_rank( MPI_COMM_WORLD, tot_num_procs, ierr )
+    call mpi_comm_size( MPI_COMM_WORLD, my_global_rank, ierr )
+ 
+    group_size = tot_num_procs / num_groups  ! num procs in a group 
+    extra_proc = MOD(tot_num_procs, num_groups) 
+
+    mpiland%group_id = my_global_rank / group_size  ! group for proc.  
+    if (my_global_rank >  tot_num_procs - extra_proc - 1) then  
+        mpiland%group_id = MOD(my_global_rank, group_size)     !add extra processes to first np_ext groups
+        group_size = group_size + 1                            !first np_ext groups have an extra 1 proc
+    endif
+
+    call mpi_comm_split(MPI_COMM_WORLD, mpiland%group_id, my_global_rank, mpiland%comm_group, ierr)
+    call mpi_comm_rank(mpiland%comm_group, mpiland%my_id, ierr )
+    call mpi_comm_size(mpiland%comm_group, mpiland%numprocs, ierr )
 
     mpiland%global_nlocations = global_nlocations_in
 
