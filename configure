@@ -8,7 +8,8 @@
 
      print "   1. NOAA Ursa parallel \n";
      print "   2. MSU/NOAA Orion parallel \n";
-     print "   3. gfortran compiler parallel \n";
+     print "   3. GAEA C6 parallel \n";
+     print "   4. gfortran compiler parallel \n";
      print "   0. exit only \n";
 
      printf "\nEnter selection : " ;
@@ -54,6 +55,24 @@
             }
 
   elsif ($response == 3) {
+              # NOAA GAEAC6 parallel
+              system "cp config/user_build_config.gaeac6.parallel user_build_config";
+              print "=====================================================================\n";
+              print "================= gaeac6 configure environment set ===================\n";
+              print "=====================================================================\n";
+              print " \n";
+              print "NEED TO LOAD MODULES (use ../land_mods_gaeac6 for land offline worklfow) \n";
+              print " \n";
+              print "module use /ncrc/proj/epic/spack-stack/c6/spack-stack-1.9.2/envs/ue-oneapi-2024.2.1/install/modulefiles/Core \n";
+              print "module load  gw_setup.gaeac6  stack-intel/2023.2.0  stack-cray-mpich/8.1.30 netcdf-fortran/4.6.1 \n";
+	      print " \n";
+              print "If modules are outdated, create issue at https://github.com/NOAA-EMC/ufs-land-driver \n";
+              print " \n";
+              print "=====================================================================\n";
+              print "=====================================================================\n";
+            }
+
+  elsif ($response == 4) {
               # generic gfortran settings
               system "cp environments/user_build_config.gfortran.parallel user_build_config"; 
               print "=====================================================================\n"; 
