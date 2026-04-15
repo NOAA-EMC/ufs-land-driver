@@ -3,7 +3,7 @@
 #  Baseline configuration for NOAA Ursa parallel build
 #===============================================================================
 
- COMPILERF90    =       ftn     ##mpiifort -fc ifx
+ COMPILERF90    =       ftn     
  FREESOURCE     =       #-ffree-form  -ffree-line-length-none
  F90FLAGS       =       -r8 -init=huge -diag-disable=10448
  NETCDFMOD      =       -I${netcdf_fortran_ROOT}/include
