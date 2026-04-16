@@ -1,6 +1,6 @@
 
 #===============================================================================
-#  Baseline configuration for NOAA Ursa parallel build
+#  Baseline configuration for NOAA GAEAC6 parallel build
 #===============================================================================
 
  COMPILERF90    =       ftn     
