@@ -1,0 +1,12 @@
+
+#===============================================================================
+#  Baseline configuration for NOAA GAEAC6 parallel build
+#===============================================================================
+
+ COMPILERF90    =       ftn     
+ FREESOURCE     =       #-ffree-form  -ffree-line-length-none
+ F90FLAGS       =       -r8 -init=huge -diag-disable=10448
+ NETCDFMOD      =       -I${netcdf_fortran_ROOT}/include
+ NETCDFLIB      =       -L${netcdf_fortran_ROOT}/lib -lnetcdff
+ PHYSDIR        =       ../ccpp-physics/physics
+
