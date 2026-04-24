@@ -17,27 +17,20 @@ module module_mpi_land
   
   contains
 
-  subroutine mpi_land_init(num_groups, global_nlocations_in, mpiland)
+  subroutine mpi_land_init(num_groups, global_nlocations_in,my_global_rank,tot_num_procs, mpiland)
 
     implicit none
 
-    integer             :: num_groups
+    integer             :: num_groups   ! << ensemble size
     integer             :: global_nlocations_in
+    integer             :: tot_num_procs, my_global_rank
     type(mpi_land_type) :: mpiland
 
     integer             :: ierr
     logical             :: mpi_inited
     integer             :: i, overlap, location_start_shift
-    integer             :: tot_num_procs, group_size, my_global_rank, extra_proc
+    integer             :: group_size, extra_proc
 
-    call mpi_initialized( mpi_inited, ierr )
-    if ( .not. mpi_inited ) then
-      call mpi_init( ierr )  
-    endif
-    
-    call mpi_comm_rank( MPI_COMM_WORLD, tot_num_procs, ierr )
-    call mpi_comm_size( MPI_COMM_WORLD, my_global_rank, ierr )
- 
     group_size = tot_num_procs / num_groups  ! num procs in a group 
     extra_proc = MOD(tot_num_procs, num_groups) 
 
@@ -50,6 +43,11 @@ module module_mpi_land
     call mpi_comm_split(MPI_COMM_WORLD, mpiland%group_id, my_global_rank, mpiland%comm_group, ierr)
     call mpi_comm_rank(mpiland%comm_group, mpiland%my_id, ierr )
     call mpi_comm_size(mpiland%comm_group, mpiland%numprocs, ierr )
+
+    if (group_size /= mpiland%numprocs) then 
+        print*, "global rank ", my_global_rank, " error in mpi_land_init. group size ",group_size," not equal to group com members size ",mpiland%numprocs
+        call mpi_land_abort()
+    endif
 
     mpiland%global_nlocations = global_nlocations_in
 
