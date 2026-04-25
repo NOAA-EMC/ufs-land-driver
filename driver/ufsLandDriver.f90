@@ -53,15 +53,15 @@ program ufsLandDriver
 
       call ufsLandNoahDriverInit(namelist, static, forcing, noah)
 
-      call ufsLandNoahDriverRun(namelist, static, forcing, noah, mpiland%comm_group, mpiland%myrank)
+      call ufsLandNoahDriverRun(namelist, static, forcing, noah, mpiland%comm_group, mpiland%group_id, mpiland%myrank)
 
       call ufsLandNoahDriverFinalize()
 
     case(NOAHMP_LAND_SURFACE_MODEL)
 
-      call ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, mpiland%comm_group, mpiland%myrank)
+      call ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, mpiland%comm_group, mpiland%group_id, mpiland%myrank)
 
-      call ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp, mpiland%comm_group, mpiland%myrank)
+      call ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp, mpiland%comm_group, mpiland%group_id, mpiland%myrank)
 
       call ufsLandNoahMPDriverFinalize()
 

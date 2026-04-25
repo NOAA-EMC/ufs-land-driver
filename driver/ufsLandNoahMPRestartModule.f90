@@ -17,7 +17,7 @@ end type noahmp_restart_type
      
 contains   
 
-  subroutine WriteRestartNoahMP(this, namelist, noahmp, now_time, comm, myrank)
+  subroutine WriteRestartNoahMP(this, namelist, noahmp, now_time, comm, commid, myrank)
   
   use mpi
   use netcdf
@@ -32,7 +32,7 @@ contains
   type(namelist_type)  :: namelist
   type(noahmp_type)    :: noahmp
   double precision     :: now_time
-  integer              :: comm, myrank
+  integer              :: comm, commid, myrank
   character*19     :: nowdate    ! current date
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
@@ -53,7 +53,7 @@ contains
 
   this%filename = trim(namelist%restart_dir)//"/"//trim(this%filename)
 
-  if(myrank==0) write(*,*) "comm ",comm," Creating: "//trim(this%filename)
+  if(myrank==0) write(*,*) "commid ",commid," Creating: "//trim(this%filename)
 
   status = nf90_create(this%filename, NF90_NETCDF4, ncid, comm = comm, &
      info = MPI_INFO_NULL)
@@ -106,7 +106,7 @@ contains
 
   end subroutine WriteRestartNoahMP
   
-  subroutine ReadRestartNoahMP(this, namelist, noahmp, comm, myrank)
+  subroutine ReadRestartNoahMP(this, namelist, noahmp, comm, commid, myrank)
  
   use mpi 
   use netcdf
@@ -121,7 +121,7 @@ contains
   type(namelist_type)  :: namelist
   type (noahmp_type)   :: noahmp
   double precision     :: now_time
-  integer              :: comm, myrank
+  integer              :: comm, commid, myrank
   
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, dimid, varid, status
@@ -143,7 +143,7 @@ contains
 
   this%filename = trim(namelist%restart_dir)//"/"//trim(this%filename)
 
-  if(myrank==0) write(*,*) "comm ",comm," Reading: "//trim(this%filename)
+  if(myrank==0) write(*,*) "commid ",commid," Reading: "//trim(this%filename)
     
   status = nf90_open(this%filename, NF90_NOWRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)

@@ -41,7 +41,7 @@ subroutine ufsLandNoahDriverInit(namelist, static, forcing, noah)
   
 end subroutine ufsLandNoahDriverInit
   
-subroutine ufsLandNoahDriverRun(namelist, static, forcing, noah, comm, myrank)
+subroutine ufsLandNoahDriverRun(namelist, static, forcing, noah, comm, commid, myrank)
 
   use machine , only : kind_phys
   use lsm_noah
@@ -71,7 +71,7 @@ subroutine ufsLandNoahDriverRun(namelist, static, forcing, noah, comm, myrank)
   type (static_type)    :: static
   type (output_type)    :: output
   type (noah_restart_type)    :: restart
-  integer                     :: comm, myrank
+  integer                     :: comm, commid, myrank
   
   integer          :: timestep
   double precision :: now_time
@@ -220,7 +220,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   now_time = namelist%initial_time + timestep * namelist%timestep_seconds
 
-  call forcing%ReadForcing(namelist, static, now_time, comm, myrank)
+  call forcing%ReadForcing(namelist, static, now_time, comm, commid, myrank)
 
   call interpolate_monthly(namelist%reference_date, now_time, im, static%gvf_monthly, sigmaf)
   call interpolate_monthly(namelist%reference_date, now_time, im, static%albedo_monthly, sfalb)
@@ -303,7 +303,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
   end if
 
   if(errflg /= 0) then
-    write(*,*) "comm", comm, " rank ", myrank, " lsm_noah_run reporting an error"
+    write(*,*) "commid", commid, " rank ", myrank, " lsm_noah_run reporting an error"
     write(*,*) trim(errmsg)
     call mpi_land_abort()  
   end if

@@ -4,7 +4,7 @@ implicit none
 
 contains
 
-subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, comm, myrank)
+subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, comm, commid, myrank)
 
   use machine , only : kind_phys
   use noahmpdrv
@@ -28,7 +28,7 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, comm, myra
   type (forcing_type)        :: forcing
   type (noahmp_restart_type) :: restart
 
-  integer                    :: comm, myrank
+  integer                    :: comm, commid, myrank
   
   integer, parameter :: lsm_noahmp = 2
   integer            :: errflg                  ! CCPP error flag
@@ -42,7 +42,7 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, comm, myra
   call noahmp%Init(namelist,namelist%subset_length)
 
   if(namelist%restart_simulation) then
-    call restart%ReadRestartNoahMP(namelist, noahmp, comm, myrank)
+    call restart%ReadRestartNoahMP(namelist, noahmp, comm, commid, myrank)
   else
     call initial%ReadInitial(namelist)
     call initial%TransferInitialNoahMP(namelist, noahmp)
@@ -63,7 +63,7 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, comm, myra
 
 end subroutine ufsLandNoahMPDriverInit
   
-subroutine ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp, comm, myrank)
+subroutine ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp, comm, commid, myrank)
 
   use machine , only : kind_phys
   use noahmpdrv
@@ -91,7 +91,7 @@ subroutine ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp, comm, myran
   type (static_type)    :: static
   type (output_type)    :: output
   type (noahmp_restart_type)    :: restart
-  integer                       :: comm, myrank
+  integer                       :: comm, commid, myrank
   
   integer          :: timestep
   double precision :: now_time
@@ -358,10 +358,10 @@ time_loop : do timestep = 1, namelist%run_timesteps
     if(.not.namelist%restart_simulation) call noahmp%InitStates(namelist, now_time)
 
     if(namelist%output_initial .and. namelist%output_names_count > 0) &
-      call output%WriteOutputNoahMP(namelist, noahmp, now_time - timestep * namelist%timestep_seconds, comm, myrank)
+      call output%WriteOutputNoahMP(namelist, noahmp, now_time - timestep * namelist%timestep_seconds, comm, commid, myrank)
   end if
 
-  call forcing%ReadForcing(namelist, static, now_time, comm, myrank)
+  call forcing%ReadForcing(namelist, static, now_time, comm, commid, myrank)
    noahmp%forcing%surface_pressure_forcing%data   = forcing%surface_pressure
    noahmp%forcing%temperature_forcing%data        = forcing%temperature
    noahmp%forcing%specific_humidity_forcing%data  = forcing%specific_humidity
@@ -461,7 +461,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             spec_humid_sfc_bare_ccpp                                   )
 
   if(errflg /= 0) then
-    write(*,*) "comm", comm, " rank ", myrank, " noahmpdrv_run reporting an error"
+    write(*,*) "commid", commid, " rank ", myrank, " noahmpdrv_run reporting an error"
     write(*,*) trim(errmsg)
 !TODO: should this end all runs?
     call mpi_land_abort()  !exit time_loop   
@@ -489,17 +489,17 @@ time_loop : do timestep = 1, namelist%run_timesteps
       case( 1 : )  ! output based on number of timesteps
 
         if(mod(timestep,namelist%output_timesteps) == 0) &
-          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, myrank)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
 
       case( -1 )  ! output daily at output_hour
 
         if(now_date(12:19) == namelist%output_hour//":00:00") &
-          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, myrank)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
       case( -2 )  ! output monthly at output_hour on 1st of month
 
         if(now_date( 9:19) == namelist%output_day//" "//namelist%output_hour//":00:00") &
-          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, myrank)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
     end select output_cases
 
@@ -509,7 +509,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   if(namelist%daily_mean_names_count > 0) then
 
-    call output%WriteDailyMeanNoahMP(namelist, noahmp, now_time, comm, myrank)
+    call output%WriteDailyMeanNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
   end if ! namelist%daily_mean_names_count > 0
 
@@ -517,7 +517,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   if(namelist%monthly_mean_names_count > 0) then
 
-    call output%WriteMonthlyMeanNoahMP(namelist, noahmp, now_time, comm, myrank)
+    call output%WriteMonthlyMeanNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
   end if ! namelist%monthly_mean_names_count > 0
 
@@ -525,7 +525,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   if(namelist%diurnal_names_count > 0) then
 
-    call output%WriteDiurnalNoahMP(namelist, noahmp, now_time, comm, myrank)
+    call output%WriteDiurnalNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
   end if ! namelist%diurnal_names_count > 0
 
@@ -533,7 +533,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   if(namelist%solar_noon_names_count > 0) then
 
-    call output%WriteSolarNoonNoahMP(namelist, noahmp, now_time, comm, myrank)
+    call output%WriteSolarNoonNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
   end if ! namelist%solar_noon_names_count > 0
 
@@ -544,17 +544,17 @@ time_loop : do timestep = 1, namelist%run_timesteps
     case( 1 : )  ! restart based on number of timesteps
 
       if(mod(timestep,namelist%restart_timesteps) == 0) &
-        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, myrank)
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
 
     case( -1 )  ! restart daily at 00Z
 
       if(now_date(12:19) == namelist%restart_hour//":00:00") &
-        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, myrank)
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
 
     case( -2 )  ! restart monthly at 00Z on 1st of month
 
       if(now_date( 9:19) == namelist%restart_day//" "//namelist%restart_hour//":00:00") &
-        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, myrank)
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
 
   end select restart_cases
 
