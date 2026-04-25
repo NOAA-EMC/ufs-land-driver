@@ -31,6 +31,11 @@ module module_mpi_land
     integer             :: i, overlap, location_start_shift
     integer             :: group_size, extra_proc
 
+!    call mpi_initialized( mpi_inited, ierr )
+!    if ( .not. mpi_inited ) then
+!      call mpi_init( ierr )
+!    endif
+
     group_size = tot_num_procs / num_groups  ! num procs in a group 
     extra_proc = MOD(tot_num_procs, num_groups) 
 
