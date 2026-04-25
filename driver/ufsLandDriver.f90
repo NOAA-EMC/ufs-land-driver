@@ -9,7 +9,7 @@ program ufsLandDriver
   use NamelistRead
   use ufsLandStaticModule, only  : static_type
   use ufsLandForcingModule, only : forcing_type
-  use module_mpi_land, only: mpi_land_init, mpi_land_type, mpi_land_finalize
+  use module_mpi_land,      only : mpi_land_init, mpi_land_type, mpi_land_finalize, mpi_land_abort
 
   implicit none
   
@@ -23,8 +23,9 @@ program ufsLandDriver
   integer, parameter :: NOAH_LAND_SURFACE_MODEL = 1
   integer, parameter :: NOAHMP_LAND_SURFACE_MODEL = 2
 
-  integer :: ierr, nprocs, myrank
-  character(len=3) :: mem_str
+  logical            :: mpi_inited
+  integer            :: ierr, nprocs, myrank
+  character(len=3)   :: mem_str
 
   call mpi_initialized( mpi_inited, ierr )
   if ( .not. mpi_inited ) then
@@ -57,15 +58,15 @@ program ufsLandDriver
 
       call ufsLandNoahDriverInit(namelist, static, forcing, noah)
 
-      call ufsLandNoahDriverRun(namelist, static, forcing, noah)
+      call ufsLandNoahDriverRun(namelist, static, forcing, noah, mpi_land%comm_group, mpi_land%myrank)
 
       call ufsLandNoahDriverFinalize()
 
     case(NOAHMP_LAND_SURFACE_MODEL)
 
-      call ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, mpi_land%comm_group,  mpi_land%my_id)
+      call ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, mpi_land%comm_group, mpi_land%myrank)
 
-      call ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp, mpi_land%comm_group, mpi_land%my_id)
+      call ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp, mpi_land%comm_group, mpi_land%myrank)
 
       call ufsLandNoahMPDriverFinalize()
 

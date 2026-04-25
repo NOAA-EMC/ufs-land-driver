@@ -34,7 +34,9 @@ type, public :: namelist_type
   integer        :: run_timesteps
   integer        :: restart_timesteps
   integer        :: output_timesteps
-  
+
+  integer        :: ens_size  
+
   integer        :: location_start
   integer        :: location_end
   integer        :: location_length
@@ -116,7 +118,9 @@ contains
   subroutine ReadNamelist(this)
   
     use time_utilities
-  
+    use mpi
+    use module_mpi_land, only: mpi_land_abort  
+
     class(namelist_type) :: this
     
     character*128  :: static_file = ""
@@ -148,7 +152,9 @@ contains
     integer        :: run_minutes = -999
     integer        :: run_seconds = -999
     integer        :: run_timesteps = -999
-    
+  
+    integer        :: ens_size = 1
+
     integer        :: location_start = -999
     integer        :: location_end = -999
     integer        :: location_length = -999
@@ -216,7 +222,7 @@ contains
 			    run_seconds, run_timesteps, separate_output, location_start, location_end, &
 			    restart_dir, restart_frequency_s, restart_simulation, restart_date, &
                             output_frequency_s, output_initial, reference_date, output_hour, &
-                            restart_hour, output_day, restart_day
+                            restart_hour, output_day, restart_day, ens_size
     namelist / land_model_option / land_model
     namelist / structure  / num_soil_levels, forcing_height
     namelist / soil_setup / soil_level_thickness, soil_level_nodes
@@ -296,6 +302,7 @@ contains
     this%restart_hour         = restart_hour
     this%restart_day          = restart_day
     this%restart_dir          = restart_dir
+    this%ens_size             = ens_size
     this%location_start       = location_start
     this%location_end         = location_end
     this%location_length      = location_end - location_start + 1
@@ -347,14 +354,14 @@ contains
       write(*,*) "location_start = ", location_start
       write(*,*) "location_end = ", location_end
       write(*,*) "location_start and location_end need to be >0"
-      stop
+      call mpi_land_abort()
     end if
     
     if(this%location_length <= 0) then
       write(*,*) "location_start = ", location_start
       write(*,*) "location_end = ", location_end
       write(*,*) "no locations to simulate"
-      stop
+      call mpi_land_abort()
     end if
     
     if(this%forcing_type /= "single_point" .and. &
@@ -362,31 +369,31 @@ contains
        this%forcing_type /= "mm_1h" .and. &
        this%forcing_type /= "dd_1h" ) then
       write(*,*) this%forcing_type, " namelist%forcing_type not recognized"
-      stop
+      call mpi_land_abort()
     end if
     
     if(this%forcing_regrid /= "none" .and. &
        this%forcing_regrid /= "esmf" ) then
       write(*,*) this%forcing_regrid, " namelist%forcing_regrid not recognized"
-      stop
+      call mpi_land_abort()
     end if
     
     if(this%forcing_regrid_weights_filename == "" .and. &
        this%forcing_regrid == "esmf" ) then
       write(*,*) "using esmf regrid weights but no forcing_regrid_weights_filename provided in namelist"
-      stop
+      call mpi_land_abort()
     end if
     
     if(this%forcing_interp_solar /= "linear" .and. &
        this%forcing_interp_solar /= "zenith" ) then
       write(*,*) this%forcing_interp_solar, " namelist%forcing_interp_solar not recognized"
-      stop
+      call mpi_land_abort()
     end if
     
     if(this%forcing_time_solar /= "instantaneous" .and. &
        this%forcing_time_solar /= "period_average" ) then
       write(*,*) this%forcing_time_solar, " namelist%forcing_time_solar not recognized"
-      stop
+      call mpi_land_abort()
     end if
     
     if(restart_simulation) then
@@ -406,14 +413,16 @@ contains
     elseif(run_timesteps /= 0) then
       this%run_timesteps = run_timesteps
     else
-      stop "no valid simulation length in namelist"
+      print*, "stop. no valid simulation length in namelist"
+      call mpi_land_abort()
     end if
     
     if(restart_frequency_s > 0) then
       if(mod(restart_frequency_s,timestep_seconds) == 0) then
         this%restart_timesteps = restart_frequency_s / timestep_seconds
       else
-        stop "restart time not divisible by timestep"
+        print*, "stop. restart time not divisible by timestep"
+        call mpi_land_abort()
       end if
     end if
 
@@ -421,7 +430,8 @@ contains
       if(mod(output_frequency_s,timestep_seconds) == 0) then
         this%output_timesteps = output_frequency_s / timestep_seconds
       else
-        stop "output time not divisible by timestep"
+        print*, "stop. output time not divisible by timestep"
+        call mpi_land_abort()
       end if
     end if
     
