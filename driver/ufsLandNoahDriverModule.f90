@@ -303,7 +303,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
   end if
 
   if(errflg /= 0) then
-    write(*,*) "commid", commid, " rank ", myrank, " lsm_noah_run reporting an error"
+    write(*,'(A,I0,A,I0,A)') "commid", commid, " rank ", myrank, " lsm_noah_run reporting an error"
     write(*,*) trim(errmsg)
     call mpi_land_abort()  
   end if

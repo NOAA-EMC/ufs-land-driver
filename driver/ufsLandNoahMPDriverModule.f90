@@ -461,7 +461,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
             spec_humid_sfc_bare_ccpp                                   )
 
   if(errflg /= 0) then
-    write(*,*) "commid", commid, " rank ", myrank, " noahmpdrv_run reporting an error"
+    write(*,'(A,I0,A,I0,A)') "commid", commid, " rank ", myrank, " noahmpdrv_run reporting an error"
     write(*,*) trim(errmsg)
 !TODO: should this end all runs?
     call mpi_land_abort()  !exit time_loop   

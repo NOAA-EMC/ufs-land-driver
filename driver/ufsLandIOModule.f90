@@ -609,7 +609,7 @@ contains
 
     this%filename = trim(namelist%output_dir)//"/"//trim(this%filename)
 
-    if (myrank == 0) write(*,*) "commid ",commid," Creating: "//trim(this%filename)
+    if (myrank == 0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename)
 
     status = nf90_create(this%filename, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
@@ -727,7 +727,7 @@ contains
 
     this%filename_daily_mean = trim(namelist%output_dir)//"/"//trim(this%filename_daily_mean)
 
-    if(myrank==0) write(*,*) "commid ",commid," Creating: "//trim(this%filename_daily_mean)
+    if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename_daily_mean)
 
     status = nf90_create(this%filename_daily_mean, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
@@ -837,7 +837,7 @@ contains
 
     this%filename_monthly_mean = trim(namelist%output_dir)//"/"//trim(this%filename_monthly_mean)
 
-    if(myrank==0) write(*,*) "commid ",commid," Creating: "//trim(this%filename_monthly_mean)
+    if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename_monthly_mean)
 
     status = nf90_create(this%filename_monthly_mean, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
@@ -947,7 +947,7 @@ contains
 
     this%filename_diurnal = trim(namelist%output_dir)//"/"//trim(this%filename_diurnal)
 
-    if(myrank==0) write(*,*) "commid ",commid," Creating: "//trim(this%filename_diurnal)
+    if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename_diurnal)
 
     status = nf90_create(this%filename_diurnal, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
@@ -1058,7 +1058,7 @@ contains
 
     this%filename_solar_noon = trim(namelist%output_dir)//"/"//trim(this%filename_solar_noon)
 
-    if(myrank==0) write(*,*) "commid ",commid," Creating: "//trim(this%filename_solar_noon)
+    if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename_solar_noon)
 
     status = nf90_create(this%filename_solar_noon, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)

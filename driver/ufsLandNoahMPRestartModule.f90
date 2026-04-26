@@ -53,7 +53,7 @@ contains
 
   this%filename = trim(namelist%restart_dir)//"/"//trim(this%filename)
 
-  if(myrank==0) write(*,*) "commid ",commid," Creating: "//trim(this%filename)
+  if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename)
 
   status = nf90_create(this%filename, NF90_NETCDF4, ncid, comm = comm, &
      info = MPI_INFO_NULL)
@@ -143,7 +143,7 @@ contains
 
   this%filename = trim(namelist%restart_dir)//"/"//trim(this%filename)
 
-  if(myrank==0) write(*,*) "commid ",commid," Reading: "//trim(this%filename)
+  if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Reading: "//trim(this%filename)
     
   status = nf90_open(this%filename, NF90_NOWRITE, ncid)
    if (status /= nf90_noerr) call handle_err(status)

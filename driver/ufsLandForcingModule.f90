@@ -272,7 +272,7 @@ contains
   call date_from_since(namelist%reference_date, now_time, now_date)
   call date_from_since(namelist%reference_date, next_time, next_date)
   
-  if (myrank == 0) write(*,*) "commid ", commid, " Searching for forcing at time: ",now_date
+  if (myrank == 0) write(*,'(A,I0,A)') "commid ", commid, " Searching for forcing at time: "//now_date
   
   if(.not. next_forcing_done) then
   
@@ -284,24 +284,24 @@ contains
         forcing_filename = trim(forcing_filename)//next_date(1:7)//".nc"
         if(next_date(9:19) == "01 00:00:00") then
           this%forcing_counter = 1
-          if (myrank == 0) write(*,*) "commid ", commid, " Resetting forcing counter to beginning of file"
+          if (myrank == 0) write(*,'(A,I0,A)') "commid ", commid, " Resetting forcing counter to beginning of file"
         end if
       case ("mm_1h")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
         forcing_filename = trim(forcing_filename)//next_date(1:7)//".nc"
         if(next_date(9:19) == "01 00:00:00") then
           this%forcing_counter = 1
-          if (myrank == 0) write(*,*) "commid ", commid, " Resetting forcing counter to beginning of file"
+          if (myrank == 0) write(*,'(A,I0,A)') "commid ", commid, " Resetting forcing counter to beginning of file"
         end if
       case ("dd_1h")
         forcing_filename = trim(namelist%forcing_dir)//"/"//trim(namelist%forcing_filename)
         forcing_filename = trim(forcing_filename)//next_date(1:10)//".nc"
         if(next_date(12:19) == "00:00:00") then
           this%forcing_counter = 1
-          if (myrank == 0) write(*,*) "commid ", commid, " Resetting forcing counter to beginning of file"
+          if (myrank == 0) write(*,'(A,I0,A)') "commid ", commid, " Resetting forcing counter to beginning of file"
         end if
       case default
-        if (myrank == 0) write(*,*) "commid ", commid, " stop. namelist forcing_type not recognized"
+        if (myrank == 0) write(*,'(A,I0,A)') "commid ", commid, " stop. namelist forcing_type not recognized"
         call mpi_land_abort()
     end select forcing_type_option
   
@@ -314,7 +314,7 @@ contains
      if(status /= nf90_noerr) call handle_err(status)
      
     if(file_next_time /= next_time) then 
-      write(*,*) "commid ", commid, " rank ", myrank, " file_next_time not equal to next_time in now_time == next_time forcing"
+      write(*,'(A,I0,A,I0,A)') "commid ", commid, " rank ", myrank, " file_next_time not equal to next_time in now_time == next_time forcing"
       write(*,*) "file_next_time: ",file_next_time
       write(*,*) "next_time: ",next_time
       write(*,*) "difference: ",file_next_time - next_time
@@ -437,7 +437,7 @@ contains
          minval(in2d_downward_longwave)  < 0    .or. &
          minval(in2d_wind_speed        ) < -10  .or. minval(in2d_specific_humidity) < -0.1 .or. &
          minval(in2d_downward_shortwave) < -100 .or. minval(in2d_precipitation)     < -1) then
-        write(*,*) "commid ", commid, " rank ", myrank, " Problem with one or more of these 2D inputs"
+        write(*,'(A,I0,A,I0,A)') "commid ", commid, " rank ", myrank, " Problem with one or more of these 2D inputs"
         write(*,*) "input 2D temperature,        min value = ", minval(in2d_temperature)
         write(*,*) "input 2D surface_pressure,   min value = ", minval(in2d_surface_pressure)
         write(*,*) "input 2D downward_longwave,  min value = ", minval(in2d_downward_longwave)
@@ -514,7 +514,7 @@ contains
 
     else
 
-      write(*,*) "commid ",commid," rank ",myrank," unknown forcing regrid option"
+      write(*,'(A,I0,A,I0,A)') "commid ",commid," rank ",myrank," unknown forcing regrid option"
       call mpi_land_abort()
     
     end if
@@ -544,7 +544,7 @@ contains
                               next_downward_shortwave,                          &
                               this%downward_shortwave)
     else
-      write(*,*) "commid ",commid," rank ",myrank," ",namelist%forcing_time_solar," namelist%forcing_time_solar not recognized"
+      write(*,'(A,I0,A,I0,A)') "commid ",commid," rank ",myrank," ",namelist%forcing_time_solar//" namelist%forcing_time_solar not recognized"
       call mpi_land_abort()
     end if
     
@@ -596,7 +596,7 @@ contains
                               last_downward_shortwave,                          &
                               this%downward_shortwave)
     else
-      write(*,*) "commid ",commid," rank ",myrank," ",namelist%forcing_time_solar, " namelist%forcing_time_solar not recognized"
+      write(*,'(A,I0,A,I0,A)') "commid ",commid," rank ",myrank," "//namelist%forcing_time_solar//" namelist%forcing_time_solar not recognized"
       call mpi_land_abort()
     end if
 
@@ -606,7 +606,7 @@ contains
 
   else
 
-    write(*,*) "commid ",commid," rank ",myrank," Read of forcing time is not consistent with model time"
+    write(*,'(A,I0,A,I0,A)') "commid ",commid," rank ",myrank," Read of forcing time is not consistent with model time"
     call mpi_land_abort()
 
   end if
