@@ -4,7 +4,7 @@ implicit none
 
 contains
 
-subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
+subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp, comm, commid, myrank)
 
   use machine , only : kind_phys
   use noahmpdrv
@@ -16,6 +16,8 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   use ufsLandInitialModule
   use ufsLandForcingModule
   use ufsLandNoahMPRestartModule
+  use mpi
+  use module_mpi_land, only: mpi_land_abort
 
   implicit none
 
@@ -25,6 +27,8 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   type (initial_type)        :: initial
   type (forcing_type)        :: forcing
   type (noahmp_restart_type) :: restart
+
+  integer                    :: comm, commid, myrank
   
   integer, parameter :: lsm_noahmp = 2
   integer            :: errflg                  ! CCPP error flag
@@ -38,7 +42,7 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
   call noahmp%Init(namelist,namelist%subset_length)
 
   if(namelist%restart_simulation) then
-    call restart%ReadRestartNoahMP(namelist, noahmp)
+    call restart%ReadRestartNoahMP(namelist, noahmp, comm, commid, myrank)
   else
     call initial%ReadInitial(namelist)
     call initial%TransferInitialNoahMP(namelist, noahmp)
@@ -59,81 +63,84 @@ subroutine ufsLandNoahMPDriverInit(namelist, static, forcing, noahmp)
 
 end subroutine ufsLandNoahMPDriverInit
   
-subroutine ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp)
+subroutine ufsLandNoahMPDriverRun(namelist, static, forcing, noahmp, comm, commid, myrank)
 
-use machine , only : kind_phys
-use noahmpdrv
-use noahmp_tables
-use physcons, only : con_hvap , con_cp, con_jcal, con_eps, con_epsm1,    &
-                     con_fvirt, con_rd, con_hfus, con_g  ,               &
-		     tfreeze=> con_t0c, rhoh2o => rhowater
+  use machine , only : kind_phys
+  use noahmpdrv
+  use noahmp_tables
+  use physcons, only : con_hvap , con_cp, con_jcal, con_eps, con_epsm1,    &
+                       con_fvirt, con_rd, con_hfus, con_g  ,               &
+  		     tfreeze=> con_t0c, rhoh2o => rhowater
+  
+  use interpolation_utilities
+  use time_utilities
+  use cosine_zenith
+  use diagnostics
+  use NamelistRead, only         : namelist_type
+  use ufsLandNoahMPType, only    : noahmp_type
+  use ufsLandStaticModule, only  : static_type
+  use ufsLandForcingModule
+  use ufsLandIOModule
+  use ufsLandNoahMPRestartModule
+  use mpi
+  use module_mpi_land, only: mpi_land_abort
 
-use interpolation_utilities
-use time_utilities
-use cosine_zenith
-use diagnostics
-use NamelistRead, only         : namelist_type
-use ufsLandNoahMPType, only    : noahmp_type
-use ufsLandStaticModule, only  : static_type
-use ufsLandForcingModule
-use ufsLandIOModule
-use ufsLandNoahMPRestartModule
+  type (namelist_type)  :: namelist
+  type (noahmp_type)    :: noahmp
+  type (forcing_type)   :: forcing
+  type (static_type)    :: static
+  type (output_type)    :: output
+  type (noahmp_restart_type)    :: restart
+  integer                       :: comm, commid, myrank
+  
+  integer          :: timestep
+  double precision :: now_time
+  character*19     :: now_date  ! format: yyyy-mm-dd hh:nn:ss
+  integer          :: now_yyyy
+  
+  integer                            :: itime      ! not used
+  integer                            :: errflg     ! CCPP error flag
+  character(len=2048)                :: errmsg     ! CCPP error message
+  real, allocatable, dimension(:) :: rho        ! density [kg/m3]
+  real, allocatable, dimension(:) :: u1         ! u-component of wind [m/s]
+  real, allocatable, dimension(:) :: v1         ! v-component of wind [m/s]
+  real, allocatable, dimension(:) :: snet       ! shortwave absorbed at surface [W/m2]
+  real, allocatable, dimension(:) :: prsl1      ! pressure at forcing height [Pa]
+  real, allocatable, dimension(:) :: srflag     ! snow ratio for precipitation [-]
+  real, allocatable, dimension(:) :: prslki     ! Exner function at forcing height [-]
+  real, allocatable, dimension(:) :: prslk1     ! Exner function at forcing height [-]
+  real, allocatable, dimension(:) :: prsik1     ! Exner function at forcing height [-]
+  real, allocatable, dimension(:) :: cmm        ! Cm*U [m/s]
+  real, allocatable, dimension(:) :: chh        ! Ch*U*rho [kg/m2/s]
+  real, allocatable, dimension(:) :: shdmin     ! minimum vegetation fraction(not used) [-]
+  real, allocatable, dimension(:) :: smcref2    ! field capacity(not used) [m3/m3]
+  real, allocatable, dimension(:) :: smcwlt2    ! wilting point(not used) [m3/m3]
+  real, allocatable, dimension(:) :: snohf      ! snow melt energy that exist pack [W/m2]
+  real, allocatable, dimension(:) :: sncovr1    !  copy of snow cover(not used)[-]
+  real, allocatable, dimension(:) :: snoalb     ! snow-covered-area albedo(not used) [-]
+  real, allocatable, dimension(:) :: tsurf      ! copy of tskin(not used) [K]
+  real, allocatable, dimension(:) :: wet1       ! top-level soil saturation(not used) [-]
+  real, allocatable, dimension(:) :: garea      ! grid cell area [m2]
+  real, allocatable, dimension(:) :: rb1        ! composite bulk richardson number
+  real, allocatable, dimension(:) :: fm1        ! composite momemtum stability
+  real, allocatable, dimension(:) :: fh1        ! composite heat/moisture stability
+  real, allocatable, dimension(:) :: stress1    ! composite surface stress
+  real, allocatable, dimension(:) :: fm101      ! composite 2-meter momemtum stability
+  real, allocatable, dimension(:) :: fh21       ! composite 10-meter heat/moisture stability
+  real, allocatable, dimension(:) :: zvfun      ! some function of vegetation used for gfs stability
+  real, allocatable, dimension(:) :: rca        ! LAI-scale canopy conductance (1/Rs)
+  real, allocatable, dimension(:) :: rhonewsn1  ! holder for microphysics frozen density
+  logical, allocatable, dimension(:) :: dry        ! land flag [-]
+  logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
+  real, allocatable, dimension(:) :: latitude_radians
 
-type (namelist_type)  :: namelist
-type (noahmp_type)    :: noahmp
-type (forcing_type)   :: forcing
-type (static_type)    :: static
-type (output_type)    :: output
-type (noahmp_restart_type)    :: restart
-
-integer          :: timestep
-double precision :: now_time
-character*19     :: now_date  ! format: yyyy-mm-dd hh:nn:ss
-integer          :: now_yyyy
-
-integer                            :: itime      ! not used
-integer                            :: errflg     ! CCPP error flag
-character(len=2048)                :: errmsg     ! CCPP error message
-   real, allocatable, dimension(:) :: rho        ! density [kg/m3]
-   real, allocatable, dimension(:) :: u1         ! u-component of wind [m/s]
-   real, allocatable, dimension(:) :: v1         ! v-component of wind [m/s]
-   real, allocatable, dimension(:) :: snet       ! shortwave absorbed at surface [W/m2]
-   real, allocatable, dimension(:) :: prsl1      ! pressure at forcing height [Pa]
-   real, allocatable, dimension(:) :: srflag     ! snow ratio for precipitation [-]
-   real, allocatable, dimension(:) :: prslki     ! Exner function at forcing height [-]
-   real, allocatable, dimension(:) :: prslk1     ! Exner function at forcing height [-]
-   real, allocatable, dimension(:) :: prsik1     ! Exner function at forcing height [-]
-   real, allocatable, dimension(:) :: cmm        ! Cm*U [m/s]
-   real, allocatable, dimension(:) :: chh        ! Ch*U*rho [kg/m2/s]
-   real, allocatable, dimension(:) :: shdmin     ! minimum vegetation fraction(not used) [-]
-   real, allocatable, dimension(:) :: smcref2    ! field capacity(not used) [m3/m3]
-   real, allocatable, dimension(:) :: smcwlt2    ! wilting point(not used) [m3/m3]
-   real, allocatable, dimension(:) :: snohf      ! snow melt energy that exist pack [W/m2]
-   real, allocatable, dimension(:) :: sncovr1    !  copy of snow cover(not used)[-]
-   real, allocatable, dimension(:) :: snoalb     ! snow-covered-area albedo(not used) [-]
-   real, allocatable, dimension(:) :: tsurf      ! copy of tskin(not used) [K]
-   real, allocatable, dimension(:) :: wet1       ! top-level soil saturation(not used) [-]
-   real, allocatable, dimension(:) :: garea      ! grid cell area [m2]
-   real, allocatable, dimension(:) :: rb1        ! composite bulk richardson number
-   real, allocatable, dimension(:) :: fm1        ! composite momemtum stability
-   real, allocatable, dimension(:) :: fh1        ! composite heat/moisture stability
-   real, allocatable, dimension(:) :: stress1    ! composite surface stress
-   real, allocatable, dimension(:) :: fm101      ! composite 2-meter momemtum stability
-   real, allocatable, dimension(:) :: fh21       ! composite 10-meter heat/moisture stability
-   real, allocatable, dimension(:) :: zvfun      ! some function of vegetation used for gfs stability
-   real, allocatable, dimension(:) :: rca        ! LAI-scale canopy conductance (1/Rs)
-   real, allocatable, dimension(:) :: rhonewsn1  ! holder for microphysics frozen density
-logical, allocatable, dimension(:) :: dry        ! land flag [-]
-logical, allocatable, dimension(:) :: flag_iter  ! defunct flag for surface layer iteration [-]
-   real, allocatable, dimension(:) :: latitude_radians
-
-logical :: do_mynnsfclay = .false.               ! flag for activating mynnsfclay
-logical :: thsfc_loc     = .true.                ! use local theta
-logical :: cpllnd        = .false.               ! Flag for land coupling (atm->lnd)
-logical :: cpllnd2atm    = .false.               ! Flag for land coupling (lnd->atm)
-
-integer                         :: lsnowl = -2   ! lower limit for snow vector
-real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
+  logical :: do_mynnsfclay = .false.               ! flag for activating mynnsfclay
+  logical :: thsfc_loc     = .true.                ! use local theta
+  logical :: cpllnd        = .false.               ! Flag for land coupling (atm->lnd)
+  logical :: cpllnd2atm    = .false.               ! Flag for land coupling (lnd->atm)
+  
+  integer                         :: lsnowl = -2   ! lower limit for snow vector
+  real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
 
 associate (                                                      &
    ps         => forcing%surface_pressure                       ,&
@@ -351,10 +358,10 @@ time_loop : do timestep = 1, namelist%run_timesteps
     if(.not.namelist%restart_simulation) call noahmp%InitStates(namelist, now_time)
 
     if(namelist%output_initial .and. namelist%output_names_count > 0) &
-      call output%WriteOutputNoahMP(namelist, noahmp, now_time - timestep * namelist%timestep_seconds)
+      call output%WriteOutputNoahMP(namelist, noahmp, now_time - timestep * namelist%timestep_seconds, comm, commid, myrank)
   end if
 
-  call forcing%ReadForcing(namelist, static, now_time)
+  call forcing%ReadForcing(namelist, static, now_time, comm, commid, myrank)
    noahmp%forcing%surface_pressure_forcing%data   = forcing%surface_pressure
    noahmp%forcing%temperature_forcing%data        = forcing%temperature
    noahmp%forcing%specific_humidity_forcing%data  = forcing%specific_humidity
@@ -454,9 +461,10 @@ time_loop : do timestep = 1, namelist%run_timesteps
             spec_humid_sfc_bare_ccpp                                   )
 
   if(errflg /= 0) then
-    write(*,*) "noahmpdrv_run reporting an error"
+    write(*,'(A,I0,A,I0,A)') "commid", commid, " rank ", myrank, " noahmpdrv_run reporting an error"
     write(*,*) trim(errmsg)
-    exit time_loop
+!TODO: should this end all runs?
+    call mpi_land_abort()  !exit time_loop   
   end if
 
   rho = prsl1 / (con_rd*t1*(one+con_fvirt*q1)) 
@@ -481,17 +489,17 @@ time_loop : do timestep = 1, namelist%run_timesteps
       case( 1 : )  ! output based on number of timesteps
 
         if(mod(timestep,namelist%output_timesteps) == 0) &
-          call output%WriteOutputNoahMP(namelist, noahmp, now_time)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
 
       case( -1 )  ! output daily at output_hour
 
         if(now_date(12:19) == namelist%output_hour//":00:00") &
-          call output%WriteOutputNoahMP(namelist, noahmp, now_time)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
       case( -2 )  ! output monthly at output_hour on 1st of month
 
         if(now_date( 9:19) == namelist%output_day//" "//namelist%output_hour//":00:00") &
-          call output%WriteOutputNoahMP(namelist, noahmp, now_time)
+          call output%WriteOutputNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
     end select output_cases
 
@@ -501,7 +509,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   if(namelist%daily_mean_names_count > 0) then
 
-    call output%WriteDailyMeanNoahMP(namelist, noahmp, now_time)
+    call output%WriteDailyMeanNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
   end if ! namelist%daily_mean_names_count > 0
 
@@ -509,7 +517,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   if(namelist%monthly_mean_names_count > 0) then
 
-    call output%WriteMonthlyMeanNoahMP(namelist, noahmp, now_time)
+    call output%WriteMonthlyMeanNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
   end if ! namelist%monthly_mean_names_count > 0
 
@@ -517,7 +525,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   if(namelist%diurnal_names_count > 0) then
 
-    call output%WriteDiurnalNoahMP(namelist, noahmp, now_time)
+    call output%WriteDiurnalNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
   end if ! namelist%diurnal_names_count > 0
 
@@ -525,7 +533,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   if(namelist%solar_noon_names_count > 0) then
 
-    call output%WriteSolarNoonNoahMP(namelist, noahmp, now_time)
+    call output%WriteSolarNoonNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
       
   end if ! namelist%solar_noon_names_count > 0
 
@@ -536,17 +544,17 @@ time_loop : do timestep = 1, namelist%run_timesteps
     case( 1 : )  ! restart based on number of timesteps
 
       if(mod(timestep,namelist%restart_timesteps) == 0) &
-        call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
 
     case( -1 )  ! restart daily at 00Z
 
       if(now_date(12:19) == namelist%restart_hour//":00:00") &
-        call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
 
     case( -2 )  ! restart monthly at 00Z on 1st of month
 
       if(now_date( 9:19) == namelist%restart_day//" "//namelist%restart_hour//":00:00") &
-        call restart%WriteRestartNoahMP(namelist, noahmp, now_time)
+        call restart%WriteRestartNoahMP(namelist, noahmp, now_time, comm, commid, myrank)
 
   end select restart_cases
 

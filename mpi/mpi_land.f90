@@ -5,8 +5,10 @@ module module_mpi_land
   implicit none
   
   type mpi_land_type
-    integer :: my_id
-    integer :: numprocs
+    integer :: group_id     
+    integer :: comm_group       !ids below are within this group
+    integer :: myrank
+    integer :: nprocs
     integer :: global_nlocations
     integer :: local_nlocations
     integer :: location_start
@@ -15,41 +17,61 @@ module module_mpi_land
   
   contains
 
-  subroutine mpi_land_init(global_nlocations_in, mpiland)
+  subroutine mpi_land_init(num_groups, global_nlocations_in,my_global_rank,tot_num_procs, mpiland)
 
     implicit none
- 
-    integer             :: global_nlocations_in
-    type(mpi_land_type) :: mpiland
-    integer             :: ierr
-    logical             :: mpi_inited
-    integer             :: i, overlap, location_start_shift
 
-    call mpi_initialized( mpi_inited, ierr )
-    if ( .not. mpi_inited ) then
-      call mpi_init( ierr )  
+    integer             :: num_groups   ! << ensemble size
+    integer             :: global_nlocations_in
+    integer             :: tot_num_procs, my_global_rank
+    type(mpi_land_type) :: mpiland
+
+    integer             :: ierr
+!    logical             :: mpi_inited
+    integer             :: i, overlap, location_start_shift
+    integer             :: group_size, extra_proc
+
+!    call mpi_initialized( mpi_inited, ierr )
+!    if ( .not. mpi_inited ) then
+!      call mpi_init( ierr )
+!    endif
+
+    group_size = tot_num_procs / num_groups  ! num procs in a group 
+    extra_proc = MOD(tot_num_procs, num_groups) 
+
+    mpiland%group_id = my_global_rank / group_size  ! group for proc.  
+    if (my_global_rank >  tot_num_procs - extra_proc - 1) then  
+        mpiland%group_id = MOD(my_global_rank, group_size)     !add extra processes to first extra_proc groups
     endif
+    if (mpiland%group_id < extra_proc) group_size = group_size + 1                            !
     
-    call mpi_comm_rank( MPI_COMM_WORLD, mpiland%my_id, ierr )
-    call mpi_comm_size( MPI_COMM_WORLD, mpiland%numprocs, ierr )
+    call mpi_comm_split(MPI_COMM_WORLD, mpiland%group_id, my_global_rank, mpiland%comm_group, ierr)
+    call mpi_comm_rank(mpiland%comm_group, mpiland%myrank, ierr )
+    call mpi_comm_size(mpiland%comm_group, mpiland%nprocs, ierr )
+
+    if (group_size /= mpiland%nprocs) then 
+        print*, "error in mpi_land_init for global rank ", my_global_rank, " group rank ", mpiland%myrank, &
+        " group size ",group_size," not equal to group com size ",mpiland%nprocs
+        call mpi_land_abort()
+    endif
 
     mpiland%global_nlocations = global_nlocations_in
 
-    mpiland%local_nlocations = int(mpiland%global_nlocations / mpiland%numprocs)
-    mpiland%location_start = mpiland%local_nlocations * mpiland%my_id + 1 
+    mpiland%local_nlocations = int(mpiland%global_nlocations / mpiland%nprocs)
+    mpiland%location_start = mpiland%local_nlocations * mpiland%myrank + 1 
 
-    overlap = mod(mpiland%global_nlocations, mpiland%numprocs)
+    overlap = mod(mpiland%global_nlocations, mpiland%nprocs)
 
     location_start_shift = 0
 
     if(overlap /= 0) then
       do i = 0, overlap - 1
 
-        if(mpiland%my_id == i ) then  ! for the overlap procs add 1 to the number of locations
+        if(mpiland%myrank == i ) then  ! for the overlap procs add 1 to the number of locations
           mpiland%local_nlocations = mpiland%local_nlocations + 1
         end if
  
-        if(mpiland%my_id > i ) then  ! for the overlap procs shift the start locations
+        if(mpiland%myrank > i ) then  ! for the overlap procs shift the start locations
           location_start_shift = location_start_shift + 1
         end if
 

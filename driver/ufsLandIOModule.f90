@@ -573,7 +573,7 @@ contains
   
   end subroutine WriteOutputNoah
   
-  subroutine WriteOutputNoahMP(this, namelist, noahmp, now_time)
+  subroutine WriteOutputNoahMP(this, namelist, noahmp, now_time, comm, commid, myrank)
   
   use mpi
   use netcdf
@@ -588,6 +588,7 @@ contains
   type(noahmp_type)    :: noahmp
   double precision     :: now_time
   character*19     :: nowdate    ! current date
+  integer          :: comm, commid, myrank
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, varid, status
   integer :: dim_id_time, dim_id_loc, dim_id_soil, dim_id_snow, dim_id_snso, dim_id_date, dim_id_rad
@@ -608,9 +609,9 @@ contains
 
     this%filename = trim(namelist%output_dir)//"/"//trim(this%filename)
 
-    write(*,*) "Creating: "//trim(this%filename)
+    if (myrank == 0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename)
 
-    status = nf90_create(this%filename, NF90_NETCDF4, ncid, comm = MPI_COMM_WORLD, &
+    status = nf90_create(this%filename, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
       if (status /= nf90_noerr) call handle_err(status)
 
@@ -672,7 +673,7 @@ contains
   
   end subroutine WriteOutputNoahMP
   
-  subroutine WriteDailyMeanNoahMP(this, namelist, noahmp, now_time)
+  subroutine WriteDailyMeanNoahMP(this, namelist, noahmp, now_time, comm, commid, myrank)
   
   use mpi
   use netcdf
@@ -688,6 +689,7 @@ contains
   type(noahmp_type)    :: noahmp
   double precision     :: now_time
   character*19     :: nowdate    ! current date
+  integer          :: comm, commid, myrank
   logical          :: end_of_day
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, varid, status
@@ -725,9 +727,9 @@ contains
 
     this%filename_daily_mean = trim(namelist%output_dir)//"/"//trim(this%filename_daily_mean)
 
-    write(*,*) "Creating: "//trim(this%filename_daily_mean)
+    if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename_daily_mean)
 
-    status = nf90_create(this%filename_daily_mean, NF90_NETCDF4, ncid, comm = MPI_COMM_WORLD, &
+    status = nf90_create(this%filename_daily_mean, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
       if (status /= nf90_noerr) call handle_err(status)
 
@@ -781,7 +783,7 @@ contains
 
   end subroutine WriteDailyMeanNoahMP
 
-  subroutine WriteMonthlyMeanNoahMP(this, namelist, noahmp, now_time)
+  subroutine WriteMonthlyMeanNoahMP(this, namelist, noahmp, now_time, comm, commid, myrank)
   
   use mpi
   use netcdf
@@ -797,6 +799,7 @@ contains
   type(noahmp_type)    :: noahmp
   double precision     :: now_time
   character*19     :: nowdate    ! current date
+  integer          :: comm, commid, myrank
   logical          :: end_of_month
   integer          :: yyyy,mm,dd,hh,nn,ss
   integer :: ncid, varid, status
@@ -834,9 +837,9 @@ contains
 
     this%filename_monthly_mean = trim(namelist%output_dir)//"/"//trim(this%filename_monthly_mean)
 
-    write(*,*) "Creating: "//trim(this%filename_monthly_mean)
+    if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename_monthly_mean)
 
-    status = nf90_create(this%filename_monthly_mean, NF90_NETCDF4, ncid, comm = MPI_COMM_WORLD, &
+    status = nf90_create(this%filename_monthly_mean, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
 
 ! Define dimensions in the file.
@@ -889,7 +892,7 @@ contains
 
   end subroutine WriteMonthlyMeanNoahMP
 
-  subroutine WriteDiurnalNoahMP(this, namelist, noahmp, now_time)
+  subroutine WriteDiurnalNoahMP(this, namelist, noahmp, now_time, comm, commid, myrank)
   
   use mpi
   use netcdf
@@ -904,6 +907,7 @@ contains
   type(namelist_type)  :: namelist
   type(noahmp_type)    :: noahmp
   double precision     :: now_time
+  integer              :: comm, commid, myrank
   character*19     :: nowdate    ! current date
   logical          :: end_of_month
   integer          :: yyyy,mm,dd,hh,nn,ss
@@ -943,9 +947,9 @@ contains
 
     this%filename_diurnal = trim(namelist%output_dir)//"/"//trim(this%filename_diurnal)
 
-    write(*,*) "Creating: "//trim(this%filename_diurnal)
+    if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename_diurnal)
 
-    status = nf90_create(this%filename_diurnal, NF90_NETCDF4, ncid, comm = MPI_COMM_WORLD, &
+    status = nf90_create(this%filename_diurnal, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
 
 ! Define dimensions in the file.
@@ -1000,7 +1004,7 @@ contains
 
   end subroutine WriteDiurnalNoahMP
 
-  subroutine WriteSolarNoonNoahMP(this, namelist, noahmp, now_time)
+  subroutine WriteSolarNoonNoahMP(this, namelist, noahmp, now_time, comm, commid, myrank)
   
   use mpi
   use netcdf
@@ -1015,6 +1019,7 @@ contains
   type(namelist_type)  :: namelist
   type(noahmp_type)    :: noahmp
   double precision     :: now_time
+  integer              :: comm, commid, myrank
   character*19     :: nowdate    ! current date
   logical          :: end_of_day
   integer          :: yyyy,mm,dd,hh,nn,ss
@@ -1053,9 +1058,9 @@ contains
 
     this%filename_solar_noon = trim(namelist%output_dir)//"/"//trim(this%filename_solar_noon)
 
-    write(*,*) "Creating: "//trim(this%filename_solar_noon)
+    if(myrank==0) write(*,'(A,I0,A)') "commid ",commid," Creating: "//trim(this%filename_solar_noon)
 
-    status = nf90_create(this%filename_solar_noon, NF90_NETCDF4, ncid, comm = MPI_COMM_WORLD, &
+    status = nf90_create(this%filename_solar_noon, NF90_NETCDF4, ncid, comm = comm, &
        info = MPI_INFO_NULL)
       if (status /= nf90_noerr) call handle_err(status)
 

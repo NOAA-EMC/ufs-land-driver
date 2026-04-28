@@ -41,51 +41,54 @@ subroutine ufsLandNoahDriverInit(namelist, static, forcing, noah)
   
 end subroutine ufsLandNoahDriverInit
   
-subroutine ufsLandNoahDriverRun(namelist, static, forcing, noah)
+subroutine ufsLandNoahDriverRun(namelist, static, forcing, noah, comm, commid, myrank)
 
-use machine , only : kind_phys
-use lsm_noah
-use sfc_diff
-use set_soilveg_mod
-use funcphys
-use namelist_soilveg, only : z0_data
-use physcons, only : grav   => con_g,    cp   => con_cp,          &
-                     hvap   => con_hvap, rd   => con_rd,          &
-                     eps    => con_eps, epsm1 => con_epsm1,       &
-                     rvrdm1 => con_fvirt,                         &
-		     tfreeze=> con_t0c
+  use machine , only : kind_phys
+  use lsm_noah
+  use sfc_diff
+  use set_soilveg_mod
+  use funcphys
+  use namelist_soilveg, only : z0_data
+  use physcons, only : grav   => con_g,    cp   => con_cp,          &
+                       hvap   => con_hvap, rd   => con_rd,          &
+                       eps    => con_eps, epsm1 => con_epsm1,       &
+                       rvrdm1 => con_fvirt,                         &
+  		     tfreeze=> con_t0c
+  
+  use interpolation_utilities
+  use NamelistRead, only         : namelist_type
+  use ufsLandNoahType, only      : noah_type
+  use ufsLandStaticModule, only  : static_type
+  use ufsLandForcingModule
+  use ufsLandIOModule
+  use ufsLandNoahRestartModule
+  use mpi
+  use module_mpi_land, only: mpi_land_abort
 
-use interpolation_utilities
-use NamelistRead, only         : namelist_type
-use ufsLandNoahType, only      : noah_type
-use ufsLandStaticModule, only  : static_type
-use ufsLandForcingModule
-use ufsLandIOModule
-use ufsLandNoahRestartModule
-
-type (namelist_type)  :: namelist
-type (noah_type)      :: noah
-type (forcing_type)   :: forcing
-type (static_type)    :: static
-type (output_type)    :: output
-type (noah_restart_type)    :: restart
-
-integer          :: timestep
-double precision :: now_time
-real, allocatable, dimension(:) :: rho
-real, allocatable, dimension(:) :: albdvis_lnd, albdnir_lnd, albivis_lnd, albinir_lnd, &
-                                   adjvisbmd, adjnirbmd, adjvisdfd, adjnirdfd, rhonewsn1
-real, allocatable, dimension(:) :: prsik1,prslk1,ustar,rb,stress,fm,fh,fm10,fh2,z0pert,ztpert, &
-                                   garea,fake  ! some fields needed for sfc_diff
-logical, allocatable, dimension(:) :: lfake
-
-logical                            :: exticeden
-
-integer                            :: errflg     ! CCPP error flag
-character(len=128)                 :: errmsg     ! CCPP error message
-
-real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
-real(kind=kind_phys)            :: cpinv, hvapi
+  type (namelist_type)  :: namelist
+  type (noah_type)      :: noah
+  type (forcing_type)   :: forcing
+  type (static_type)    :: static
+  type (output_type)    :: output
+  type (noah_restart_type)    :: restart
+  integer                     :: comm, commid, myrank
+  
+  integer          :: timestep
+  double precision :: now_time
+  real, allocatable, dimension(:) :: rho
+  real, allocatable, dimension(:) :: albdvis_lnd, albdnir_lnd, albivis_lnd, albinir_lnd, &
+                                     adjvisbmd, adjnirbmd, adjvisdfd, adjnirdfd, rhonewsn1
+  real, allocatable, dimension(:) :: prsik1,prslk1,ustar,rb,stress,fm,fh,fm10,fh2,z0pert,ztpert, &
+                                     garea,fake  ! some fields needed for sfc_diff
+  logical, allocatable, dimension(:) :: lfake
+  
+  logical                            :: exticeden
+  
+  integer                            :: errflg     ! CCPP error flag
+  character(len=128)                 :: errmsg     ! CCPP error message
+  
+  real(kind=kind_phys), parameter :: one     = 1.0_kind_phys
+  real(kind=kind_phys)            :: cpinv, hvapi
 
 associate (                             &
    ps         => forcing%surface_pressure    ,&
@@ -217,7 +220,7 @@ time_loop : do timestep = 1, namelist%run_timesteps
 
   now_time = namelist%initial_time + timestep * namelist%timestep_seconds
 
-  call forcing%ReadForcing(namelist, static, now_time)
+  call forcing%ReadForcing(namelist, static, now_time, comm, commid, myrank)
 
   call interpolate_monthly(namelist%reference_date, now_time, im, static%gvf_monthly, sigmaf)
   call interpolate_monthly(namelist%reference_date, now_time, im, static%albedo_monthly, sfalb)
@@ -300,9 +303,9 @@ time_loop : do timestep = 1, namelist%run_timesteps
   end if
 
   if(errflg /= 0) then
-    write(*,*) "lsm_noah_run reporting an error"
-    write(*,*) errmsg
-    stop
+    write(*,'(A,I0,A,I0,A)') "commid", commid, " rank ", myrank, " lsm_noah_run reporting an error"
+    write(*,*) trim(errmsg)
+    call mpi_land_abort()  
   end if
 
 end do time_loop
